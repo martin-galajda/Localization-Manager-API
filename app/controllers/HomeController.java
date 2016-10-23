@@ -73,7 +73,12 @@ public class HomeController extends Controller {
     }
 
 	public Result putProject() {
-		return ok();
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference projectsReference = database.getReference("projects");
+		JsonNode newProjectJson = request().body().asJson();
+		projectsReference.push().setValue(newProjectJson);
+
+		return ok(newProjectJson);
 	}
 
 }
