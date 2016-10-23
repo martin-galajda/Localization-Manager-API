@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -75,8 +76,18 @@ public class HomeController extends Controller {
 	public Result putProject() {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference projectsReference = database.getReference("projects");
+		ObjectMapper jsonObjectMapper = new ObjectMapper();
 		JsonNode newProjectJson = request().body().asJson();
-		projectsReference.push().setValue(newProjectJson);
+		try {
+			Project newProject = jsonObjectMapper.treeToValue(newProjectJson, Project.class);
+			projectsReference.push().setValue(newProject);
+			System.err.println(newProject.getName());
+		}
+		catch (Exception e) {
+			System.err.println("Exception occured : " + e.getMessage());
+			return internalServerError();
+		}
+
 
 		return ok(newProjectJson);
 	}
