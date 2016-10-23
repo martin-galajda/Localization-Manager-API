@@ -84,8 +84,8 @@ public class HomeController extends Controller {
 			System.err.println(newProject.getName());
 		}
 		catch (Exception e) {
-			System.err.println("Exception occured : " + e.getMessage());
-			return internalServerError();
+			System.err.println("Exception occured : " + e);
+			return internalServerError(e.toString());
 		}
 
 
