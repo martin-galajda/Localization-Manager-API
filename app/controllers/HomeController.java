@@ -57,8 +57,8 @@ public class HomeController extends Controller {
 
 			@Override
 			public void onDataChange(DataSnapshot snapshot) {
-
-				Object projects = snapshot.getValue();
+				GenericTypeIndicator<List<Project>> t = new GenericTypeIndicator<List<Project>>() {};
+				Object projects = snapshot.getValue(t);
 				System.out.println(projects);
 				JsonNode node = Json.toJson(projects);
 				future.complete(node);
@@ -66,7 +66,7 @@ public class HomeController extends Controller {
 
 			@Override
 			public void onCancelled(DatabaseError err) {
-				System.err.println("Database error occured while reading projcets: " + err.getMessage());
+				System.err.println("Database error occured while reading projects: " + err.getMessage());
 			}
 		});
 
