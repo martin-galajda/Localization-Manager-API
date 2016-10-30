@@ -8,7 +8,6 @@ import javax.inject.*;
 import play.mvc.*;
 import play.mvc.Http.RequestHeader;
 
-
 /**
  * This is a simple filter that adds a header to all requests. It's
  * added to the application's list of filters by the
@@ -37,7 +36,8 @@ public class ExampleFilter extends Filter {
         RequestHeader requestHeader) {
 
         return next.apply(requestHeader).thenApplyAsync(
-            result -> result.withHeader("X-ExampleFilter", "foo"),
+            result -> result.withHeader("Access-Control-Allow-Origin:", "*"),
+
             exec
         );
     }
