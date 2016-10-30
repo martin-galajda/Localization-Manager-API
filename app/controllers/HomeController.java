@@ -60,7 +60,7 @@ public class HomeController extends Controller {
 				GenericTypeIndicator<HashMap<String, Project>> t = new GenericTypeIndicator<HashMap<String, Project>>() {};
 				HashMap<String, Project> projects = snapshot.getValue(t);
 				projects.forEach((projectId, projectValue) -> {
-					projects.get(projectId).setId(projectId);
+					projectValue.setId(projectId);
 				});
 				System.out.println(projects);
 				JsonNode node = Json.toJson(projects.values());
