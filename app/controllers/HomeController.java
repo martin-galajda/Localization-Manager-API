@@ -52,6 +52,8 @@ public class HomeController extends Controller {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference projectsReference = database.getReference("projects");
 		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
+		response().setHeader("Access-Control-Allow-Origin", "*");
+		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
 
 		projectsReference.addListenerForSingleValueEvent(new ValueEventListener() {
 
