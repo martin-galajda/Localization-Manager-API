@@ -59,8 +59,8 @@ public class HomeController extends Controller {
 			public void onDataChange(DataSnapshot snapshot) {
 				GenericTypeIndicator<HashMap<String, Project>> t = new GenericTypeIndicator<HashMap<String, Project>>() {};
 				HashMap<String, Project> projects = snapshot.getValue(t);
-				projects.forEach((projectId, project) -> {
-					project.setId(projectId);
+				projects.forEach((projectId, projectValue) -> {
+					projects.get(projectId).setId(projectId);
 				});
 				System.out.println(projects);
 				JsonNode node = Json.toJson(projects.values());
