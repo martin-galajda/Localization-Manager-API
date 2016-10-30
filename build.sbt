@@ -13,5 +13,6 @@ libraryDependencies ++= Seq(
   javaJdbc,
   cache,
   javaWs,
+  filters,
   "com.google.firebase" % "firebase-server-sdk" % "3.0.1"
 )
