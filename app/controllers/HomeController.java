@@ -83,6 +83,10 @@ public class HomeController extends Controller {
 		DatabaseReference projectsReference = database.getReference("projects");
 		ObjectMapper jsonObjectMapper = new ObjectMapper();
 		JsonNode newProjectJson = request().body().asJson();
+
+		response().setHeader("Access-Control-Allow-Origin", "*");
+		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
+
 		try {
 			Project newProject = jsonObjectMapper.treeToValue(newProjectJson, Project.class);
 			projectsReference.push().setValue(newProject);
