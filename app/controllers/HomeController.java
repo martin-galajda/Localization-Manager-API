@@ -104,4 +104,13 @@ public class HomeController extends Controller {
 		return ok(newProjectJson);
 	}
 
+	public Result options() {
+		response().setHeader("Access-Control-Allow-Origin", "*");
+		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
+		response().setHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, X-Json, X-Prototype-Version, X-Requested-With");
+		response().setHeader("Access-Control-Allow-Credentials", "true");
+
+		return ok();
+	}
+
 }
