@@ -89,7 +89,10 @@ public class HomeController extends Controller {
 
 		try {
 			Project newProject = jsonObjectMapper.treeToValue(newProjectJson, Project.class);
-			projectsReference.push().setValue(newProject);
+			DatabaseReference newProjectRef = projectsReference.push();
+			newProjectRef.setValue(newProject);
+			newProject.setId(newProjectRef.getKey());
+			newProjectJson = Json.toJson(newProject);
 			System.err.println(newProject.getName());
 		}
 		catch (Exception e) {
