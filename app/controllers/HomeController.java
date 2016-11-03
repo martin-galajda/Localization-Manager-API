@@ -78,7 +78,7 @@ public class HomeController extends Controller {
 		return future.thenApplyAsync((jsonNode -> ok(jsonNode)), exec);
     }
 
-	public Result putProject() {
+	public Result postProject() {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference projectsReference = database.getReference("projects");
 		ObjectMapper jsonObjectMapper = new ObjectMapper();
