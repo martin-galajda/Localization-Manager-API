@@ -89,7 +89,10 @@ public class AuthController extends Controller {
 			String refreshToken = jsonBody.findPath("refresh_token").asText();
 
 			WSRequest accessRequest = ws.url("https://www.googleapis.com/oauth2/v2/userinfo");
-			CompletionStage<WSResponse> authFuture = accessRequest.setHeader("Authorization", "Bearer " + accessToken).get();
+			WSRequest authReq = accessRequest.setAuth(accessToken);
+			System.err.println(authReq);
+
+			CompletionStage<WSResponse> authFuture = authReq.get();
 
 
 			authFuture.thenApply(res -> {
