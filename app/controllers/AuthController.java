@@ -48,7 +48,7 @@ public class AuthController extends Controller {
 		});
 	}
 
-	public CompletionStage<CompletionStage<Result>> handleGoogle() {
+	public CompletionStage<Result> handleGoogle() {
 		System.out.println("handle google");
 		System.out.println(request());
 		String code = request().getQueryString("code");
@@ -87,6 +87,8 @@ public class AuthController extends Controller {
 
 				return ok(jsonBody);
 			});
+		}).thenCompose(res -> {
+			return res;
 		});
 	}
 
