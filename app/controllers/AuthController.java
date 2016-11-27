@@ -23,7 +23,7 @@ public class AuthController extends Controller {
 	@Inject WSClient ws;
 	@Inject ExecutionContextExecutor exec;
 
-	public CompletionStage<Result> google() {
+	public Result google() {
 		SecureRandom randomGenerator = new SecureRandom();
 		int state = randomGenerator.nextInt();
 		System.out.println("google");
@@ -49,12 +49,9 @@ public class AuthController extends Controller {
 				.setQueryParameter("scope", scope)
 				.setQueryParameter("access_type", accessType);
 
+		
 
-		req.setFollowRedirects(true).get().thenApply(result -> {
-			return future.complete(result.asJson());
-		});
-
-		return future.thenApplyAsync(res -> ok(res), exec);
+		return redirect(req.getUrl());
 	}
 
 	public CompletionStage<Result> handleGoogle() {
