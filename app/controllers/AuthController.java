@@ -86,6 +86,7 @@ public class AuthController extends Controller {
 			JsonNode jsonBody = response.asJson();
 			String accessToken = jsonBody.findPath("access_token").asText();
 			System.out.println(accessToken);
+			System.err.println("got access token");
 			String refreshToken = jsonBody.findPath("refresh_token").asText();
 
 			WSRequest accessRequest = ws.url("https://www.googleapis.com/oauth2/v2/userinfo");
