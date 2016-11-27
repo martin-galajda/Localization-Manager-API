@@ -12,7 +12,7 @@ POST     /project                   controllers.ProjectController.postProject
 
 
 GET     /auth/google                controllers.AuthController.google
-POST    /auth/google/handler        controllers.AuthController.handleGoogle
+GET     /auth/google/handler        controllers.AuthController.handleGoogle
 
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
