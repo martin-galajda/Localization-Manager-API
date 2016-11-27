@@ -39,6 +39,8 @@ public class AuthController extends Controller {
 
 		String googleUrl = "https://accounts.google.com/o/oauth2/v2/auth";
 
+		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
+
 		WSRequest req = ws.url(googleUrl)
 				.setQueryParameter("redirect_uri", redirectUri)
 				.setQueryParameter("client_id", clientId)
@@ -48,9 +50,11 @@ public class AuthController extends Controller {
 				.setQueryParameter("access_type", accessType);
 
 
-		return req.setFollowRedirects(true).get().thenApply(res -> {
-			return ok(res.asJson());
+		req.setFollowRedirects(true).get().thenApply(result -> {
+			return future.complete(result.asJson());
 		});
+
+		return future.thenApplyAsync(res -> ok(res), exec);
 	}
 
 	public CompletionStage<Result> handleGoogle() {
