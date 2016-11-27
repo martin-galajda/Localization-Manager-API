@@ -5,6 +5,8 @@ import play.http.HttpFilters;
 import play.mvc.*;
 
 import filters.ExampleFilter;
+import play.filters.csrf.CSRFFilter;
+import play.http.DefaultHttpFilters;
 
 /**
  * This class configures filters that run on every request. This
@@ -16,31 +18,13 @@ import filters.ExampleFilter;
  * the <code>application.conf</code> configuration file.
  */
 @Singleton
-public class Filters implements HttpFilters {
-
-    private final Environment env;
-    private final EssentialFilter exampleFilter;
+public class Filters extends DefaultHttpFilters {
 
     /**
-     * @param env Basic environment settings for the current application.
-     * @param exampleFilter A demonstration filter that adds a header to
      */
     @Inject
-    public Filters(Environment env, ExampleFilter exampleFilter) {
-        this.env = env;
-        this.exampleFilter = exampleFilter;
-    }
-
-    @Override
-    public EssentialFilter[] filters() {
-      // Use the example filter if we're running development mode. If
-      // we're running in production or test mode then don't use any
-      // filters at all.
-      if (env.mode().equals(Mode.DEV)) {
-          return new EssentialFilter[] { exampleFilter };
-      } else {
-         return new EssentialFilter[] {};
-      }
+    public Filters(CSRFFilter csrfFilter) {
+        super(csrfFilter);
     }
 
 }

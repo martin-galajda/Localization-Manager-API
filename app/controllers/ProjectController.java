@@ -29,12 +29,12 @@ import javax.inject.Inject;
  * This controller contains an action to handle HTTP requests
  * to the application's home page.
  */
-public class HomeController extends Controller {
+public class ProjectController extends Controller {
 
 	private final ExecutionContextExecutor exec;
 
 	@Inject
-	public HomeController(ExecutionContextExecutor exec) {
+	public ProjectController(ExecutionContextExecutor exec) {
 		this.exec = exec;
 	}
     /**
@@ -89,11 +89,12 @@ public class HomeController extends Controller {
 
 		try {
 			Project newProject = jsonObjectMapper.treeToValue(newProjectJson, Project.class);
-			DatabaseReference newProjectRef = projectsReference.push();
-			newProjectRef.setValue(newProject);
-			newProject.setId(newProjectRef.getKey());
-			newProjectJson = Json.toJson(newProject);
-			System.err.println(newProject.getName());
+			if (newProject.getId() == null) {
+				return createNewProject(newProject);
+			}
+			Map <String, Object> projectUpdates = new HashMap<>();
+			projectUpdates.put(newProject.getId(), newProject);
+			projectsReference.updateChildren(projectUpdates);
 		}
 		catch (Exception e) {
 			System.err.println("Exception occured : " + e);
@@ -101,6 +102,16 @@ public class HomeController extends Controller {
 		}
 
 
+		return ok(newProjectJson);
+	}
+
+	private Result createNewProject(Project newProject) {
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference projectsReference = database.getReference("projects");
+		DatabaseReference newProjectRef = projectsReference.push();
+		newProjectRef.setValue(newProject);
+		newProject.setId(newProjectRef.getKey());
+		JsonNode newProjectJson = Json.toJson(newProject);
 		return ok(newProjectJson);
 	}
 
