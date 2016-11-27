@@ -49,9 +49,16 @@ public class AuthController extends Controller {
 				.setQueryParameter("scope", scope)
 				.setQueryParameter("access_type", accessType);
 
-		
+		googleUrl += "?" +
+				"&redirect_uri=" + redirectUri +
+				"&client_id=" + clientId +
+				"&prompt=" + prompt +
+				"&response_type=" + responseType +
+				"&scope=" + scope +
+				"&access_type=" + accessType;
 
-		return redirect(req.getUrl());
+
+		return redirect(googleUrl);
 	}
 
 	public CompletionStage<Result> handleGoogle() {
