@@ -23,6 +23,8 @@ public class AuthController extends Controller {
 	public CompletionStage<Result> google() {
 		SecureRandom randomGenerator = new SecureRandom();
 		int state = randomGenerator.nextInt();
+		System.out.println("google");
+		System.err.println("google");
 
 		String clientSecret = "3djQduYEEVXCJ9kdg4JGC0L2";
 		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
@@ -51,6 +53,8 @@ public class AuthController extends Controller {
 	public CompletionStage<Result> handleGoogle() {
 		System.out.println("handle google");
 		System.out.println(request());
+		System.err.println("handle google");
+		System.err.println(request());
 		String code = request().getQueryString("code");
 		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
 		String clientSecret = "3djQduYEEVXCJ9kdg4JGC0L2";
@@ -87,8 +91,6 @@ public class AuthController extends Controller {
 
 				return ok(jsonBody);
 			});
-		}).thenCompose(res -> {
-			return res;
 		});
 	}
 
