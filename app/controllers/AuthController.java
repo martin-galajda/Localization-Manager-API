@@ -111,12 +111,15 @@ public class AuthController extends Controller {
 			return jsonBody;
 		});
 
+		//Http.Session sessionData = session();
 		return future.thenApplyAsync(res -> {
 			String name = res.findPath("name").asText();
 			String id = res.findPath("id").asText();
-			Map<String, String> sessionData = new HashMap<>();
-			//session("name", name);
-			//session("id", id);
+			session().put("id", id);
+			session().put("name", id);
+			//sessionData.put("id", id);
+			//sessionData.put("name", name);
+
 			return redirect("https://morning-taiga-56897.herokuapp.com");
 		}, exec);
 	}
