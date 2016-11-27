@@ -118,7 +118,7 @@ public class AuthController extends Controller {
 			session("name", name);
 			session("id", id);
 			return redirect("https://morning-taiga-56897.herokuapp.com/");
-		});
+		}, exec);
 	}
 
 	public Result googleSuccess() {
