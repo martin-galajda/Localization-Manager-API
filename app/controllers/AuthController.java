@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import play.libs.ws.*;
 import scala.concurrent.ExecutionContextExecutor;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -116,7 +118,14 @@ public class AuthController extends Controller {
 			return jsonBody;
 		});
 
-		return future.thenApplyAsync(res -> ok(res), exec);
+		return future.thenApplyAsync(res -> {
+			String name = res.findPath("name").asText();
+			String id = res.findPath("id").asText();
+			Map<String, String> sessionData = new HashMap<>();
+			session("name", name);
+			session("id", id);
+			return redirect("https://morning-taiga-56897.herokuapp.com/");
+		}, exec);
 	}
 
 	public Result googleSuccess() {
