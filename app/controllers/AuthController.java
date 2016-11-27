@@ -20,7 +20,7 @@ public class AuthController extends Controller {
 	@Inject WSClient ws;
 
 
-	public CompletionStage<WSResponse> google() {
+	public CompletionStage<Result> google() {
 		SecureRandom randomGenerator = new SecureRandom();
 		int state = randomGenerator.nextInt();
 
@@ -43,10 +43,12 @@ public class AuthController extends Controller {
 				.setQueryParameter("access_type", accessType);
 
 
-		return req.setFollowRedirects(true).get();
+		return req.setFollowRedirects(true).get().thenApply(res -> {
+			return ok(res.asJson());
+		});
 	}
 
-	public CompletionStage<CompletionStage<JsonNode>> handleGoogle() {
+	public CompletionStage<CompletionStage<Result>> handleGoogle() {
 		System.out.println("handle google");
 		System.out.println(request());
 		String code = request().getQueryString("code");
@@ -83,7 +85,7 @@ public class AuthController extends Controller {
 				System.out.println(name);
 				System.out.println(id);
 
-				return jsonBody;
+				return ok(jsonBody);
 			});
 		});
 	}
