@@ -115,9 +115,9 @@ public class AuthController extends Controller {
 			String name = res.findPath("name").asText();
 			String id = res.findPath("id").asText();
 			Map<String, String> sessionData = new HashMap<>();
-			session("name", name);
-			session("id", id);
-			return redirect("https://morning-taiga-56897.herokuapp.com/");
+			//session("name", name);
+			//session("id", id);
+			return redirect("https://morning-taiga-56897.herokuapp.com");
 		}, exec);
 	}
 
