@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Json;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.*;
 import play.filters.csrf.*;
 
@@ -24,6 +25,7 @@ public class AuthController extends Controller {
 
 	@Inject WSClient ws;
 	@Inject ExecutionContextExecutor exec;
+	@Inject HttpExecutionContext ec;
 
 	public Result google() {
 		SecureRandom randomGenerator = new SecureRandom();
@@ -83,7 +85,7 @@ public class AuthController extends Controller {
 				"&grant_type=" + grantType +
 				"&redirect_uri=" + redirectUri;
 
-		req.setContentType("application/x-www-form-urlencoded").post(reqForm).thenApply(response -> {
+		req.setContentType("application/x-www-form-urlencoded").post(reqForm).thenApplyAsync(response -> {
 			JsonNode jsonBody = response.asJson();
 			String accessToken = jsonBody.findPath("access_token").asText();
 			System.out.println(accessToken);
@@ -98,7 +100,7 @@ public class AuthController extends Controller {
 			CompletionStage<WSResponse> authFuture = authReq.get();
 
 
-			authFuture.thenApply(res -> {
+			authFuture.thenApplyAsync(res -> {
 				JsonNode jsonBodyRes = res.asJson();
 				System.out.println(jsonBodyRes);
 				String name = jsonBodyRes.findPath("name").asText();
@@ -107,21 +109,19 @@ public class AuthController extends Controller {
 				System.out.println(id);
 				future.complete(jsonBodyRes);
 				return jsonBodyRes;
-			});
+			}, ec.current());
 			return jsonBody;
-		});
+		}, ec.current());
 
 		Http.Session sessionData = session();
 		return future.thenApplyAsync(res -> {
 			String name = res.findPath("name").asText();
 			String id = res.findPath("id").asText();
-			//session().put("id", id);
-			//session().put("name", id);
-			sessionData.put("id", id);
-			sessionData.put("name", name);
+			session().put("id", id);
+			session().put("name", id);
 
 			return redirect("https://morning-taiga-56897.herokuapp.com");
-		}, exec);
+		}, ec.current());
 	}
 
 	public Result googleSuccess() {
