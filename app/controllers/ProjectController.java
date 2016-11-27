@@ -49,6 +49,7 @@ public class ProjectController extends Controller {
 
 
     public CompletionStage<Result> getProjects() {
+		System.err.println(session("name"));
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference projectsReference = database.getReference("projects");
 		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
