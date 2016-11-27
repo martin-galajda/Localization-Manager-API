@@ -121,7 +121,7 @@ public class ProjectController extends Controller {
 
 
 	public Result sessionTest() {
-		return ok("Name=" + session("name") + "cookie=" + request().cookie("name").value());
+		return ok("Name=" + session("name") + "csrf=" + session("csrfToken"));
 	}
 
 }
