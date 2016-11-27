@@ -111,14 +111,14 @@ public class AuthController extends Controller {
 			return jsonBody;
 		});
 
-		//Http.Session sessionData = session();
+		Http.Session sessionData = session();
 		return future.thenApplyAsync(res -> {
 			String name = res.findPath("name").asText();
 			String id = res.findPath("id").asText();
-			session().put("id", id);
-			session().put("name", id);
-			//sessionData.put("id", id);
-			//sessionData.put("name", name);
+			//session().put("id", id);
+			//session().put("name", id);
+			sessionData.put("id", id);
+			sessionData.put("name", name);
 
 			return redirect("https://morning-taiga-56897.herokuapp.com");
 		}, exec);
