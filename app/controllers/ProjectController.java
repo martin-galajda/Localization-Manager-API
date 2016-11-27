@@ -10,7 +10,6 @@ import com.google.firebase.*;
 import play.mvc.*;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
-import scala.concurrent.ExecutionContextExecutor;
 import views.html.*;
 
 import java.util.List;
@@ -30,13 +29,8 @@ import javax.inject.Inject;
  * to the application's home page.
  */
 public class ProjectController extends Controller {
+	@Inject HttpExecutionContext ec;
 
-	private final ExecutionContextExecutor exec;
-
-	@Inject
-	public ProjectController(ExecutionContextExecutor exec) {
-		this.exec = exec;
-	}
     /**
      * An action that renders an HTML page with a welcome message.
      * The configuration in the <code>routes</code> file means that
@@ -76,7 +70,7 @@ public class ProjectController extends Controller {
 			}
 		});
 
-		return future.thenApplyAsync((jsonNode -> ok(jsonNode)), exec);
+		return future.thenApplyAsync((jsonNode -> ok(jsonNode)), ec.current());
     }
 
 	public Result postProject() {
@@ -123,6 +117,11 @@ public class ProjectController extends Controller {
 		response().setHeader("Access-Control-Allow-Credentials", "true");
 
 		return ok();
+	}
+
+
+	public Result sessionTest() {
+		return ok("Name=" + session("name") + "cookie=" + request().cookie("name").value());
 	}
 
 }

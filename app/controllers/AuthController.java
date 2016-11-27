@@ -118,7 +118,7 @@ public class AuthController extends Controller {
 			String name = res.findPath("name").asText();
 			String id = res.findPath("id").asText();
 			session().put("id", id);
-			session().put("name", id);
+			session().put("name", name);
 
 			return redirect("https://morning-taiga-56897.herokuapp.com");
 		}, ec.current());
