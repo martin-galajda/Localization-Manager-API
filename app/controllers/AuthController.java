@@ -70,7 +70,7 @@ public class AuthController extends Controller {
 		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
 		String clientSecret = "3djQduYEEVXCJ9kdg4JGC0L2";
 		String grantType = "authorization_code";
-		String redirectUri = "https://morning-taiga-56897.herokuapp.com/";
+		String redirectUri = "https://glacial-hollows-97055.herokuapp.com/auth/google/success";
 
 		WSRequest req = ws.url("https://accounts.google.com/o/oauth2/token");
 		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
@@ -120,6 +120,6 @@ public class AuthController extends Controller {
 	}
 
 	public Result googleSuccess() {
-		return ok();
+		return ok("Sucess");
 	}
 }
