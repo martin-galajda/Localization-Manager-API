@@ -77,13 +77,6 @@ public class AuthController extends Controller {
 		WSRequest req = ws.url("https://accounts.google.com/o/oauth2/token");
 		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
 
-		JsonNode reqBody = Json.newObject()
-				.put("code", code)
-				.put("client_id", clientId)
-				.put("client_secret", clientSecret)
-				.put("grant_type", grantType)
-				.put("redirect_uri", redirectUri);
-
 		String reqForm = "code=" + code +
 				"&client_id=" + clientId +
 				"&client_secret=" + clientSecret +
@@ -125,7 +118,7 @@ public class AuthController extends Controller {
 			session("name", name);
 			session("id", id);
 			return redirect("https://morning-taiga-56897.herokuapp.com/");
-		}, exec);
+		});
 	}
 
 	public Result googleSuccess() {
