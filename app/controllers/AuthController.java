@@ -8,6 +8,9 @@ import play.filters.csrf.*;
 import javax.inject.Inject;
 
 import play.libs.ws.*;
+import scala.concurrent.ExecutionContextExecutor;
+
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import java.security.SecureRandom;
@@ -18,7 +21,7 @@ import java.security.SecureRandom;
 public class AuthController extends Controller {
 
 	@Inject WSClient ws;
-
+	@Inject ExecutionContextExecutor exec;
 
 	public CompletionStage<Result> google() {
 		SecureRandom randomGenerator = new SecureRandom();
@@ -62,6 +65,7 @@ public class AuthController extends Controller {
 		String redirectUri = "https://morning-taiga-56897.herokuapp.com/";
 
 		WSRequest req = ws.url("https://accounts.google.com/o/oauth2/token");
+		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
 
 		JsonNode reqBody = Json.newObject()
 				.put("code", code)
@@ -70,28 +74,30 @@ public class AuthController extends Controller {
 				.put("grant_type", grantType)
 				.put("redirect_uri", redirectUri);
 
-		req.post(reqBody);
-
-		return req.post(reqBody).thenApply(response -> {
+		req.post(reqBody).thenApply(response -> {
 			JsonNode jsonBody = response.asJson();
 			String accessToken = jsonBody.findPath("access_token").asText();
 			System.out.println(accessToken);
 			String refreshToken = jsonBody.findPath("refresh_token").asText();
 
 			WSRequest accessRequest = ws.url("https://www.googleapis.com/oauth2/v2/userinfo");
-			CompletionStage<WSResponse> future = accessRequest.setHeader("Authorization", "Bearer " + accessToken).get();
+			CompletionStage<WSResponse> authFuture = accessRequest.setHeader("Authorization", "Bearer " + accessToken).get();
 
-			return future.thenApply(res -> {
+
+			authFuture.thenApply(res -> {
 				JsonNode jsonBodyRes = res.asJson();
 				System.out.println(jsonBodyRes);
 				String name = jsonBodyRes.findPath("name").asText();
 				String id = jsonBodyRes.findPath("id").asText();
 				System.out.println(name);
 				System.out.println(id);
-
-				return ok(jsonBody);
+				future.complete(jsonBodyRes);
+				return jsonBodyRes;
 			});
+			return jsonBody;
 		});
+
+		return future.thenApplyAsync(res -> ok(res), exec);
 	}
 
 	public Result googleSuccess() {
