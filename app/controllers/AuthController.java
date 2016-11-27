@@ -50,7 +50,7 @@ public class AuthController extends Controller {
 				.setQueryParameter("access_type", accessType);
 
 		googleUrl += "?" +
-				"&redirect_uri=" + redirectUri +
+				"redirect_uri=" + redirectUri +
 				"&client_id=" + clientId +
 				"&prompt=" + prompt +
 				"&response_type=" + responseType +
@@ -82,7 +82,13 @@ public class AuthController extends Controller {
 				.put("grant_type", grantType)
 				.put("redirect_uri", redirectUri);
 
-		req.post(reqBody).thenApply(response -> {
+		String reqForm = "code=" + code +
+				"&client_id=" + clientId +
+				"&client_secret=" + clientSecret +
+				"&grant_type=" + grantType +
+				"&redirect_uri=" + redirectUri;
+
+		req.setContentType("application/x-www-form-urlencoded").post(reqForm).thenApply(response -> {
 			JsonNode jsonBody = response.asJson();
 			String accessToken = jsonBody.findPath("access_token").asText();
 			System.out.println(accessToken);
