@@ -30,6 +30,7 @@ public class AuthController extends Controller {
 
 	public Result google() {
 		SecureRandom randomGenerator = new SecureRandom();
+
 		Integer state = randomGenerator.nextInt();
 
 		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
@@ -133,6 +134,13 @@ public class AuthController extends Controller {
 		System.err.println("Printing session info: " + session());
 		System.out.println(id);
 		System.out.println(session());
+		SecureRandom randomGenerator = new SecureRandom();
+
+		Integer state = randomGenerator.nextInt();
+
+		session().put("csrf", state.toString());
+
+		response().setCookie("XSRF-TOKEN", session("csrf"));
 
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
@@ -142,6 +150,7 @@ public class AuthController extends Controller {
 
 		response().setHeader("Access-Control-Allow-Origin", "*");
 		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
+		response().setHeader("X-XSRF-TOKEN", session("csrf"));
 
 		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
