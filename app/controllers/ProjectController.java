@@ -43,7 +43,7 @@ public class ProjectController extends Controller {
 
 
     public CompletionStage<Result> getProjects() {
-		System.err.println(session("name"));
+		System.err.println("Printing session info: " + session());
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference projectsReference = database.getReference("projects");
 		final CompletableFuture<JsonNode> future = new CompletableFuture<>();

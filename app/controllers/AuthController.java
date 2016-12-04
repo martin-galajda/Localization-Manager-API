@@ -30,7 +30,7 @@ public class AuthController extends Controller {
 
 	public Result google() {
 		SecureRandom randomGenerator = new SecureRandom();
-		int state = randomGenerator.nextInt();
+		Integer state = randomGenerator.nextInt();
 
 		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
 		String redirectUri = "https://glacial-hollows-97055.herokuapp.com/auth/google/handler";
@@ -50,8 +50,11 @@ public class AuthController extends Controller {
 				"&scope=" + scope +
 				"&access_type=" + accessType;
 
+		session().put("csrf", state.toString());
 
-		return redirect(googleUrl);
+		response().setCookie("XSRF-TOKEN", session("csrf"));
+
+		return redirect(googleUrl).withHeader("X-XSRF-TOKEN", session("csrf"));
 	}
 
 	public CompletionStage<Result> handleGoogle() {
@@ -119,17 +122,22 @@ public class AuthController extends Controller {
 
 			session().put("logged_user_id", id);
 
-			return redirect("https://morning-taiga-56897.herokuapp.com");
+			response().setCookie("XSRF-TOKEN", session("csrf"));
+
+			return redirect("https://morning-taiga-56897.herokuapp.com").withHeader("X-XSRF-TOKEN", session("csrf"));
 		}, ec.current());
 	}
 
 	public CompletionStage<Result> getLoggedUser() {
 		String id = session("logged_user_id");
+		System.err.println("Printing session info: " + session());
 		System.out.println(id);
 		System.out.println(session());
+
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
 		Query queryRef = usersReference.orderByChild("id").equalTo(id);
+
 		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
 
 		response().setHeader("Access-Control-Allow-Origin", "*");
@@ -144,7 +152,7 @@ public class AuthController extends Controller {
 				}
 				GenericTypeIndicator<HashMap<String, User>> t = new GenericTypeIndicator<HashMap<String, User>>() {};
 				HashMap<String, User> userMap = snapshot.getValue(t);
-				if (userMap.size() == 0) {
+				if (userMap.size() != 1) {
 					future.complete(null);
 				}
 
@@ -160,7 +168,10 @@ public class AuthController extends Controller {
 			}
 		});
 
-		return future.thenApplyAsync((jsonNode -> jsonNode != null ? ok(jsonNode) : noContent()), ec.current());
+		return future.thenApplyAsync((jsonNode -> {
+			response().setCookie("XSRF-TOKEN", session("csrf"));
+			return jsonNode != null ? ok(jsonNode).withHeader("X-XSRF-TOKEN", session("csrf")) : noContent()
+		}), ec.current());
 	}
 
 
