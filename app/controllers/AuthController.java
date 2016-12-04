@@ -125,6 +125,8 @@ public class AuthController extends Controller {
 
 	public CompletionStage<Result> getLoggedUser() {
 		String id = session("logged_user_id");
+		System.out.println(id);
+		System.out.println(session());
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
 		Query queryRef = usersReference.orderByChild("id").equalTo(id);
@@ -137,8 +139,6 @@ public class AuthController extends Controller {
 
 			@Override
 			public void onDataChange(DataSnapshot snapshot) {
-				System.out.println(snapshot.getValue());
-
 				if (!snapshot.exists()) {
 					future.complete(null);
 				}
