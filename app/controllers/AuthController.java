@@ -160,7 +160,7 @@ public class AuthController extends Controller {
 			}
 		});
 
-		return future.thenApplyAsync((jsonNode -> ok(jsonNode)), ec.current());
+		return future.thenApplyAsync((jsonNode -> jsonNode != null ? ok(jsonNode) : noContent()), ec.current());
 	}
 
 
