@@ -138,6 +138,10 @@ public class AuthController extends Controller {
 			@Override
 			public void onDataChange(DataSnapshot snapshot) {
 				System.out.println(snapshot.getValue());
+
+				if (!snapshot.exists()) {
+					future.complete(null);
+				}
 				GenericTypeIndicator<HashMap<String, User>> t = new GenericTypeIndicator<HashMap<String, User>>() {};
 				HashMap<String, User> userMap = snapshot.getValue(t);
 				if (userMap.size() == 0) {
