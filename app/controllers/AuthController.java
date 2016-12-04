@@ -170,7 +170,7 @@ public class AuthController extends Controller {
 
 		return future.thenApplyAsync((jsonNode -> {
 			response().setCookie("XSRF-TOKEN", session("csrf"));
-			return jsonNode != null ? ok(jsonNode).withHeader("X-XSRF-TOKEN", session("csrf")) : noContent()
+			return jsonNode != null ? ok(jsonNode).withHeader("X-XSRF-TOKEN", session("csrf")) : noContent().withHeader("X-XSRF-TOKEN", session("csrf"));
 		}), ec.current());
 	}
 
