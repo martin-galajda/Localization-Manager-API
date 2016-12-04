@@ -122,10 +122,14 @@ public class AuthController extends Controller {
 			});
 
 			session().put("logged_user_id", id);
+			SecureRandom randomGenerator = new SecureRandom();
+
+			Integer state = randomGenerator.nextInt();
+			session().put("csrf", state.toString());
 
 			response().setCookie("XSRF-TOKEN", session("csrf"));
 
-			return redirect("https://morning-taiga-56897.herokuapp.com").withHeader("X-XSRF-TOKEN", session("csrf"));
+			return redirect("https://morning-taiga-56897.herokuapp.com");
 		}, ec.current());
 	}
 
@@ -178,8 +182,7 @@ public class AuthController extends Controller {
 		});
 
 		return future.thenApplyAsync((jsonNode -> {
-			response().setCookie("XSRF-TOKEN", session("csrf"));
-			return jsonNode != null ? ok(jsonNode).withHeader("X-XSRF-TOKEN", session("csrf")) : noContent().withHeader("X-XSRF-TOKEN", session("csrf"));
+			return jsonNode != null ? ok(jsonNode) : noContent();
 		}), ec.current());
 	}
 
