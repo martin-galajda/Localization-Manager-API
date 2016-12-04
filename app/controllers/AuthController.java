@@ -139,13 +139,7 @@ public class AuthController extends Controller {
 		System.out.println(id);
 		System.out.println(session());
 		SecureRandom randomGenerator = new SecureRandom();
-
-		Integer state = randomGenerator.nextInt();
-
-		session().put("csrf", state.toString());
-
-		response().setCookie("XSRF-TOKEN", session("csrf"));
-
+		
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
 		Query queryRef = usersReference.orderByChild("id").equalTo(id);
