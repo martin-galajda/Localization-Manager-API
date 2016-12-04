@@ -1,6 +1,10 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.firebase.database.*;
+import model.Project;
+import model.User;
+import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.*;
 import play.filters.csrf.*;
@@ -9,6 +13,7 @@ import javax.inject.Inject;
 
 import play.libs.ws.*;
 
+import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -86,14 +91,68 @@ public class AuthController extends Controller {
 		}, ec.current());
 
 		return future.thenApplyAsync(res -> {
-			String name = res.findPath("name").asText();
 			String id = res.findPath("id").asText();
-			session().put("id", id);
-			session().put("name", name);
+			String name = res.findPath("name").asText();
+
+			FirebaseDatabase database = FirebaseDatabase.getInstance();
+			DatabaseReference usersReference = database.getReference("users");
+			Query queryRef = usersReference.orderByChild("id").equalTo(id);
+
+			queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+				@Override
+				public void onDataChange(DataSnapshot dataSnapshot) {
+					if (!dataSnapshot.exists()) {
+						User user = new User();
+						user.setId(id);
+						user.setName(name);
+
+						usersReference.push().setValue(user);
+					}
+				}
+
+				@Override
+				public void onCancelled(DatabaseError databaseError) {
+					System.err.println(databaseError);
+				}
+			});
+
+			session().put("logged_user_id", id);
 
 			return redirect("https://morning-taiga-56897.herokuapp.com");
 		}, ec.current());
 	}
+
+	public CompletionStage<Result> getLoggedUser() {
+		String id = session("logged_user_id");
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference usersReference = database.getReference("users");
+		Query queryRef = usersReference.orderByChild("id").equalTo(id);
+		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
+
+		response().setHeader("Access-Control-Allow-Origin", "*");
+		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
+
+		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+			@Override
+			public void onDataChange(DataSnapshot snapshot) {
+				GenericTypeIndicator<User> t = new GenericTypeIndicator<User>() {};
+				User user = snapshot.getValue(t);
+
+				System.out.println(user);
+				JsonNode node = Json.toJson(user);
+				future.complete(node);
+			}
+
+			@Override
+			public void onCancelled(DatabaseError err) {
+				System.err.println("Database error occured while reading user: " + err.getMessage());
+			}
+		});
+
+		return future.thenApplyAsync((jsonNode -> ok(jsonNode)), ec.current());
+	}
+
 
 	public Result googleSuccess() {
 		return ok("Sucess");
