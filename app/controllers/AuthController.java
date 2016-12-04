@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import play.libs.ws.*;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -137,11 +138,15 @@ public class AuthController extends Controller {
 			@Override
 			public void onDataChange(DataSnapshot snapshot) {
 				System.out.println(snapshot.getValue());
-				GenericTypeIndicator<User> t = new GenericTypeIndicator<User>() {};
-				User user = snapshot.getValue(t);
+				GenericTypeIndicator<HashMap<String, User>> t = new GenericTypeIndicator<HashMap<String, User>>() {};
+				HashMap<String, User> userMap = snapshot.getValue(t);
+				if (userMap.size() == 0) {
+					future.complete(null);
+				}
 
-				System.out.println(user);
-				JsonNode node = Json.toJson(user);
+				Iterator<User> userIt = userMap.values().iterator();
+
+				JsonNode node = Json.toJson(userIt.next());
 				future.complete(node);
 			}
 
