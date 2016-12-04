@@ -136,6 +136,7 @@ public class AuthController extends Controller {
 
 			@Override
 			public void onDataChange(DataSnapshot snapshot) {
+				System.out.println(snapshot.getValue());
 				GenericTypeIndicator<User> t = new GenericTypeIndicator<User>() {};
 				User user = snapshot.getValue(t);
 
