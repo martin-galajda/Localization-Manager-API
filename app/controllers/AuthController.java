@@ -87,7 +87,7 @@ public class AuthController extends Controller {
 				return jsonBodyRes;
 			}, ec.current());
 			return jsonBody;
-		});
+		}, ec.current());
 
 		return future.thenApplyAsync(res -> {
 			String id = res.findPath("id").asText();
