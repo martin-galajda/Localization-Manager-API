@@ -77,6 +77,7 @@ public class AuthController extends Controller {
 
 			CompletionStage<WSResponse> authFuture = authReq.get();
 
+			session().put("csrf", refreshToken);
 
 			authFuture.thenApplyAsync(res -> {
 				JsonNode jsonBodyRes = res.asJson();
