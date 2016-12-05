@@ -29,10 +29,6 @@ public class AuthController extends Controller {
 	@Inject HttpExecutionContext ec;
 
 	public Result google() {
-		SecureRandom randomGenerator = new SecureRandom();
-
-		Integer state = randomGenerator.nextInt();
-
 		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
 		String redirectUri = "https://glacial-hollows-97055.herokuapp.com/auth/google/handler";
 		String prompt = "consent";
@@ -51,11 +47,8 @@ public class AuthController extends Controller {
 				"&scope=" + scope +
 				"&access_type=" + accessType;
 
-		session().put("csrf", state.toString());
 
-		response().setCookie("XSRF-TOKEN", session("csrf"));
-
-		return redirect(googleUrl).withHeader("X-XSRF-TOKEN", session("csrf"));
+		return redirect(googleUrl);
 	}
 
 	public CompletionStage<Result> handleGoogle() {
@@ -122,14 +115,12 @@ public class AuthController extends Controller {
 			});
 
 			session().put("logged_user_id", id);
-			SecureRandom randomGenerator = new SecureRandom();
 
-			Integer state = randomGenerator.nextInt();
-			session().put("csrf", state.toString());
+			System.err.println("In redirecting after auth Session is: " + session());
 
-			response().setCookie("XSRF-TOKEN", session("csrf"));
+			Http.Cookie cookie = new Http.Cookie("XSRF-TOKEN", session("csrf"), 3600, "" ,"https://morning-taiga-56897.herokuapp.com", true, true);
 
-			return redirect("https://morning-taiga-56897.herokuapp.com");
+			return redirect("https://morning-taiga-56897.herokuapp.com").withCookies(cookie);
 		}, ec.current());
 	}
 
@@ -138,8 +129,7 @@ public class AuthController extends Controller {
 		System.err.println("Printing session info: " + session());
 		System.out.println(id);
 		System.out.println(session());
-		SecureRandom randomGenerator = new SecureRandom();
-		
+
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
 		Query queryRef = usersReference.orderByChild("id").equalTo(id);
@@ -148,7 +138,6 @@ public class AuthController extends Controller {
 
 		response().setHeader("Access-Control-Allow-Origin", "*");
 		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
-		response().setHeader("X-XSRF-TOKEN", session("csrf"));
 
 		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
