@@ -77,8 +77,6 @@ public class AuthController extends Controller {
 
 			CompletionStage<WSResponse> authFuture = authReq.get();
 
-			session().put("csrf", refreshToken);
-
 			authFuture.thenApplyAsync(res -> {
 				JsonNode jsonBodyRes = res.asJson();
 				String name = jsonBodyRes.findPath("name").asText();
@@ -119,9 +117,8 @@ public class AuthController extends Controller {
 
 			System.err.println("In redirecting after auth Session is: " + session());
 
-			Http.Cookie cookie = new Http.Cookie("XSRF-TOKEN", session("csrf"), 3600, "" ,"https://morning-taiga-56897.herokuapp.com", true, true);
 
-			return redirect("https://morning-taiga-56897.herokuapp.com").withCookies(cookie);
+			return redirect("https://morning-taiga-56897.herokuapp.com");
 		}, ec.current());
 	}
 
