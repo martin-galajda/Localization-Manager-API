@@ -87,7 +87,7 @@ public class AuthController extends Controller {
 				return jsonBodyRes;
 			}, ec.current());
 			return jsonBody;
-		}, ec.current());
+		});
 
 		return future.thenApplyAsync(res -> {
 			String id = res.findPath("id").asText();
@@ -122,7 +122,7 @@ public class AuthController extends Controller {
 			Http.Cookie cookie = new Http.Cookie("XSRF-TOKEN", session("csrf"), 3600, "" ,"https://morning-taiga-56897.herokuapp.com", true, true);
 
 			return redirect("https://morning-taiga-56897.herokuapp.com").withCookies(cookie);
-		}, ec.current());
+		});
 	}
 
 	public CompletionStage<Result> getLoggedUser() {
