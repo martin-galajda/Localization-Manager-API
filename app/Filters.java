@@ -29,8 +29,8 @@ public class Filters extends DefaultHttpFilters {
     /**
      */
     @Inject
-    public Filters(CSRFFilter csrfFilter) {
-        super(csrfFilter);
+    public Filters(CSRFFilter csrfFilter, ExampleFilter exampleFilter) {
+        super(csrfFilter, exampleFilter);
     }
 
 
