@@ -1,7 +1,6 @@
 package model;
 
-public class Converter {
-	private String Id;
+public class Converter extends BaseModelClass {
 
 	private String Name;
 
@@ -10,10 +9,6 @@ public class Converter {
 	private String Script;
 
 	private String OutputFormat;
-
-	public void setId(String id) {
-		Id = id;
-	}
 
 	public void setName(String name) {
 		Name = name;
@@ -31,10 +26,7 @@ public class Converter {
 		OutputFormat = outputFormat;
 	}
 
-	public String getId() {
 
-		return Id;
-	}
 
 	public String getName() {
 		return Name;

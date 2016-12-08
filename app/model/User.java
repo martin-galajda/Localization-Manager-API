@@ -1,16 +1,12 @@
 package model;
 
 
-public class User {
-	private String Id;
+public class User extends BaseModelClass {
 
 	private String Name;
 
 	private String TeamName;
 
-	public void setId(String id) {
-		Id = id;
-	}
 
 	public void setName(String name) {
 		Name = name;
@@ -18,11 +14,6 @@ public class User {
 
 	public void setTeamName(String teamName) {
 		TeamName = teamName;
-	}
-
-	public String getId() {
-
-		return Id;
 	}
 
 	public String getName() {

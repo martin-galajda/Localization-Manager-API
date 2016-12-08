@@ -1,9 +1,7 @@
 package model;
 
 
-public class Project {
-	private String Id;
-
+public class Project extends BaseModelClass {
 	private String Name;
 
 	private String Description;
@@ -49,9 +47,6 @@ public class Project {
 		return Converter;
 	}
 
-	public void setId(String id) {
-		Id = id;
-	}
 
 	public void setName(String name) {
 		Name = name;
@@ -81,9 +76,6 @@ public class Project {
 		StashId = stashId;
 	}
 
-	public String getId() {
-		return Id;
-	}
 
 	public String getName() {
 		return Name;
