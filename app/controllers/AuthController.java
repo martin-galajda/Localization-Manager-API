@@ -134,7 +134,7 @@ public class AuthController extends Controller {
 
 		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
 
-		response().setHeader("Access-Control-Allow-Origin", "*");
+		response().setHeader("Access-Control-Allow-Origin", "https://morning-taiga-56897.herokuapp.com");
 		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
 
 		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
