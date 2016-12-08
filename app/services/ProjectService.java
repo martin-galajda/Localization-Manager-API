@@ -12,11 +12,19 @@ import java.util.concurrent.CompletionStage;
 @Singleton
 public class ProjectService extends BaseDatabaseService<Project> {
 
-	ProjectService() {
+	public ProjectService() {
 		super("projects", Project.class);
 	}
 
 	public CompletionStage<Collection<Project>> getProjects() {
 		return this.fetchEntities();
+	}
+
+	public CompletionStage<Collection<Project>> addProject(Project project) {
+		return this.addProject(project);
+	}
+
+	public CompletionStage<Project> updateProject(String projectId, Project project) {
+		return this.updateEntity(project);
 	}
 }

@@ -51,41 +51,21 @@ public class ProjectController extends Controller {
 		return this.projectService.getProjects().thenApplyAsync(projects -> ok(Json.toJson(projects)));
     }
 
-	public Result postProject() {
-		FirebaseDatabase database = FirebaseDatabase.getInstance();
-		DatabaseReference projectsReference = database.getReference("projects");
-		ObjectMapper jsonObjectMapper = new ObjectMapper();
+	public CompletionStage<Result> postProject() {
 		JsonNode newProjectJson = request().body().asJson();
+		Project newProject = Project.create(newProjectJson);
 
-		response().setHeader("Access-Control-Allow-Origin", "*");
-		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
-
-		try {
-			Project newProject = jsonObjectMapper.treeToValue(newProjectJson, Project.class);
-			if (newProject.getId() == null) {
-				return createNewProject(newProject);
-			}
-			Map <String, Object> projectUpdates = new HashMap<>();
-			projectUpdates.put(newProject.getId(), newProject);
-			projectsReference.updateChildren(projectUpdates);
-		}
-		catch (Exception e) {
-			System.err.println("Exception occured : " + e);
-			return internalServerError(e.toString());
+		if (newProject.getId() == null) {
+			return createNewProject(newProject);
 		}
 
-
-		return ok(newProjectJson);
+		return this.projectService
+				.updateProject(newProject.getId(), newProject)
+				.thenApplyAsync(project -> ok(Json.toJson(project)));
 	}
 
-	private Result createNewProject(Project newProject) {
-		FirebaseDatabase database = FirebaseDatabase.getInstance();
-		DatabaseReference projectsReference = database.getReference("projects");
-		DatabaseReference newProjectRef = projectsReference.push();
-		newProjectRef.setValue(newProject);
-		newProject.setId(newProjectRef.getKey());
-		JsonNode newProjectJson = Json.toJson(newProject);
-		return ok(newProjectJson);
+	private CompletionStage<Result> createNewProject(Project newProject) {
+		return this.projectService.addProject(newProject).thenApplyAsync(entity -> ok(Json.toJson(entity)));
 	}
 
 	public Result options() {

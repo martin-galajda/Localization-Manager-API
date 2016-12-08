@@ -11,10 +11,7 @@ import model.BaseModelClass;
 import model.User;
 import play.libs.F;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -58,5 +55,27 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		reference.addListenerForSingleValueEvent(new FirebaseDatabaseListener<T>(promise, genericEntity));
 
 		return promise.thenApplyAsync(values -> values);
+	}
+
+	protected CompletableFuture<T> addEntity(T entity) {
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference reference = database.getReference(pathToEntity);
+		CompletableFuture<T> promise = new CompletableFuture<>();
+
+		reference.push().setValue(entity).addOnCompleteListener(new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
+
+		return promise;
+	}
+
+	protected CompletableFuture<T> updateEntity(T entity) {
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference reference = database.getReference(pathToEntity);
+		CompletableFuture<T> promise = new CompletableFuture<>();
+
+		Map<String, Object> entityUpdates = new HashMap<>();
+		entityUpdates.put(entity.getId(), entity);
+		reference.updateChildren(entityUpdates, new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
+
+		return promise;
 	}
 }
