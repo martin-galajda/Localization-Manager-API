@@ -20,8 +20,8 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		return this.fetchEntities();
 	}
 
-	public CompletionStage<Collection<Project>> addProject(Project project) {
-		return this.addProject(project);
+	public CompletionStage<Project> addProject(Project project) {
+		return this.addEntity(project);
 	}
 
 	public CompletionStage<Project> updateProject(String projectId, Project project) {
