@@ -136,6 +136,8 @@ public class AuthController extends Controller {
 
 		response().setHeader("Access-Control-Allow-Origin", "https://morning-taiga-56897.herokuapp.com");
 		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
+		response().setHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, X-Json, X-Prototype-Version, X-Requested-With, X-XSRF-TOKEN");
+		response().setHeader("Access-Control-Allow-Credentials", "true");
 
 		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
