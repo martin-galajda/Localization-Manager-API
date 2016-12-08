@@ -48,10 +48,12 @@ public class ProjectController extends Controller {
 
 
     public CompletionStage<Result> getProjects() {
+		this.setHeaders();
 		return this.projectService.getProjects().thenApplyAsync(projects -> ok(Json.toJson(projects)));
     }
 
 	public CompletionStage<Result> postProject() {
+		this.setHeaders();
 		JsonNode newProjectJson = request().body().asJson();
 		Project newProject = Project.create(newProjectJson);
 
@@ -65,6 +67,7 @@ public class ProjectController extends Controller {
 	}
 
 	private CompletionStage<Result> createNewProject(Project newProject) {
+		this.setHeaders();
 		return this.projectService.addProject(newProject).thenApplyAsync(entity -> ok(Json.toJson(entity)));
 	}
 
@@ -73,14 +76,18 @@ public class ProjectController extends Controller {
 	}
 
 	public Result options(String s) {
+		this.setHeaders();
+		return ok();
+	}
+
+
+	private void setHeaders() {
 		response().setHeader("Access-Control-Allow-Origin", "https://morning-taiga-56897.herokuapp.com");
 		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
 		response().setHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, X-Json, X-Prototype-Version, X-Requested-With, X-XSRF-TOKEN");
 		response().setHeader("Access-Control-Allow-Credentials", "true");
 
-		return ok();
 	}
-
 
 	public Result sessionTest() {
 		return ok("Name=" + session("name") + "csrf=" + session("csrfToken"));

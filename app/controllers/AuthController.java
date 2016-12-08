@@ -29,6 +29,7 @@ public class AuthController extends Controller {
 	@Inject HttpExecutionContext ec;
 
 	public Result google() {
+		this.setHeaders();
 		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
 		String redirectUri = "https://glacial-hollows-97055.herokuapp.com/auth/google/handler";
 		String prompt = "consent";
@@ -52,6 +53,7 @@ public class AuthController extends Controller {
 	}
 
 	public CompletionStage<Result> handleGoogle() {
+		this.setHeaders();
 		String code = request().getQueryString("code");
 		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
 		String clientSecret = "3djQduYEEVXCJ9kdg4JGC0L2";
@@ -123,6 +125,7 @@ public class AuthController extends Controller {
 	}
 
 	public CompletionStage<Result> getLoggedUser() {
+		this.setHeaders();
 		String id = session("logged_user_id");
 		System.err.println("Printing session info: " + session());
 		System.out.println(id);
@@ -178,5 +181,12 @@ public class AuthController extends Controller {
 		session().clear();
 
 		return ok();
+	}
+
+	private void setHeaders() {
+		response().setHeader("Access-Control-Allow-Origin", "https://morning-taiga-56897.herokuapp.com");
+		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
+		response().setHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, X-Json, X-Prototype-Version, X-Requested-With, X-XSRF-TOKEN");
+		response().setHeader("Access-Control-Allow-Credentials", "true");
 	}
 }
