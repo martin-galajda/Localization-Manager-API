@@ -9,12 +9,14 @@ GET     /projects                   controllers.ProjectController.getProjects
 
 OPTIONS  /                          controllers.ProjectController.options
 OPTIONS  /logged_user               controllers.ProjectController.options
+OPTIONS  /*url                      controllers.ProjectController.options
 POST     /project                   controllers.ProjectController.postProject
 
 
 GET     /auth/google                controllers.AuthController.google
 GET     /auth/google/handler        controllers.AuthController.handleGoogle
 GET     /auth/google/success        controllers.AuthController.googleSuccess
+GET     /auth/logout                controllers.AuthController.logout
 # An example controller showing how to write asynchronous code
 
 # Map static resources from the /public folder to the /assets URL path

@@ -173,4 +173,10 @@ public class AuthController extends Controller {
 	public Result googleSuccess() {
 		return ok("Sucess");
 	}
+
+	public Result logout() {
+		session().clear();
+
+		return ok();
+	}
 }
