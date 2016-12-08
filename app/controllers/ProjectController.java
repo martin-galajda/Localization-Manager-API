@@ -10,6 +10,7 @@ import com.google.firebase.*;
 import play.mvc.*;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
+import services.ProjectService;
 import views.html.*;
 
 import java.util.List;
@@ -29,7 +30,11 @@ import javax.inject.Inject;
  * to the application's home page.
  */
 public class ProjectController extends Controller {
-	@Inject HttpExecutionContext ec;
+	@Inject
+	private HttpExecutionContext ec;
+
+	@Inject
+	private ProjectService projectService;
 
     /**
      * An action that renders an HTML page with a welcome message.
@@ -43,34 +48,7 @@ public class ProjectController extends Controller {
 
 
     public CompletionStage<Result> getProjects() {
-		System.err.println("Printing session info: " + session());
-		FirebaseDatabase database = FirebaseDatabase.getInstance();
-		DatabaseReference projectsReference = database.getReference("projects");
-		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
-		response().setHeader("Access-Control-Allow-Origin", "*");
-		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
-
-		projectsReference.addListenerForSingleValueEvent(new ValueEventListener() {
-
-			@Override
-			public void onDataChange(DataSnapshot snapshot) {
-				GenericTypeIndicator<HashMap<String, Project>> t = new GenericTypeIndicator<HashMap<String, Project>>() {};
-				HashMap<String, Project> projects = snapshot.getValue(t);
-				projects.forEach((projectId, projectValue) -> {
-					projectValue.setId(projectId);
-				});
-				System.out.println(projects);
-				JsonNode node = Json.toJson(projects.values());
-				future.complete(node);
-			}
-
-			@Override
-			public void onCancelled(DatabaseError err) {
-				System.err.println("Database error occured while reading projects: " + err.getMessage());
-			}
-		});
-
-		return future.thenApplyAsync((jsonNode -> ok(jsonNode)), ec.current());
+		return this.projectService.getProjects().thenApplyAsync(projects -> ok(Json.toJson(projects)));
     }
 
 	public Result postProject() {
