@@ -1,6 +1,8 @@
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.inject.AbstractModule;
+import services.ProjectService;
+import services.UserService;
 
 import java.io.FileInputStream;
 import java.time.Clock;
@@ -23,9 +25,8 @@ public class Module extends AbstractModule {
         bind(Clock.class).toInstance(Clock.systemDefaultZone());
         // Ask Guice to create an instance of ApplicationTimer when the
         // application starts.
-        bind(ApplicationTimer.class).asEagerSingleton();
-        // Set AtomicCounter as the implementation for Counter.
-        bind(Counter.class).to(AtomicCounter.class);
+        bind(ProjectService.class).asEagerSingleton();
+        bind(UserService.class).asEagerSingleton();
 
         try {
             FirebaseOptions options = new FirebaseOptions.Builder()
