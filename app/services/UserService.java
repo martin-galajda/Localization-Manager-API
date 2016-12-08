@@ -13,7 +13,7 @@ import java.util.concurrent.CompletionStage;
 @Singleton
 public class UserService extends BaseDatabaseService<User> {
 	public UserService() {
-		super("users");
+		super("users", User.class);
 	}
 
 	public CompletionStage<Collection<User>> getUsers() {

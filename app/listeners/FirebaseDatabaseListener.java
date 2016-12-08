@@ -1,33 +1,33 @@
 package listeners;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.firebase.database.*;
 import model.BaseModelClass;
-import model.Project;
-import play.libs.Json;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by martin on 12/8/16.
  */
 public class FirebaseDatabaseListener<T extends BaseModelClass> implements ValueEventListener {
-	protected CompletableFuture<HashMap<String, T>> future;
+	protected final CompletableFuture<Collection<T>> promise;
+	private final Class<T> genericEntity;
 
-	public FirebaseDatabaseListener(CompletableFuture<HashMap<String, T>> future) {
-		this.future = future;
+	public FirebaseDatabaseListener(CompletableFuture<Collection<T>> future, Class<T> genericEntity) {
+		this.promise = future;
+		this.genericEntity = genericEntity;
 	}
 
 	@Override
 	public void onDataChange(DataSnapshot dataSnapshot) {
-		GenericTypeIndicator<HashMap<String, T>> t = new GenericTypeIndicator<HashMap<String, T>>() {};
-		HashMap<String, T> entities = dataSnapshot.getValue(t);
-		entities.forEach((entityId, entityValue) -> {
-			entityValue.setId(entityId);
-		});
-		future.complete(entities);
+		List<T> entitiesList = new ArrayList();
+		for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+			T entity = childSnapshot.getValue(genericEntity);
+			entity.setId(childSnapshot.getKey());
+			entitiesList.add(entity);
+		}
+
+		promise.complete(entitiesList);
 	}
 
 	@Override

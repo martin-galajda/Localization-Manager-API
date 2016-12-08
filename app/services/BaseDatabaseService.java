@@ -8,6 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import listeners.FirebaseDatabaseListener;
 import model.BaseModelClass;
+import model.User;
 import play.libs.F;
 
 import java.util.ArrayList;
@@ -21,10 +22,12 @@ import java.util.concurrent.CompletionStage;
  * Created by martin on 12/8/16.
  */
 public abstract class BaseDatabaseService<T extends BaseModelClass> {
-	String pathToEntity;
+	private final String pathToEntity;
+	private final Class<T> genericEntity;
 
-	BaseDatabaseService(String pathToEntity) {
+	BaseDatabaseService(String pathToEntity, Class<T> genericEntity) {
 		this.pathToEntity = pathToEntity;
+		this.genericEntity = genericEntity;
 	}
 
 	protected DatabaseReference getReference(String path) {
@@ -32,28 +35,27 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		return database.getReference(path);
 	}
 
-
-	protected CompletionStage<HashMap<String, T>> getEntitiesEqualingTo(String key, String value) {
+	protected CompletableFuture<Collection<T>> getEntitiesEqualingTo(String key, String value) {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference reference = database.getReference(pathToEntity);
-		CompletableFuture<HashMap<String, T>> promise = new CompletableFuture<>();
+		CompletableFuture<Collection<T>> promise = new CompletableFuture<>();
 
 		if (key != null && value != null) {
 			Query result = reference.orderByChild(key).equalTo(value);
-			result.addListenerForSingleValueEvent(new FirebaseDatabaseListener<T>(promise));
+			result.addListenerForSingleValueEvent(new FirebaseDatabaseListener<T>(promise, genericEntity));
 		} else {
-			reference.addListenerForSingleValueEvent(new FirebaseDatabaseListener<T>(promise));
+			reference.addListenerForSingleValueEvent(new FirebaseDatabaseListener<T>(promise, genericEntity));
 		}
 
 		return promise.thenApplyAsync(values -> values);
 	}
 
-	protected CompletionStage<HashMap<String, T>> fetchEntities() {
+	protected CompletableFuture<Collection<T>> fetchEntities() {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference reference = database.getReference(pathToEntity);
-		CompletableFuture<HashMap<String, T>> promise = new CompletableFuture<>();
+		CompletableFuture<Collection<T>> promise = new CompletableFuture<>();
 
-		reference.addListenerForSingleValueEvent(new FirebaseDatabaseListener<T>(promise));
+		reference.addListenerForSingleValueEvent(new FirebaseDatabaseListener<T>(promise, genericEntity));
 
 		return promise.thenApplyAsync(values -> values);
 	}
