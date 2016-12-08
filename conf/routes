@@ -9,7 +9,7 @@ GET     /projects                   controllers.ProjectController.getProjects
 
 OPTIONS  /                          controllers.ProjectController.options
 OPTIONS  /logged_user               controllers.ProjectController.options
-OPTIONS  /:url                      controllers.ProjectController.options
+OPTIONS  /:url                      controllers.ProjectController.options(url)
 POST     /project                   controllers.ProjectController.postProject
 
 
