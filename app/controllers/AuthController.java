@@ -1,5 +1,6 @@
 package controllers;
 
+import authentication.providers.GoogleProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.firebase.database.*;
 import model.Project;
@@ -27,69 +28,20 @@ public class AuthController extends Controller {
 
 	@Inject WSClient ws;
 	@Inject HttpExecutionContext ec;
+	@Inject GoogleProvider googleProvider;
 
 	public Result google() {
 		this.setHeaders();
-		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
-		String redirectUri = "https://glacial-hollows-97055.herokuapp.com/auth/google/handler";
-		String prompt = "consent";
-		String responseType = "code";
-		String scope = "https://www.googleapis.com/auth/plus.me";
-		String accessType = "offline";
-
-		String googleUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-
-
-		googleUrl += "?" +
-				"redirect_uri=" + redirectUri +
-				"&client_id=" + clientId +
-				"&prompt=" + prompt +
-				"&response_type=" + responseType +
-				"&scope=" + scope +
-				"&access_type=" + accessType;
-
-
-		return redirect(googleUrl);
+		return redirect(googleProvider.getRedirectUrl());
 	}
 
-	public CompletionStage<Result> handleGoogle() {
+	public Result handleGoogle() {
 		this.setHeaders();
 		String code = request().getQueryString("code");
-		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
-		String clientSecret = "3djQduYEEVXCJ9kdg4JGC0L2";
-		String grantType = "authorization_code";
-		String redirectUri = "https://glacial-hollows-97055.herokuapp.com/auth/google/handler";
+		googleProvider.handleGoogleAuthentication(code)
+				.thenApplyAsync(this::saveUser);
 
-		WSRequest req = ws.url("https://accounts.google.com/o/oauth2/token");
-		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
-
-		String reqForm = "code=" + code +
-				"&client_id=" + clientId +
-				"&client_secret=" + clientSecret +
-				"&grant_type=" + grantType +
-				"&redirect_uri=" + redirectUri;
-
-		req.setContentType("application/x-www-form-urlencoded").post(reqForm).thenApplyAsync(response -> {
-			JsonNode jsonBody = response.asJson();
-			String accessToken = jsonBody.findPath("access_token").asText();
-			String refreshToken = jsonBody.findPath("refresh_token").asText();
-
-			WSRequest accessRequest = ws.url("https://www.googleapis.com/oauth2/v2/userinfo");
-			WSRequest authReq = accessRequest.setHeader("Authorization", "Bearer " + accessToken);
-
-			CompletionStage<WSResponse> authFuture = authReq.get();
-
-			authFuture.thenApplyAsync(res -> {
-				JsonNode jsonBodyRes = res.asJson();
-				String name = jsonBodyRes.findPath("name").asText();
-				String id = jsonBodyRes.findPath("id").asText();
-				future.complete(jsonBodyRes);
-				return jsonBodyRes;
-			}, ec.current());
-			return jsonBody;
-		}, ec.current());
-
-		return future.thenApplyAsync(res -> {
+		/*return future.thenApplyAsync(res -> {
 			String id = res.findPath("id").asText();
 			String name = res.findPath("name").asText();
 
@@ -121,7 +73,43 @@ public class AuthController extends Controller {
 
 
 			return redirect("https://morning-taiga-56897.herokuapp.com");
-		}, ec.current());
+		}, ec.current());*/
+		return redirect("https://morning-taiga-56897.herokuapp.com");
+	}
+
+	private CompletionStage<User> saveUser(JsonNode node)
+	{
+		String id = node.findPath("id").asText();
+		final String name = node.findPath("name").asText();
+		final CompletableFuture<User> future = new CompletableFuture<>();
+
+
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference usersReference = database.getReference("users");
+		Query queryRef = usersReference.orderByChild("id").equalTo(id);
+
+		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(DataSnapshot dataSnapshot) {
+				if (!dataSnapshot.exists()) {
+					DatabaseReference userReference = usersReference.push();
+
+					User user = new User();
+					user.setName(name);
+					user.setId(userReference.getKey());
+					userReference.setValue(user);
+
+					future.complete(user);
+				}
+			}
+
+			@Override
+			public void onCancelled(DatabaseError databaseError) {
+				System.err.println(databaseError);
+			}
+		});
+
+		return future;
 	}
 
 	public CompletionStage<Result> getLoggedUser() {

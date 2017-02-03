@@ -1,3 +1,4 @@
+import authentication.providers.GoogleProvider;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.inject.AbstractModule;
@@ -27,6 +28,7 @@ public class Module extends AbstractModule {
         // application starts.
         bind(ProjectService.class).asEagerSingleton();
         bind(UserService.class).asEagerSingleton();
+        bind(GoogleProvider.class).asEagerSingleton();
 
         try {
             FirebaseOptions options = new FirebaseOptions.Builder()
