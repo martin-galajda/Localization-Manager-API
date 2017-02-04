@@ -25,9 +25,6 @@ public class GoogleProvider {
 	@Inject
 	private WSClient wsClient;
 
-	//@Inject
-	//private HttpExecutionContext ec;
-
 	public GoogleProvider() {
 
 	}
@@ -57,9 +54,7 @@ public class GoogleProvider {
 	{
 		return this
 				.exchangeCodeForToken(code, executor)
-				.thenComposeAsync(token -> {
-					return this.exchangeTokenForUserInfo(token, executor);
-				}, executor);
+				.thenComposeAsync(token -> this.exchangeTokenForUserInfo(token, executor), executor);
 	}
 
 	public CompletionStage<WSResponse> exchangeCodeForToken(String code, Executor executor) {
@@ -92,14 +87,5 @@ public class GoogleProvider {
 
 		return authFuture.thenApplyAsync(WSResponse::asJson, executor);
 	}
-/*
-	public void handleReceivedUserInfo(WSResponse res) {
-		JsonNode jsonBodyRes = res.asJson();
-		String name = jsonBodyRes.findPath("name").asText();
-		String id = jsonBodyRes.findPath("id").asText();
-		//future.complete(jsonBodyRes);
-		return jsonBodyRes;
-	}
-*/
 
 }

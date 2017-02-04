@@ -23,7 +23,11 @@ import java.util.concurrent.CompletionStage;
 public class AuthController extends Controller {
 
 	public static String SESSION_USER_ID_FIELD = "logged_user_id";
+	public static String SESSION_USER_PROVIDER_ID_FIELD = "logged_user_provider_id";
 	public static String SESSION_USER_NAME_FIELD = "logged_user_name";
+
+	public static String USER_ID_FIELD = "id";
+	public static String USER_PROVIDER_ID_FIELD = "idFromProvider";
 
 
 	@Inject WSClient ws;
@@ -41,56 +45,21 @@ public class AuthController extends Controller {
 		return googleProvider.handleGoogleAuthentication(code, ec.current())
 				.thenApplyAsync(this::getUserInfo, ec.current())
 				.thenComposeAsync(this::saveUserInfoInSession, ec.current())
-				.thenApplyAsync(user -> {
-					return redirect("https://morning-taiga-56897.herokuapp.com");
-				});
-		/*return future.thenApplyAsync(res -> {
-			String id = res.findPath("id").asText();
-			String name = res.findPath("name").asText();
-
-			FirebaseDatabase database = FirebaseDatabase.getInstance();
-			DatabaseReference usersReference = database.getReference("users");
-			Query queryRef = usersReference.orderByChild("id").equalTo(id);
-
-			queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-				@Override
-				public void onDataChange(DataSnapshot dataSnapshot) {
-					if (!dataSnapshot.exists()) {
-						User user = new User();
-						user.setId(id);
-						user.setName(name);
-
-						usersReference.push().setValue(user);
-					}
-				}
-
-				@Override
-				public void onCancelled(DatabaseError databaseError) {
-					System.err.println(databaseError);
-				}
-			});
-
-			session().put("logged_user_id", id);
-
-			System.err.println("In redirecting after auth Session is: " + session());
-
-
-			return redirect("https://morning-taiga-56897.herokuapp.com");
-		}, ec.current());*/
-
+				.thenApplyAsync(user -> redirect("https://morning-taiga-56897.herokuapp.com"));
 	}
 
 	private CompletionStage<User> getUserInfo(JsonNode node)
 	{
-		final String id = node.findPath("id").asText();
+		System.err.println(node);
+		final String userProviderId = node.findPath("id").asText();
 		final String name = node.findPath("name").asText();
 		final CompletableFuture<User> future = new CompletableFuture<>();
 
-		System.err.println("Inside getUserInfo, response is " + id + " and " + name);
+		System.err.println("Inside getUserInfo, response is " + userProviderId + " and " + name);
 
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
-		Query queryRef = usersReference.orderByChild("idFromProvider").equalTo(id);
+		Query queryRef = usersReference.orderByChild("idFromProvider").equalTo(userProviderId);
 
 		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
@@ -101,7 +70,7 @@ public class AuthController extends Controller {
 					User user = new User();
 					user.setName(name);
 					user.setId(userReference.getKey());
-					user.setIdFromProvider(id);
+					user.setIdFromProvider(userProviderId);
 					userReference.setValue(user);
 
 					future.complete(user);

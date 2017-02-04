@@ -10,7 +10,7 @@ public class User extends BaseModelClass {
 	protected String IdFromProvider;
 
 	public String getIdFromProvider() {
-		return Id;
+		return IdFromProvider;
 	}
 
 	public void setIdFromProvider(String idFromProvider) {
