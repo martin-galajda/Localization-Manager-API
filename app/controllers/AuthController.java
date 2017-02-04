@@ -88,7 +88,7 @@ public class AuthController extends Controller {
 
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
-		Query queryRef = usersReference.orderByChild("id").equalTo(id);
+		Query queryRef = usersReference.orderByChild("idFromProvider").equalTo(id);
 
 		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
