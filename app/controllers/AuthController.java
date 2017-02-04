@@ -82,7 +82,8 @@ public class AuthController extends Controller {
 		String id = node.findPath("id").asText();
 		final String name = node.findPath("name").asText();
 		final CompletableFuture<User> future = new CompletableFuture<>();
-
+		
+		System.err.println("Inside saveUser, response is " + id + " and " + name);
 
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
