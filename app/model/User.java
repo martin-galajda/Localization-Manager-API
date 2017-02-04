@@ -7,6 +7,16 @@ public class User extends BaseModelClass {
 
 	private String TeamName;
 
+	protected String IdFromProvider;
+
+	public String getIdFromProvider() {
+		return Id;
+	}
+
+	public void setIdFromProvider(String id) {
+		IdFromProvider = id;
+	}
+
 
 	public void setName(String name) {
 		Name = name;

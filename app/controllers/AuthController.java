@@ -99,6 +99,7 @@ public class AuthController extends Controller {
 					User user = new User();
 					user.setName(name);
 					user.setId(userReference.getKey());
+					user.setIdFromProvider(id);
 					userReference.setValue(user);
 
 					future.complete(user);
