@@ -24,8 +24,8 @@ public class GoogleProvider {
 	@Inject
 	private WSClient wsClient;
 
-	@Inject
-	private HttpExecutionContext ec;
+	//@Inject
+	//private HttpExecutionContext ec;
 
 	public GoogleProvider() {
 
@@ -52,14 +52,14 @@ public class GoogleProvider {
 		return googleUrl;
 	}
 
-	public CompletionStage<JsonNode> handleGoogleAuthentication(String code)
+	public CompletionStage<JsonNode> handleGoogleAuthentication(String code, HttpExecutionContext ec)
 	{
 		return this
-				.exchangeCodeForToken(code)
+				.exchangeCodeForToken(code, ec)
 				.thenComposeAsync(this::exchangeTokenForUserInfo, ec.current());
 	}
 
-	public CompletionStage<WSResponse> exchangeCodeForToken(String code) {
+	public CompletionStage<WSResponse> exchangeCodeForToken(String code, HttpExecutionContext ec) {
 
 		// todo check if this works, maybe replace with query string extracing
 	//	String code = response.asJson().findPath("code").asText();

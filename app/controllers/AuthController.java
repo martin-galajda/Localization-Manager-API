@@ -38,9 +38,9 @@ public class AuthController extends Controller {
 	public Result handleGoogle() {
 		this.setHeaders();
 		String code = request().getQueryString("code");
-		googleProvider.handleGoogleAuthentication(code)
-				.thenApplyAsync(this::getUserInfo)
-				.thenApplyAsync(this::saveUserInfoInSession);
+		googleProvider.handleGoogleAuthentication(code, ec)
+				.thenApplyAsync(this::getUserInfo, ec.current())
+				.thenApplyAsync(this::saveUserInfoInSession, ec.current());
 
 		/*return future.thenApplyAsync(res -> {
 			String id = res.findPath("id").asText();
