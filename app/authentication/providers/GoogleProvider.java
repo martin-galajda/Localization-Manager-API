@@ -2,6 +2,7 @@ package authentication.providers;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executor;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.firebase.database.*;
@@ -52,14 +53,16 @@ public class GoogleProvider {
 		return googleUrl;
 	}
 
-	public CompletionStage<JsonNode> handleGoogleAuthentication(String code, HttpExecutionContext ec)
+	public CompletionStage<JsonNode> handleGoogleAuthentication(String code, Executor executor)
 	{
 		return this
-				.exchangeCodeForToken(code, ec)
-				.thenComposeAsync(this::exchangeTokenForUserInfo, ec.current());
+				.exchangeCodeForToken(code, executor)
+				.thenComposeAsync(token -> {
+					return this.exchangeTokenForUserInfo(token, executor);
+				}, executor);
 	}
 
-	public CompletionStage<WSResponse> exchangeCodeForToken(String code, HttpExecutionContext ec) {
+	public CompletionStage<WSResponse> exchangeCodeForToken(String code, Executor executor) {
 
 		// todo check if this works, maybe replace with query string extracing
 	//	String code = response.asJson().findPath("code").asText();
@@ -74,10 +77,10 @@ public class GoogleProvider {
 
 		return req.setContentType("application/x-www-form-urlencoded")
 				.post(reqForm)
-				.thenApplyAsync(res -> res, ec.current());
+				.thenApplyAsync(res -> res, executor);
 	}
 
-	public CompletionStage<JsonNode> exchangeTokenForUserInfo(WSResponse response) {
+	public CompletionStage<JsonNode> exchangeTokenForUserInfo(WSResponse response, Executor executor) {
 		JsonNode jsonBody = response.asJson();
 		String accessToken = jsonBody.findPath("access_token").asText();
 		String refreshToken = jsonBody.findPath("refresh_token").asText();
@@ -87,7 +90,7 @@ public class GoogleProvider {
 
 		CompletionStage<WSResponse> authFuture = authReq.get();
 
-		return authFuture.thenApplyAsync(WSResponse::asJson);
+		return authFuture.thenApplyAsync(WSResponse::asJson, executor);
 	}
 /*
 	public void handleReceivedUserInfo(WSResponse res) {
