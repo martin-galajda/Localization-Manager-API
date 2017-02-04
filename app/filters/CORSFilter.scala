@@ -10,8 +10,8 @@ class CORSFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext
   def apply(nextFilter: RequestHeader => Future[Result])
            (requestHeader: RequestHeader): Future[Result] = {
 
+    println(requestHeader)
     nextFilter(requestHeader).map { result =>
-      println(result)
       result.withHeaders(
         "Access-Control-Allow-Origin" -> "https://morning-taiga-56897.herokuapp.com",
         "Access-Control-Allow-Methods" -> "GET, POST, OPTIONS, DELETE, PUT",
