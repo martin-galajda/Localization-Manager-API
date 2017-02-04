@@ -123,8 +123,8 @@ public class AuthController extends Controller {
 	private CompletionStage<User> saveUserInfoInSession(CompletionStage<User> future)
 	{
 		return future.thenApplyAsync(user -> {
-			session(SESSION_USER_ID_FIELD, user.getId());
-			session(SESSION_USER_NAME_FIELD, user.getId());
+			session().put(SESSION_USER_ID_FIELD, user.getId());
+			session().put(SESSION_USER_NAME_FIELD, user.getName());
 			return user;
 		});
 	}
