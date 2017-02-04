@@ -59,7 +59,7 @@ public class AuthController extends Controller {
 
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
-		Query queryRef = usersReference.orderByChild("idFromProvider").equalTo(userProviderId);
+		Query queryRef = usersReference.orderByChild(USER_PROVIDER_ID_FIELD).equalTo(userProviderId);
 
 		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
@@ -94,6 +94,7 @@ public class AuthController extends Controller {
 	{
 		return future.thenApplyAsync(user -> {
 			session().put(SESSION_USER_ID_FIELD, user.getId());
+			session().put(SESSION_USER_PROVIDER_ID_FIELD, user.getIdFromProvider());
 			session().put(SESSION_USER_NAME_FIELD, user.getName());
 			System.err.println(session());
 			return user;
@@ -109,7 +110,7 @@ public class AuthController extends Controller {
 
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
-		Query queryRef = usersReference.orderByChild("id").equalTo(id);
+		Query queryRef = usersReference.orderByChild(USER_ID_FIELD).equalTo(id);
 
 		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
 
