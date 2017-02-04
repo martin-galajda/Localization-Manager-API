@@ -41,7 +41,7 @@ public class AuthController extends Controller {
 		return googleProvider.handleGoogleAuthentication(code, ec)
 				.thenApplyAsync(this::getUserInfo, ec.current())
 				.thenApplyAsync(this::saveUserInfoInSession, ec.current())
-				.thenApplyAsync(user -> redirect("https://morning-taiga-56897.herokuapp.com"));
+				.thenApplyAsync(user -> redirect("https://morning-taiga-56897.herokuapp.com"), ec.current());
 
 		/*return future.thenApplyAsync(res -> {
 			String id = res.findPath("id").asText();
@@ -125,6 +125,7 @@ public class AuthController extends Controller {
 		return future.thenApplyAsync(user -> {
 			session().put(SESSION_USER_ID_FIELD, user.getId());
 			session().put(SESSION_USER_NAME_FIELD, user.getName());
+			System.err.println(session());
 			return user;
 		}, ec.current());
 	}
