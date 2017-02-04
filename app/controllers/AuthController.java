@@ -126,7 +126,7 @@ public class AuthController extends Controller {
 			session().put(SESSION_USER_ID_FIELD, user.getId());
 			session().put(SESSION_USER_NAME_FIELD, user.getName());
 			return user;
-		});
+		}, ec.current());
 	}
 
 	public CompletionStage<Result> getLoggedUser() {
