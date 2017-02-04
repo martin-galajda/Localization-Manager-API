@@ -3,12 +3,10 @@ package controllers;
 import authentication.providers.GoogleProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.firebase.database.*;
-import model.Project;
 import model.User;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.*;
-import play.filters.csrf.*;
 
 import javax.inject.Inject;
 
@@ -19,12 +17,14 @@ import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import java.security.SecureRandom;
-
 /**
  * Created by martin on 11/26/16.
  */
 public class AuthController extends Controller {
+
+	public static String SESSION_USER_ID_FIELD = "logged_user_id";
+	public static String SESSION_USER_NAME_FIELD = "logged_user_name";
+
 
 	@Inject WSClient ws;
 	@Inject HttpExecutionContext ec;
@@ -39,7 +39,8 @@ public class AuthController extends Controller {
 		this.setHeaders();
 		String code = request().getQueryString("code");
 		googleProvider.handleGoogleAuthentication(code)
-				.thenApplyAsync(this::saveUser);
+				.thenApplyAsync(this::getUserInfo)
+				.thenApplyAsync(this::saveUserInfoInSession);
 
 		/*return future.thenApplyAsync(res -> {
 			String id = res.findPath("id").asText();
@@ -77,13 +78,13 @@ public class AuthController extends Controller {
 		return redirect("https://morning-taiga-56897.herokuapp.com");
 	}
 
-	private CompletionStage<User> saveUser(JsonNode node)
+	private CompletionStage<User> getUserInfo(JsonNode node)
 	{
 		String id = node.findPath("id").asText();
 		final String name = node.findPath("name").asText();
 		final CompletableFuture<User> future = new CompletableFuture<>();
-		
-		System.err.println("Inside saveUser, response is " + id + " and " + name);
+
+		System.err.println("Inside getUserInfo, response is " + id + " and " + name);
 
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
@@ -101,6 +102,10 @@ public class AuthController extends Controller {
 					userReference.setValue(user);
 
 					future.complete(user);
+				} else {
+					User user = dataSnapshot.getValue(User.class);
+
+					future.complete(user);
 				}
 			}
 
@@ -113,9 +118,18 @@ public class AuthController extends Controller {
 		return future;
 	}
 
+	private CompletionStage<User> saveUserInfoInSession(CompletionStage<User> future)
+	{
+		return future.thenApplyAsync(user -> {
+			session(SESSION_USER_ID_FIELD, user.getId());
+			session(SESSION_USER_NAME_FIELD, user.getId());
+			return user;
+		});
+	}
+
 	public CompletionStage<Result> getLoggedUser() {
 		this.setHeaders();
-		String id = session("logged_user_id");
+		String id = session(SESSION_USER_ID_FIELD);
 		System.err.println("Printing session info: " + session());
 		System.out.println(id);
 		System.out.println(session());
@@ -160,7 +174,6 @@ public class AuthController extends Controller {
 			return jsonNode != null ? ok(jsonNode) : noContent();
 		}), ec.current());
 	}
-
 
 	public Result googleSuccess() {
 		return ok("Sucess");
