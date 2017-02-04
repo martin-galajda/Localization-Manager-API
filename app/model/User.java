@@ -13,8 +13,8 @@ public class User extends BaseModelClass {
 		return Id;
 	}
 
-	public void setIdFromProvider(String id) {
-		IdFromProvider = id;
+	public void setIdFromProvider(String idFromProvider) {
+		IdFromProvider = idFromProvider;
 	}
 
 

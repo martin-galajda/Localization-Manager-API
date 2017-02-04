@@ -35,12 +35,13 @@ public class AuthController extends Controller {
 		return redirect(googleProvider.getRedirectUrl());
 	}
 
-	public Result handleGoogle() {
+	public CompletionStage<Result> handleGoogle() {
 		this.setHeaders();
 		String code = request().getQueryString("code");
-		googleProvider.handleGoogleAuthentication(code, ec)
+		return googleProvider.handleGoogleAuthentication(code, ec)
 				.thenApplyAsync(this::getUserInfo, ec.current())
-				.thenApplyAsync(this::saveUserInfoInSession, ec.current());
+				.thenApplyAsync(this::saveUserInfoInSession, ec.current())
+				.thenApplyAsync(user -> redirect("https://morning-taiga-56897.herokuapp.com"));
 
 		/*return future.thenApplyAsync(res -> {
 			String id = res.findPath("id").asText();
@@ -75,12 +76,12 @@ public class AuthController extends Controller {
 
 			return redirect("https://morning-taiga-56897.herokuapp.com");
 		}, ec.current());*/
-		return redirect("https://morning-taiga-56897.herokuapp.com");
+
 	}
 
 	private CompletionStage<User> getUserInfo(JsonNode node)
 	{
-		String id = node.findPath("id").asText();
+		final String id = node.findPath("id").asText();
 		final String name = node.findPath("name").asText();
 		final CompletableFuture<User> future = new CompletableFuture<>();
 
