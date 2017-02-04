@@ -1,6 +1,7 @@
 import javax.inject.*;
 
 import akka.stream.Materializer;
+import filters.CORSFilter;
 import play.*;
 import play.mvc.EssentialFilter;
 import play.http.HttpFilters;
@@ -29,8 +30,8 @@ public class Filters extends DefaultHttpFilters {
     /**
      */
     @Inject
-    public Filters(CSRFFilter csrfFilter) {
-        super(csrfFilter);
+    public Filters(CSRFFilter csrfFilter, CORSFilter corsFilter) {
+        super(csrfFilter, corsFilter);
     }
 
 
