@@ -59,15 +59,16 @@ public class AuthController extends Controller {
 		final CompletableFuture<User> future = new CompletableFuture<>();
 
 		System.err.println("Inside getUserInfo, response is " + userProviderId + " and " + name);
-		this.userService.getUserByIdFromProvider(userProviderId).thenAcceptAsync(user -> {
+		userService.getUserByIdFromProvider(userProviderId).thenApplyAsync(user -> {
 			if (user == null) {
 				User newUser = new User();
 				newUser.setName(name);
 				newUser.setIdFromProvider(userProviderId);
-				this.userService.add(newUser).thenAcceptAsync(future::complete);
+				userService.add(newUser).thenApplyAsync(future::complete);
 			} else {
 				future.complete(user);
 			}
+			return true;
 		});
 
 		/*FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -163,10 +164,17 @@ public class AuthController extends Controller {
 		System.err.println("Printing session info: " + session());
 		System.out.println(id);
 		System.out.println(session());
-
 		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
-		userService.getUserById(id).thenAcceptAsync(user -> {
+		final CompletableFuture<Result> futureResult = new CompletableFuture<>();
+
+		if (id == null) {
+			futureResult.complete(null);
+			return futureResult;
+		}
+
+		userService.getUserById(id).thenApplyAsync(user -> {
 			future.complete(Json.toJson(user));
+			return true;
 		});
 		/*
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
