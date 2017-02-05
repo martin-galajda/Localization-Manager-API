@@ -168,7 +168,7 @@ public class AuthController extends Controller {
 		final CompletableFuture<Result> futureResult = new CompletableFuture<>();
 
 		if (id == null) {
-			futureResult.complete(null);
+			futureResult.complete(unauthorized());
 			return futureResult;
 		}
 
