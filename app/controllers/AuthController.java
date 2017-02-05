@@ -164,16 +164,14 @@ public class AuthController extends Controller {
 		System.out.println(id);
 		System.out.println(session());
 
+		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
+		userService.getUserById(id).thenAcceptAsync(user -> {
+			future.complete(Json.toJson(user));
+		});
+		/*
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
 		Query queryRef = usersReference.orderByChild(USER_ID_FIELD).equalTo(id);
-
-		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
-
-		response().setHeader("Access-Control-Allow-Origin", "https://morning-taiga-56897.herokuapp.com");
-		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
-		response().setHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, X-Json, X-Prototype-Version, X-Requested-With, X-XSRF-TOKEN");
-		response().setHeader("Access-Control-Allow-Credentials", "true");
 
 		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -198,7 +196,7 @@ public class AuthController extends Controller {
 			public void onCancelled(DatabaseError err) {
 				System.err.println("Database error occured while reading user: " + err.getMessage());
 			}
-		});
+		});*/
 
 		return future.thenApplyAsync((jsonNode -> {
 			return jsonNode != null ? ok(jsonNode) : noContent();
