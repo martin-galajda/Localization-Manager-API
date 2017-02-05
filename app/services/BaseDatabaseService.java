@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import listeners.FirebaseDatabaseChildListener;
 import listeners.FirebaseDatabaseListener;
 import model.BaseModelClass;
 import model.User;
@@ -47,6 +48,19 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		return promise.thenApplyAsync(values -> values);
 	}
 
+	protected CompletableFuture<T> getOneEntityEqualingTo(String key, String value) {
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference reference = database.getReference(pathToEntity);
+		CompletableFuture<T> promise = new CompletableFuture<>();
+
+		if (key != null && value != null) {
+			Query result = reference.orderByChild(key).equalTo(value);
+			result.addChildEventListener(new FirebaseDatabaseChildListener<>(promise, genericEntity));
+		}
+
+		return promise.thenApplyAsync(entityValue -> entityValue);
+	}
+
 	protected CompletableFuture<Collection<T>> fetchEntities() {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference reference = database.getReference(pathToEntity);
@@ -62,7 +76,11 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		DatabaseReference reference = database.getReference(pathToEntity);
 		CompletableFuture<T> promise = new CompletableFuture<>();
 
-		reference.push().setValue(entity).addOnCompleteListener(new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
+		DatabaseReference entityReference = reference.push();
+		entity.setId(entityReference.getKey());
+		entityReference
+				.setValue(entity)
+				.addOnCompleteListener(new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
 
 		return promise;
 	}

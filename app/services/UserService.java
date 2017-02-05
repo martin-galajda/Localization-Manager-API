@@ -19,4 +19,17 @@ public class UserService extends BaseDatabaseService<User> {
 	public CompletionStage<Collection<User>> getUsers() {
 		return this.fetchEntities();
 	}
+
+	public CompletionStage<User> getUserByIdFromProvider(String idFromProvider) {
+		return this.getOneEntityEqualingTo("idFromProvider", idFromProvider);
+	}
+
+	public CompletionStage<User> getUserById(String id) {
+		return this.getOneEntityEqualingTo("id", id);
+	}
+
+	public CompletionStage<User> add(User user) {
+		return this.addEntity(user);
+	}
+
 }

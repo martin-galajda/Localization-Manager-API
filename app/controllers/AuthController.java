@@ -11,6 +11,7 @@ import play.mvc.*;
 import javax.inject.Inject;
 
 import play.libs.ws.*;
+import services.UserService;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,6 +34,8 @@ public class AuthController extends Controller {
 	@Inject WSClient ws;
 	@Inject HttpExecutionContext ec;
 	@Inject GoogleProvider googleProvider;
+	@Inject
+	UserService userService;
 
 	public Result google() {
 		this.setHeaders();
@@ -56,13 +59,23 @@ public class AuthController extends Controller {
 		final CompletableFuture<User> future = new CompletableFuture<>();
 
 		System.err.println("Inside getUserInfo, response is " + userProviderId + " and " + name);
+		this.userService.getUserByIdFromProvider(userProviderId).thenAcceptAsync(user -> {
+			if (user == null) {
+				User newUser = new User();
+				newUser.setName(name);
+				newUser.setIdFromProvider(userProviderId);
+				this.userService.add(newUser).thenAcceptAsync(future::complete);
+			} else {
+				future.complete(user);
+			}
+		});
 
-		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		/*FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference usersReference = database.getReference("users");
 		Query queryRef = usersReference.orderByChild(USER_PROVIDER_ID_FIELD).equalTo(userProviderId);
 
 		queryRef.addChildEventListener(new ChildEventListener() {
-			/*public void onDataChange(DataSnapshot dataSnapshot) {
+			public void onDataChange(DataSnapshot dataSnapshot) {
 				if (!dataSnapshot.exists()) {
 					DatabaseReference userReference = usersReference.push();
 
@@ -82,7 +95,7 @@ public class AuthController extends Controller {
 					System.err.println("Success user" + dataSnapshot.getValue());
 					future.complete(user);
 				}
-			}*/
+			}
 
 			@Override
 			public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -127,6 +140,7 @@ public class AuthController extends Controller {
 				System.err.println(databaseError);
 			}
 		});
+			*/
 
 		return future;
 	}
