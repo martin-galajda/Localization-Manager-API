@@ -4,6 +4,7 @@ import model.Project;
 
 import javax.inject.Singleton;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CompletionStage;
 
 /**
@@ -16,7 +17,7 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		super("projects", Project.class);
 	}
 
-	public CompletionStage<Collection<Project>> getProjects() {
+	public CompletionStage<List<Project>> getProjects() {
 		return this.fetchEntities();
 	}
 

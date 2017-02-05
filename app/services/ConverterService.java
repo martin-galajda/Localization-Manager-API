@@ -3,6 +3,7 @@ package services;
 import model.Converter;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CompletionStage;
 
 /**
@@ -14,7 +15,7 @@ public class ConverterService extends BaseDatabaseService<Converter> {
 		super("converters", Converter.class);
 	}
 
-	public CompletionStage<Collection<Converter>> getConverters()
+	public CompletionStage<List<Converter>> getConverters()
 	{
 		return this.fetchEntities();
 	}

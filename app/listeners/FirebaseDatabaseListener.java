@@ -19,7 +19,7 @@ public class FirebaseDatabaseListener<T extends BaseModelClass>
 		OnSuccessListener<Void>,
 		DatabaseReference.CompletionListener
 {
-	protected final CompletableFuture<Collection<T>> collectionPromise;
+	protected final CompletableFuture<List<T>> collectionPromise;
 	protected final CompletableFuture<T> entityPromise;
 	private final Class<T> genericEntityType;
 	private final T entity;
@@ -29,7 +29,7 @@ public class FirebaseDatabaseListener<T extends BaseModelClass>
 		entityPromise.complete(entity);
 	}
 
-	public FirebaseDatabaseListener(CompletableFuture<Collection<T>> future, Class<T> genericEntity) {
+	public FirebaseDatabaseListener(CompletableFuture<List<T>> future, Class<T> genericEntity) {
 		this.collectionPromise = future;
 		this.genericEntityType = genericEntity;
 		entityPromise = null;
@@ -45,7 +45,7 @@ public class FirebaseDatabaseListener<T extends BaseModelClass>
 
 	@Override
 	public void onDataChange(DataSnapshot dataSnapshot) {
-		ArrayList entitiesList = new ArrayList();
+		ArrayList<T> entitiesList = new ArrayList<>();
 		for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
 			T entity = childSnapshot.getValue(genericEntityType);
 			entity.setId(childSnapshot.getKey());
