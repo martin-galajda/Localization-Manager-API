@@ -17,6 +17,9 @@ public class FirebaseDatabaseChildListener<T extends BaseModelClass>
 
 	@Override
 	public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+		System.err.println("On child added: " + dataSnapshot);
+		System.err.println("On child added: " + dataSnapshot.getValue());
 		if (dataSnapshot.exists()) {
 			T entity = dataSnapshot.getValue(genericEntityType);
 			entityPromise.complete(entity);
@@ -26,16 +29,22 @@ public class FirebaseDatabaseChildListener<T extends BaseModelClass>
 
 	@Override
 	public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+		System.err.println("onChildChanged: " + dataSnapshot);
+		System.err.println("onChildChanged: " + dataSnapshot.getValue());
 
 	}
 
 	@Override
 	public void onChildRemoved(DataSnapshot dataSnapshot) {
+		System.err.println("onChildRemoved: " + dataSnapshot);
+		System.err.println("onChildRemoved: " + dataSnapshot.getValue());
 
 	}
 
 	@Override
 	public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+		System.err.println("onChildMoved: " + dataSnapshot);
+		System.err.println("onChildMoved: " + dataSnapshot.getValue());
 
 	}
 
