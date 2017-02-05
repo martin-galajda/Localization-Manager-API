@@ -52,8 +52,11 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference reference = database.getReference(pathToEntity);
 		CompletableFuture<T> promise = new CompletableFuture<>();
+		System.err.println("Inside get One Entity Equaling to");
 
 		if (key != null && value != null) {
+			System.err.println("key" + key);
+			System.err.println("value" + value);
 			Query result = reference.orderByChild(key).equalTo(value);
 			result.addChildEventListener(new FirebaseDatabaseChildListener<>(promise, genericEntity));
 		}
