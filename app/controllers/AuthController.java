@@ -61,9 +61,8 @@ public class AuthController extends Controller {
 		DatabaseReference usersReference = database.getReference("users");
 		Query queryRef = usersReference.orderByChild(USER_PROVIDER_ID_FIELD).equalTo(userProviderId);
 
-		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-			@Override
-			public void onDataChange(DataSnapshot dataSnapshot) {
+		queryRef.addChildEventListener(new ChildEventListener() {
+			/*public void onDataChange(DataSnapshot dataSnapshot) {
 				if (!dataSnapshot.exists()) {
 					DatabaseReference userReference = usersReference.push();
 
@@ -83,6 +82,44 @@ public class AuthController extends Controller {
 					System.err.println("Success user" + dataSnapshot.getValue());
 					future.complete(user);
 				}
+			}*/
+
+			@Override
+			public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+				if (!dataSnapshot.exists()) {
+					DatabaseReference userReference = usersReference.push();
+
+					User user = new User();
+					user.setName(name);
+					user.setId(userReference.getKey());
+					user.setIdFromProvider(userProviderId);
+					userReference.setValue(user);
+					System.err.println("Not success user" + user);
+
+					future.complete(user);
+				} else {
+					User user = dataSnapshot.getValue(User.class);
+
+					System.err.println("Success user" + user);
+					System.err.println("Success user" + dataSnapshot);
+					System.err.println("Success user" + dataSnapshot.getValue());
+					future.complete(user);
+				}
+			}
+
+			@Override
+			public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+				System.err.println("User changed");
+			}
+
+			@Override
+			public void onChildRemoved(DataSnapshot dataSnapshot) {
+				System.err.println("User removed");
+			}
+
+			@Override
+			public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+				System.err.println("User moved");
 			}
 
 			@Override
