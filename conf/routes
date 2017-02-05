@@ -7,7 +7,7 @@ GET     /                           controllers.ProjectController.index
 
 GET     /projects                   controllers.ProjectController.getProjects
 
-OPTIONS  /:url                      controllers.ProjectController.options(url)
+OPTIONS  /:url                      controllers.AppController.options(url)
 POST     /project                   controllers.ProjectController.postProject
 
 

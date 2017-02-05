@@ -25,7 +25,11 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		return this.addEntity(project);
 	}
 
-	public CompletionStage<Project> updateProject(String projectId, Project project) {
+	public CompletionStage<Project> updateProject(Project project) {
 		return this.updateEntity(project);
+	}
+
+	public CompletionStage<Boolean> deleteProject(String projectId) {
+		return this.deleteEntity(projectId);
 	}
 }

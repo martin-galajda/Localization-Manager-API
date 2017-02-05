@@ -12,15 +12,9 @@ import javax.inject.Inject;
 
 import play.libs.ws.*;
 import services.UserService;
-
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-/**
- * Created by martin on 11/26/16.
- */
 public class AuthController extends Controller {
 
 	public static String SESSION_USER_ID_FIELD = "logged_user_id";

@@ -14,9 +14,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-/**
- * Created by martin on 12/8/16.
- */
+
 public abstract class BaseDatabaseService<T extends BaseModelClass> {
 	private final String pathToEntity;
 	private final Class<T> genericEntity;
@@ -86,5 +84,17 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		reference.updateChildren(entityUpdates, new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
 
 		return promise;
+	}
+
+	protected CompletableFuture<Boolean> deleteEntity(String entityId) {
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference reference = database.getReference(pathToEntity);
+		CompletableFuture<T> promise = new CompletableFuture<>();
+
+		Map<String, Object> entityUpdates = new HashMap<>();
+		entityUpdates.put(entityId, null);
+		reference.updateChildren(entityUpdates, new FirebaseDatabaseListener<T>(promise, genericEntity, null));
+
+		return promise.thenApplyAsync(deletedEntity -> true);
 	}
 }
