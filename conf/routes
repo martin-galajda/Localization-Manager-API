@@ -8,6 +8,7 @@ GET     /                           controllers.ProjectController.index
 GET     /projects                   controllers.ProjectController.getProjects
 
 OPTIONS  /:url                      controllers.AppController.options(url)
+OPTIONS  /:urlPartOne/:urlPartTwo   controllers.AppController.options(urlPartOne + urlPartTwo)
 POST     /project                   controllers.ProjectController.postProject
 DELETE   /project/:id               controllers.ProjectController.deleteProject(id)
 
