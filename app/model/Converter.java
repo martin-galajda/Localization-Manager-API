@@ -4,13 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.List;
+
 public class Converter extends BaseModelClass {
 
 	private String Name;
 
-	private String[] convertFromXliff;
+	private List<String> convertFromXliff;
 
-	private String[] convertToXliff;
+	private List<String> convertToXliff;
 
 
 	public Converter()
@@ -26,19 +28,19 @@ public class Converter extends BaseModelClass {
 		Name = name;
 	}
 
-	public String[] getConvertFromXliff() {
+	public List<String> getConvertFromXliff() {
 		return convertFromXliff;
 	}
 
-	public void setConvertFromXliff(String[] convertFromXliff) {
+	public void setConvertFromXliff(List<String> convertFromXliff) {
 		this.convertFromXliff = convertFromXliff;
 	}
 
-	public String[] getConvertToXliff() {
+	public List<String> getConvertToXliff() {
 		return convertToXliff;
 	}
 
-	public void setConvertToXliff(String[] convertToXliff) {
+	public void setConvertToXliff(List<String> convertToXliff) {
 		this.convertToXliff = convertToXliff;
 	}
 
