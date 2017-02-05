@@ -22,27 +22,11 @@ public class UserService extends BaseDatabaseService<User> {
 	}
 
 	public CompletionStage<User> getUserByIdFromProvider(String idFromProvider) {
-		//return this.getOneEntityEqualingTo("idFromProvider", idFromProvider);
-		return this
-				.getEntitiesEqualingTo("idFromProvider", idFromProvider)
-				.thenApplyAsync(users -> {
-					if (users.size() == 1) {
-						return users.get(0);
-					}
-					return null;
-				});
+		return this.getOneEntityEqualingTo("idFromProvider", idFromProvider);
 	}
 
 	public CompletionStage<User> getUserById(String id) {
-		//return this.getOneEntityEqualingTo("id", id);
-		return this
-				.getEntitiesEqualingTo("id", id)
-				.thenApplyAsync(users -> {
-					if (users.size() == 1) {
-						return users.get(0);
-					}
-					return null;
-				});
+		return this.getOneEntityEqualingTo("id", id);
 	}
 
 	public CompletionStage<User> add(User user) {

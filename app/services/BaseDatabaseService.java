@@ -47,19 +47,9 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 	}
 
 	protected CompletableFuture<T> getOneEntityEqualingTo(String key, String value) {
-		FirebaseDatabase database = FirebaseDatabase.getInstance();
-		DatabaseReference reference = database.getReference(pathToEntity);
-		CompletableFuture<T> promise = new CompletableFuture<>();
-		System.err.println("Inside get One Entity Equaling to");
-
-		if (key != null && value != null) {
-			System.err.println("key" + key);
-			System.err.println("value" + value);
-			Query result = reference.orderByChild(key).equalTo(value);
-			result.addChildEventListener(new FirebaseDatabaseChildListener<>(promise, genericEntity));
-		}
-
-		return promise.thenApplyAsync(entityValue -> entityValue);
+		return this
+				.getEntitiesEqualingTo(key, value)
+				.thenApplyAsync(entities -> entities.size() > 0 ? entities.get(0) : null);
 	}
 
 	protected CompletableFuture<List<T>> fetchEntities() {
