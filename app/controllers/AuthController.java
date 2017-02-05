@@ -27,15 +27,10 @@ public class AuthController extends Controller {
 	public static String SESSION_USER_PROVIDER_ID_FIELD = "logged_user_provider_id";
 	public static String SESSION_USER_NAME_FIELD = "logged_user_name";
 
-	public static String USER_ID_FIELD = "id";
-	public static String USER_PROVIDER_ID_FIELD = "idFromProvider";
-
-
 	@Inject WSClient ws;
 	@Inject HttpExecutionContext ec;
 	@Inject GoogleProvider googleProvider;
-	@Inject
-	UserService userService;
+	@Inject UserService userService;
 
 	public Result google() {
 		this.setHeaders();
@@ -59,89 +54,17 @@ public class AuthController extends Controller {
 		final CompletableFuture<User> future = new CompletableFuture<>();
 
 		System.err.println("Inside getUserInfo, response is " + userProviderId + " and " + name);
-		userService.getUserByIdFromProvider(userProviderId).thenApplyAsync(user -> {
+		userService.getUserByIdFromProvider(userProviderId).thenAcceptAsync(user -> {
 			if (user == null) {
 				User newUser = new User();
 				newUser.setName(name);
 				newUser.setIdFromProvider(userProviderId);
-				userService.add(newUser).thenApplyAsync(future::complete);
+
+				userService.add(newUser).thenAcceptAsync(future::complete);
 			} else {
 				future.complete(user);
 			}
-			return true;
 		});
-
-		/*FirebaseDatabase database = FirebaseDatabase.getInstance();
-		DatabaseReference usersReference = database.getReference("users");
-		Query queryRef = usersReference.orderByChild(USER_PROVIDER_ID_FIELD).equalTo(userProviderId);
-
-		queryRef.addChildEventListener(new ChildEventListener() {
-			public void onDataChange(DataSnapshot dataSnapshot) {
-				if (!dataSnapshot.exists()) {
-					DatabaseReference userReference = usersReference.push();
-
-					User user = new User();
-					user.setName(name);
-					user.setId(userReference.getKey());
-					user.setIdFromProvider(userProviderId);
-					userReference.setValue(user);
-					System.err.println("Not success user" + user);
-
-					future.complete(user);
-				} else {
-					User user = dataSnapshot.getValue(User.class);
-
-					System.err.println("Success user" + user);
-					System.err.println("Success user" + dataSnapshot);
-					System.err.println("Success user" + dataSnapshot.getValue());
-					future.complete(user);
-				}
-			}
-
-			@Override
-			public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-				if (!dataSnapshot.exists()) {
-					DatabaseReference userReference = usersReference.push();
-
-					User user = new User();
-					user.setName(name);
-					user.setId(userReference.getKey());
-					user.setIdFromProvider(userProviderId);
-					userReference.setValue(user);
-					System.err.println("Not success user" + user);
-
-					future.complete(user);
-				} else {
-					User user = dataSnapshot.getValue(User.class);
-
-					System.err.println("Success user" + user);
-					System.err.println("Success user" + dataSnapshot);
-					System.err.println("Success user" + dataSnapshot.getValue());
-					future.complete(user);
-				}
-			}
-
-			@Override
-			public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-				System.err.println("User changed");
-			}
-
-			@Override
-			public void onChildRemoved(DataSnapshot dataSnapshot) {
-				System.err.println("User removed");
-			}
-
-			@Override
-			public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-				System.err.println("User moved");
-			}
-
-			@Override
-			public void onCancelled(DatabaseError databaseError) {
-				System.err.println(databaseError);
-			}
-		});
-			*/
 
 		return future;
 	}
@@ -149,7 +72,6 @@ public class AuthController extends Controller {
 	private CompletionStage<User> saveUserInfoInSession(CompletionStage<User> future)
 	{
 		return future.thenApplyAsync(user -> {
-
 			session().put(SESSION_USER_ID_FIELD, user.getId());
 			session().put(SESSION_USER_PROVIDER_ID_FIELD, user.getIdFromProvider());
 			session().put(SESSION_USER_NAME_FIELD, user.getName());
@@ -164,51 +86,19 @@ public class AuthController extends Controller {
 		System.err.println("Printing session info: " + session());
 		System.out.println(id);
 		System.out.println(session());
-		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
-		final CompletableFuture<Result> futureResult = new CompletableFuture<>();
+		final CompletableFuture<JsonNode> authorizedFuture = new CompletableFuture<>();
+		final CompletableFuture<Result> unauthorizedFuture = new CompletableFuture<>();
 
 		if (id == null) {
-			futureResult.complete(unauthorized());
-			return futureResult;
+			unauthorizedFuture.complete(unauthorized());
+			return unauthorizedFuture;
 		}
 
-		userService.getUserById(id).thenApplyAsync(user -> {
-			future.complete(Json.toJson(user));
-			return true;
+		userService.getUserById(id).thenAcceptAsync(user -> {
+			authorizedFuture.complete(Json.toJson(user));
 		});
-		/*
-		FirebaseDatabase database = FirebaseDatabase.getInstance();
-		DatabaseReference usersReference = database.getReference("users");
-		Query queryRef = usersReference.orderByChild(USER_ID_FIELD).equalTo(id);
 
-		queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-			@Override
-			public void onDataChange(DataSnapshot snapshot) {
-				if (!snapshot.exists()) {
-					future.complete(null);
-				}
-				GenericTypeIndicator<HashMap<String, User>> t = new GenericTypeIndicator<HashMap<String, User>>() {};
-				HashMap<String, User> userMap = snapshot.getValue(t);
-				if (userMap.size() != 1) {
-					future.complete(null);
-				}
-
-				Iterator<User> userIt = userMap.values().iterator();
-
-				JsonNode node = Json.toJson(userIt.next());
-				future.complete(node);
-			}
-
-			@Override
-			public void onCancelled(DatabaseError err) {
-				System.err.println("Database error occured while reading user: " + err.getMessage());
-			}
-		});*/
-
-		return future.thenApplyAsync((jsonNode -> {
-			return jsonNode != null ? ok(jsonNode) : noContent();
-		}), ec.current());
+		return authorizedFuture.thenApplyAsync(jsonNode -> jsonNode != null ? ok(jsonNode) : notFound());
 	}
 
 	public Result googleSuccess() {
@@ -222,9 +112,9 @@ public class AuthController extends Controller {
 	}
 
 	private void setHeaders() {
-		response().setHeader("Access-Control-Allow-Origin", "https://morning-taiga-56897.herokuapp.com");
-		response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
-		response().setHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, X-Json, X-Prototype-Version, X-Requested-With, X-XSRF-TOKEN");
-		response().setHeader("Access-Control-Allow-Credentials", "true");
+		//response().setHeader("Access-Control-Allow-Origin", "https://morning-taiga-56897.herokuapp.com");
+		//response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
+		//response().setHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, X-Json, X-Prototype-Version, X-Requested-With, X-XSRF-TOKEN");
+		//response().setHeader("Access-Control-Allow-Credentials", "true");
 	}
 }
