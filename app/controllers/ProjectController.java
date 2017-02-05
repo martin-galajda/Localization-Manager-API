@@ -57,9 +57,7 @@ public class ProjectController extends Controller {
 			.thenApplyAsync(project -> ok(Json.toJson(project)));
 	}
 
-	public CompletionStage<Result> deleteProject() {
-		String projectId = request().getQueryString("id");
-
+	public CompletionStage<Result> deleteProject(String projectId) {
 		return projectService.deleteProject(projectId).thenApplyAsync(deleted -> ok());
 	}
 
