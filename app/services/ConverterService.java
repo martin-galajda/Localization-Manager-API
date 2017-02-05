@@ -19,4 +19,9 @@ public class ConverterService extends BaseDatabaseService<Converter> {
 	{
 		return this.fetchEntities();
 	}
+
+	public CompletionStage<Converter> addConverter(Converter converter)
+	{
+		return this.addEntity(converter);
+	}
 }
