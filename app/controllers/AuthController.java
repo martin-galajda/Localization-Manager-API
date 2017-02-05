@@ -79,6 +79,8 @@ public class AuthController extends Controller {
 					User user = dataSnapshot.getValue(User.class);
 
 					System.err.println("Success user" + user);
+					System.err.println("Success user" + dataSnapshot);
+					System.err.println("Success user" + dataSnapshot.getValue());
 					future.complete(user);
 				}
 			}
