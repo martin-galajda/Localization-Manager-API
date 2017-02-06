@@ -5,37 +5,68 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.List;
+
 public class Project extends BaseModelClass {
+
 	private String Name;
 
-	private String Description;
+	private String ProjectKey;
 
-	private String GitUrl;
+	private boolean SyncVersions;
 
-	private String Format;
+	private String Git;
 
-	private String PathToResources;
-
-	private String ResourcePrefix;
-
-	private String StashId;
+	private String ResourcePath;
 
 	private User Assignee;
 
-	private User Reviewer;
-
 	private Converter Converter;
+
+	private List<String> Branches;
+
+	public boolean getSyncVersions() {
+		return SyncVersions;
+	}
+
+	public List<String> getBranches() {
+		return Branches;
+	}
+
+	public void setBranches(List<String> branches) {
+		Branches = branches;
+	}
+
+	public String getProjectKey() {
+		return ProjectKey;
+	}
+
+	public void setProjectKey(String projectKey) {
+		ProjectKey = projectKey;
+	}
+
+	public void setSyncVersions(boolean syncVersions) {
+		this.SyncVersions = syncVersions;
+	}
+
+	public String getGit() {
+		return Git;
+	}
+
+	public void setGit(String git) {
+		Git = git;
+	}
+
+	public String getResourcePath() {
+		return ResourcePath;
+	}
+
+	public void setResourcePath(String resourcePath) {
+		ResourcePath = resourcePath;
+	}
 
 	public void setAssignee(User assignee) {
 		Assignee = assignee;
-	}
-
-	public void setReviewer(User reviewer) {
-		Reviewer = reviewer;
-	}
-
-	public void setConverter(model.Converter converter) {
-		Converter = converter;
 	}
 
 	public User getAssignee() {
@@ -43,9 +74,10 @@ public class Project extends BaseModelClass {
 		return Assignee;
 	}
 
-	public User getReviewer() {
-		return Reviewer;
+	public void setConverter(model.Converter converter) {
+		Converter = converter;
 	}
+
 
 	public model.Converter getConverter() {
 		return Converter;
@@ -56,58 +88,10 @@ public class Project extends BaseModelClass {
 		Name = name;
 	}
 
-	public void setDescription(String description) {
-		Description = description;
-	}
-
-	public void setGitUrl(String gitUrl) {
-		GitUrl = gitUrl;
-	}
-
-	public void setFormat(String format) {
-		Format = format;
-	}
-
-	public void setPathToResources(String pathToResources) {
-		PathToResources = pathToResources;
-	}
-
-	public void setResourcePrefix(String resourcePrefix) {
-		ResourcePrefix = resourcePrefix;
-	}
-
-	public void setStashId(String stashId) {
-		StashId = stashId;
-	}
-
-
 	public String getName() {
 		return Name;
 	}
 
-	public String getDescription() {
-		return Description;
-	}
-
-	public String getGitUrl() {
-		return GitUrl;
-	}
-
-	public String getFormat() {
-		return Format;
-	}
-
-	public String getPathToResources() {
-		return PathToResources;
-	}
-
-	public String getResourcePrefix() {
-		return ResourcePrefix;
-	}
-
-	public String getStashId() {
-		return StashId;
-	}
 
 	public Project()
 	{
