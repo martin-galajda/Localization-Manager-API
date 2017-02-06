@@ -80,7 +80,7 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		CompletableFuture<T> promise = new CompletableFuture<>();
 
 		//Map<String, Object> entityUpdates = new HashMap<>();
-		reference.getRef().child(entity.getId()).setValue(entity.getId(), new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
+		reference.getRef().child(entity.getId()).setValue(entity, new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
 		//entityUpdates.put(entity.getId(), entity);
 		//reference.updateChildren(entityUpdates, new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
 
