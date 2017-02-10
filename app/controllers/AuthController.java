@@ -27,12 +27,10 @@ public class AuthController extends Controller {
 	@Inject UserService userService;
 
 	public Result google() {
-		this.setHeaders();
 		return redirect(googleProvider.getRedirectUrl());
 	}
 
 	public CompletionStage<Result> handleGoogle() {
-		this.setHeaders();
 		String code = request().getQueryString("code");
 		return googleProvider.handleGoogleAuthentication(code, ec.current())
 				.thenApplyAsync(this::getUserInfo, ec.current())
@@ -75,11 +73,7 @@ public class AuthController extends Controller {
 	}
 
 	public CompletionStage<Result> getLoggedUser() {
-		this.setHeaders();
 		String id = session(SESSION_USER_ID_FIELD);
-		System.err.println("Printing session info: " + session());
-		System.out.println(id);
-		System.out.println(session());
 		final CompletableFuture<JsonNode> authorizedFuture = new CompletableFuture<>();
 		final CompletableFuture<Result> unauthorizedFuture = new CompletableFuture<>();
 
@@ -95,20 +89,9 @@ public class AuthController extends Controller {
 		return authorizedFuture.thenApplyAsync(jsonNode -> jsonNode != null ? ok(jsonNode) : notFound());
 	}
 
-	public Result googleSuccess() {
-		return ok("Sucess");
-	}
-
 	public Result logout() {
 		session().clear();
 
 		return ok();
-	}
-
-	private void setHeaders() {
-		//response().setHeader("Access-Control-Allow-Origin", "https://morning-taiga-56897.herokuapp.com");
-		//response().setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, PUT");
-		//response().setHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, X-Json, X-Prototype-Version, X-Requested-With, X-XSRF-TOKEN");
-		//response().setHeader("Access-Control-Allow-Credentials", "true");
 	}
 }

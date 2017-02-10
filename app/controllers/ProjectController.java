@@ -57,6 +57,14 @@ public class ProjectController extends Controller {
 			.thenApplyAsync(project -> ok(Json.toJson(project)));
 	}
 
+	public Result postProjectWordCount(String id) {
+		JsonNode newProjectJson = request().body().asJson();
+		Integer wordCount = newProjectJson.get("word_count").asInt();
+
+		projectService.updateProjectWordCount(id, wordCount);
+		return ok();
+	}
+
 	public CompletionStage<Result> deleteProject(String projectId) {
 		return projectService.deleteProject(projectId).thenApplyAsync(deleted -> ok());
 	}

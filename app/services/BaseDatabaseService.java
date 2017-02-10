@@ -87,6 +87,16 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		return promise;
 	}
 
+	protected void updateEntityField(String entityId, String fieldName, Object value) {
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference reference = database.getReference(pathToEntity);
+
+		Map<String, Object> entityUpdates = new HashMap<>();
+		entityUpdates.put(fieldName, value);
+		DatabaseReference entityReference = reference.getRef().child(entityId);
+		entityReference.updateChildren(entityUpdates);
+	}
+
 	protected CompletableFuture<Boolean> deleteEntity(String entityId) {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference reference = database.getReference(pathToEntity);

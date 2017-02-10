@@ -29,6 +29,10 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		return this.updateEntity(project);
 	}
 
+	public void updateProjectWordCount(String entityId, Integer wordCount) {
+		this.updateEntityField(entityId, "wordCount", wordCount);
+	}
+
 	public CompletionStage<Boolean> deleteProject(String projectId) {
 		return this.deleteEntity(projectId);
 	}
