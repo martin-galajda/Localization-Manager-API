@@ -24,4 +24,21 @@ public class ConverterService extends BaseDatabaseService<Converter> {
 	{
 		return this.addEntity(converter);
 	}
+
+	public CompletionStage<Converter> updateConverter(Converter converter)
+	{
+		return this.updateEntity(converter);
+	}
+
+	public CompletionStage<Converter> getConverter(String entityId)
+	{
+		return this
+				.getEntitiesEqualingTo("id", entityId)
+				.thenApplyAsync(matchedConverters -> matchedConverters.size() == 1 ? matchedConverters.get(0) : null);
+	}
+
+	public CompletionStage<Boolean> deleteConverter(String converterId) {
+		return this.deleteEntity(converterId);
+	}
+
 }

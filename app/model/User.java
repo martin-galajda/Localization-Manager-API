@@ -11,6 +11,15 @@ public class User extends BaseModelClass {
 
 	protected String IdFromProvider;
 
+	private String Role;
+
+	public String getRole() {
+		return Role;
+	}
+
+	public void setRole(String role) {
+		Role = role;
+	}
 
 	public void setIdFromProvider(String idFromProvider) {
 		IdFromProvider = idFromProvider;

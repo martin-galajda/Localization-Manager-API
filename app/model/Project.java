@@ -25,6 +25,36 @@ public class Project extends BaseModelClass {
 
 	private List<String> Branches;
 
+	private Integer WordCount;
+
+	private String Status;
+
+	private String HashMapIdentifier;
+
+	public String getHashMapIdentifier() {
+		return HashMapIdentifier;
+	}
+
+	public void setHashMapIdentifier(String hashMapIdentifier) {
+		HashMapIdentifier = hashMapIdentifier;
+	}
+
+	public Integer getWordCount() {
+		return WordCount;
+	}
+
+	public void setWordCount(Integer wordCount) {
+		WordCount = wordCount;
+	}
+
+	public String getStatus() {
+		return Status;
+	}
+
+	public void setStatus(String status) {
+		Status = status;
+	}
+
 	public boolean getSyncVersions() {
 		return SyncVersions;
 	}
@@ -77,7 +107,6 @@ public class Project extends BaseModelClass {
 	public void setConverter(model.Converter converter) {
 		Converter = converter;
 	}
-
 
 	public model.Converter getConverter() {
 		return Converter;

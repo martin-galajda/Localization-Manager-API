@@ -24,11 +24,37 @@ public class ConverterController extends Controller {
 		return this.converterService.getConverters().thenApplyAsync(converters -> ok(Json.toJson(converters)));
 	}
 
+	public CompletionStage<Result> getConverter(String id) {
+		return this
+				.converterService
+				.getConverter(id)
+				.thenApplyAsync(converter -> ok(Json.toJson(converter)));
+	}
+
+	public CompletionStage<Result> deleteConverter(String id) {
+		return this
+				.converterService
+				.deleteConverter(id)
+				.thenApplyAsync(deleted -> ok());
+	}
+
 	public CompletionStage<Result> postConverter() {
 		JsonNode newConverterJson = request().body().asJson();
 		System.err.println("New converter json: " + newConverterJson);
 		Converter newConverter = Converter.create(newConverterJson);
 
-		return this.converterService.addConverter(newConverter).thenApplyAsync(converter -> ok(Json.toJson(converter)));
+		return this.converterService
+				.addConverter(newConverter)
+				.thenApplyAsync(converter -> ok(Json.toJson(converter)));
+	}
+
+	public CompletionStage<Result> postConverterUpdate(String entityId) {
+		JsonNode newConverterJson = request().body().asJson();
+		System.err.println("New converter json: " + newConverterJson);
+		Converter newConverter = Converter.create(newConverterJson);
+
+		return this.converterService
+				.updateConverter(newConverter)
+				.thenApplyAsync(converter -> ok(Json.toJson(converter)));
 	}
 }

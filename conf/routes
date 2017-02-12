@@ -5,13 +5,14 @@
 # An example controller showing a sample home page
 GET     /                           controllers.ProjectController.index
 
-GET     /projects                   controllers.ProjectController.getProjects
+GET     /project/list               controllers.ProjectController.getProjects
+GET     /project/hash_map           controllers.ProjectController.getProjectsAsHashMap
 
-OPTIONS  /*url                    controllers.AppController.options(url)
+OPTIONS  /*url                      controllers.AppController.options(url)
 POST     /project                   controllers.ProjectController.postProject
 DELETE   /project/:id               controllers.ProjectController.deleteProject(id)
 
-POST    /project/word_count/:id     controllers.ProjectController.postProjectWordCount(id)
+POST    /project/:id/status         controllers.ProjectController.postProjectStatus(id)
 
 GET     /auth/google                controllers.AuthController.google
 GET     /auth/google/handler        controllers.AuthController.handleGoogle
@@ -21,6 +22,9 @@ GET     /user                       controllers.UserController.getUsers
 
 GET     /converter                  controllers.ConverterController.getConverters
 POST    /converter                  controllers.ConverterController.postConverter
+POST    /converter/:id              controllers.ConverterController.postConverterUpdate(id)
+GET     /converter/:id              controllers.ConverterController.getConverter(id)
+DELETE  /converter/:id               controllers.ConverterController.deleteConverter(id)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

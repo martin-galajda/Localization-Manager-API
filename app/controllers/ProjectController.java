@@ -1,26 +1,15 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.*;
-import com.google.firebase.*;
 import play.mvc.*;
 import play.libs.Json;
-import play.libs.concurrent.HttpExecutionContext;
 import services.ProjectService;
-import views.html.*;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.concurrent.CompletionStage;
 
 
-import java.io.FileInputStream;
-import java.util.HashMap;
-import java.util.Map;
 import model.*;
 
 import javax.inject.Inject;
@@ -44,6 +33,24 @@ public class ProjectController extends Controller {
 		return this.projectService.getProjects().thenApplyAsync(projects -> ok(Json.toJson(projects)));
     }
 
+    public CompletionStage<Result> getProjectsAsHashMap() {
+		return this
+				.projectService
+				.getProjects()
+				.thenApplyAsync(projectsList -> {
+					HashMap<String, Project> projectHashMap = new HashMap<>();
+
+					Iterator<Project> it = projectsList.iterator();
+					while (it.hasNext()) {
+						Project nextProject = it.next();
+						projectHashMap.put(nextProject.getHashMapIdentifier(), nextProject);
+					}
+
+					return projectHashMap;
+				})
+				.thenApplyAsync(projects -> ok(Json.toJson(projects)));
+    }
+
 	public CompletionStage<Result> postProject() {
 		JsonNode newProjectJson = request().body().asJson();
 		Project newProject = Project.create(newProjectJson);
@@ -57,11 +64,12 @@ public class ProjectController extends Controller {
 			.thenApplyAsync(project -> ok(Json.toJson(project)));
 	}
 
-	public Result postProjectWordCount(String id) {
+	public Result postProjectStatus(String id) {
 		JsonNode newProjectJson = request().body().asJson();
 		Integer wordCount = newProjectJson.get("word_count").asInt();
+		String status = newProjectJson.get("status").asText();
 
-		projectService.updateProjectWordCount(id, wordCount);
+		projectService.updateProjectStatus(id, wordCount, status);
 		return ok();
 	}
 

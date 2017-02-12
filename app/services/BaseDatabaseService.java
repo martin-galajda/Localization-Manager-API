@@ -79,20 +79,21 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		DatabaseReference reference = database.getReference(pathToEntity);
 		CompletableFuture<T> promise = new CompletableFuture<>();
 
-		//Map<String, Object> entityUpdates = new HashMap<>();
 		reference.getRef().child(entity.getId()).setValue(entity, new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
-		//entityUpdates.put(entity.getId(), entity);
-		//reference.updateChildren(entityUpdates, new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
 
 		return promise;
 	}
 
 	protected void updateEntityField(String entityId, String fieldName, Object value) {
+		Map<String, Object> entityUpdates = new HashMap<>();
+		entityUpdates.put(fieldName, value);
+		this.updateEntityFields(entityId, entityUpdates);
+	}
+
+	protected void updateEntityFields(String entityId, Map<String, Object> entityUpdates) {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference reference = database.getReference(pathToEntity);
 
-		Map<String, Object> entityUpdates = new HashMap<>();
-		entityUpdates.put(fieldName, value);
 		DatabaseReference entityReference = reference.getRef().child(entityId);
 		entityReference.updateChildren(entityUpdates);
 	}
