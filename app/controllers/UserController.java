@@ -1,5 +1,6 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import model.User;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -8,6 +9,7 @@ import services.UserService;
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 /**
@@ -25,6 +27,21 @@ public class UserController extends Controller {
 		return userService.getUsers().thenApplyAsync(users -> {
 			return ok(Json.toJson(users));
 		});
+	}
+
+	public CompletionStage<Result> updateUser(String userId) {
+		JsonNode requestBody = request().body().asJson();
+		Boolean isAssignable = requestBody.get("isAssignable").asBoolean();
+		CompletableFuture failedFuture = new CompletableFuture();
+
+		if (isAssignable == null) {
+			failedFuture.complete(forbidden("`isAssignable` parameter is required."));
+			return failedFuture;
+		}
+
+		return userService
+				.updateUserAssignability(userId, isAssignable)
+				.thenApplyAsync(user -> ok(Json.toJson(user)));
 	}
 
 }

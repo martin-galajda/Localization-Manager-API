@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 /**
@@ -31,6 +32,23 @@ public class UserService extends BaseDatabaseService<User> {
 
 	public CompletionStage<User> add(User user) {
 		return this.addEntity(user);
+	}
+
+	public CompletionStage<User> updateUser(User user) {
+		return this.updateEntity(user);
+	}
+
+	public CompletionStage<User> updateUserAssignability(String userId, Boolean isAssignable) {
+		return this.getUserById(userId).thenApplyAsync(user -> {
+			if (user == null) {
+				return null;
+			}
+
+			user.setIsAssignable(isAssignable);
+
+			this.updateEntity(user);
+			return user;
+		});
 	}
 
 }

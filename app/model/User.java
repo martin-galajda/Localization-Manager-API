@@ -1,6 +1,10 @@
 package model;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class User extends BaseModelClass {
 
 	private String Name;
@@ -58,4 +62,15 @@ public class User extends BaseModelClass {
 
 	}
 
+	public static User create(JsonNode newUserAsJson) {
+		ObjectMapper objMapper = new ObjectMapper();
+		User newUser = null;
+		try {
+			newUser = objMapper.treeToValue(newUserAsJson, User.class);
+		}
+		catch (JsonProcessingException e) {
+			System.err.println("Error parsing user json into User model: " + e.getMessage());
+		}
+		return newUser;
+	}
 }
