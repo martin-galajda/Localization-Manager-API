@@ -41,7 +41,7 @@ public class UserController extends Controller {
 
 		return userService
 				.updateUserAssignability(userId, isAssignable)
-				.thenApplyAsync(user -> ok(Json.toJson(user)));
+				.thenApplyAsync(user -> user != null ? ok(Json.toJson(user)) : noContent());
 	}
 
 }
