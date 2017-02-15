@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.firebase.database.*;
 import model.User;
 
+import play.Configuration;
 import play.libs.concurrent.HttpExecutionContext;
 import play.libs.ws.*;
 
@@ -18,20 +19,24 @@ public class GoogleProvider {
 	static final String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
 	static final String clientSecret = "3djQduYEEVXCJ9kdg4JGC0L2";
 	static final String grantType = "authorization_code";
-	static final String redirectUri = "https://glacial-hollows-97055.herokuapp.com/auth/google/handler";
 
 	static final String GOOGLE_REQUEST_TOKEN_ENDPOINT = "https://accounts.google.com/o/oauth2/token";
+
+	private String redirectUri;
 
 	@Inject
 	private WSClient wsClient;
 
-	public GoogleProvider() {
+	@Inject
+	private Configuration configuration;
 
+	public GoogleProvider() {
+		this.redirectUri = configuration.getString("authentication.redirectUrl");
 	}
 
 	public String getRedirectUrl() {
 		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
-		String redirectUri = "https://glacial-hollows-97055.herokuapp.com/auth/google/handler";
+		String redirectUri = this.redirectUri;
 		String prompt = "consent";
 		String responseType = "code";
 		String scope = "https://www.googleapis.com/auth/plus.me";
@@ -58,11 +63,7 @@ public class GoogleProvider {
 	}
 
 	public CompletionStage<WSResponse> exchangeCodeForToken(String code, Executor executor) {
-
-		// todo check if this works, maybe replace with query string extracing
-	//	String code = response.asJson().findPath("code").asText();
 		WSRequest req = wsClient.url(GOOGLE_REQUEST_TOKEN_ENDPOINT);
-		final CompletableFuture<JsonNode> future = new CompletableFuture<>();
 
 		String reqForm = "code=" + code +
 				"&client_id=" + clientId +
