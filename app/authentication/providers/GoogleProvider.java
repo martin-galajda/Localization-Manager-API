@@ -24,13 +24,15 @@ public class GoogleProvider {
 
 	private String redirectUri;
 
-	@Inject
 	private WSClient wsClient;
 
-	@Inject
 	private Configuration configuration;
 
-	public GoogleProvider() {
+	@Inject
+	public GoogleProvider(Configuration configuration, WSClient wsClient) {
+		this.wsClient = wsClient;
+		this.configuration = configuration;
+
 		this.redirectUri = configuration.getString("authentication.redirectUrl");
 	}
 
