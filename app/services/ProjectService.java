@@ -35,6 +35,7 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		CompletableFuture<Boolean> createdProjectChange = new CompletableFuture<>();
 		this.getProjectById(project.getId()).thenAcceptAsync(oldProject -> {
 			if (!createdProjectChange.isDone()) {
+				System.err.println("Adding change");
 				this.projectChangeService.addProjectChange(oldProject);
 				createdProjectChange.complete(true);
 			}
