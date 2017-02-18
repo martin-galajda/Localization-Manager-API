@@ -14,7 +14,7 @@ public class ProjectChange extends BaseModelClass {
 
 	private Project OldProjectVersion;
 
-	private Date CreatedAt;
+	private long CreatedAtTimestamp;
 
 	public Project getOldProjectVersion() {
 		return OldProjectVersion;
@@ -25,10 +25,14 @@ public class ProjectChange extends BaseModelClass {
 	}
 
 	public Date getCreatedAt() {
-		return CreatedAt;
+		return new Date(this.CreatedAtTimestamp);
 	}
 
 	public void setCreatedAt(Date createdAt) {
-		CreatedAt = createdAt;
+		CreatedAtTimestamp = createdAt.getTime();
+	}
+
+	public void setCreatedAtTimestamp(Long timestamp) {
+		CreatedAtTimestamp = timestamp;
 	}
 }
