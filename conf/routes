@@ -27,6 +27,8 @@ POST    /converter/:id              controllers.ConverterController.postConverte
 GET     /converter/:id              controllers.ConverterController.getConverter(id)
 DELETE  /converter/:id              controllers.ConverterController.deleteConverter(id)
 
+GET     /project_history/:projectId controllers.ProjectChangeController.getProjectChangesForProject(projectId)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
