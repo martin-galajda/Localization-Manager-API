@@ -6,12 +6,15 @@ import java.util.Date;
 public class ProjectChange extends BaseModelClass {
 
 	public static ProjectChange create(Project oldProjectVersion){
+		Date date = new Date();
+		long timeStamp = date.getTime();
+
 		ProjectChange projectChange = new ProjectChange();
 		projectChange.setOldProjectVersion(oldProjectVersion);
-		projectChange.setCreatedAtTimestamp(new Date().getTime());
+		projectChange.setCreatedAtTimestamp(timeStamp);
 
 		System.err.println("Adding change inside projectChange: create");
-		System.err.println("Adding change inside timestamp: " + projectChange.getCreatedAtTimestamp());
+		System.err.println("Adding change inside timestamp: " + timeStamp);
 
 
 		return projectChange;
