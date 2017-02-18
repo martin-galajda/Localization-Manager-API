@@ -33,10 +33,11 @@ public class ProjectService extends BaseDatabaseService<Project> {
 	public CompletionStage<Project> updateProject(Project project) {
 
 		CompletableFuture<Boolean> createdProjectChange = new CompletableFuture<>();
-
 		this.getProjectById(project.getId()).thenAcceptAsync(oldProject -> {
-			this.projectChangeService.addProjectChange(oldProject);
-			createdProjectChange.complete(true);
+			if (!createdProjectChange.isDone()) {
+				this.projectChangeService.addProjectChange(oldProject);
+				createdProjectChange.complete(true);
+			}
 		});
 
 		return createdProjectChange.thenComposeAsync((createdChange) -> this.updateEntity(project));
