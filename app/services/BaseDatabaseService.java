@@ -65,6 +65,9 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		DatabaseReference reference = database.getReference(pathToEntity);
 		CompletableFuture<T> promise = new CompletableFuture<>();
 
+		System.err.println("Adding entity: " + entity);
+
+
 		DatabaseReference entityReference = reference.push();
 		entity.setId(entityReference.getKey());
 		entityReference

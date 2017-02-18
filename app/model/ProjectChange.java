@@ -9,6 +9,11 @@ public class ProjectChange extends BaseModelClass {
 		ProjectChange projectChange = new ProjectChange();
 		projectChange.setOldProjectVersion(oldProjectVersion);
 		projectChange.setCreatedAtTimestamp(new Date().getTime());
+
+		System.err.println("Adding change inside projectChange: create");
+		System.err.println("Adding change inside timestamp: " + projectChange.getCreatedAtTimestamp());
+
+
 		return projectChange;
 	}
 

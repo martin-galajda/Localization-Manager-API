@@ -21,6 +21,8 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 	public CompletionStage<ProjectChange> addProjectChange(Project oldProject)
 	{
 		ProjectChange projectChange = ProjectChange.create(oldProject);
+		System.err.println("Adding change inside projectChangeService: addProjectChange");
+
 		return this.addEntity(projectChange);
 	}
 
