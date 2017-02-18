@@ -3,6 +3,7 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.mvc.*;
 import play.libs.Json;
+import services.ProjectChangeService;
 import services.ProjectService;
 
 import java.util.HashMap;
@@ -22,6 +23,9 @@ public class ProjectController extends Controller {
 
 	@Inject
 	private ProjectService projectService;
+
+	@Inject
+	private ProjectChangeService projectChangeService;
 
     public Result index() {
         //return ok(index.render("Your new application is ready."));
@@ -58,6 +62,7 @@ public class ProjectController extends Controller {
 		if (newProject.getId() == null) {
 			return createNewProject(newProject);
 		}
+
 
 		return projectService
 			.updateProject(newProject)

@@ -2,10 +2,12 @@ package services;
 
 import model.Project;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 /**
@@ -13,6 +15,8 @@ import java.util.concurrent.CompletionStage;
  */
 @Singleton
 public class ProjectService extends BaseDatabaseService<Project> {
+
+	@Inject ProjectChangeService projectChangeService;
 
 	public ProjectService() {
 		super("projects", Project.class);
@@ -27,7 +31,19 @@ public class ProjectService extends BaseDatabaseService<Project> {
 	}
 
 	public CompletionStage<Project> updateProject(Project project) {
-		return this.updateEntity(project);
+
+		CompletableFuture<Boolean> createdProjectChange = new CompletableFuture<>();
+
+		this.getProjectById(project.getId()).thenAcceptAsync(oldProject -> {
+			this.projectChangeService.addProjectChange(oldProject);
+			createdProjectChange.complete(true);
+		});
+
+		return createdProjectChange.thenComposeAsync((createdChange) -> this.updateEntity(project));
+	}
+
+	public CompletionStage<Project> getProjectById(String projectId) {
+		return this.getOneEntityEqualingTo("id", projectId);
 	}
 
 	public void updateProjectStatus(String entityId, Integer wordCount, String status) {
