@@ -17,6 +17,19 @@ public class User extends BaseModelClass {
 
 	private String Role;
 
+	private String pictureUrl;
+
+
+	public String getPictureUrl()
+	{
+		return pictureUrl;
+	}
+
+	public void setPictureUrl(String newPictureUrl)
+	{
+		pictureUrl = newPictureUrl;
+	}
+
 	public String getRole() {
 		return Role;
 	}

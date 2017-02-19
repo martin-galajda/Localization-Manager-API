@@ -41,7 +41,9 @@ public class GoogleProvider {
 		String redirectUri = this.redirectUri;
 		String prompt = "consent";
 		String responseType = "code";
-		String scope = "https://www.googleapis.com/auth/plus.me";
+		String scope = "https://www.googleapis.com/auth/plus.me " +
+				"https://www.googleapis.com/auth/userinfo.email " +
+				"https://www.googleapis.com/auth/userinfo.profile";
 		String accessType = "offline";
 
 		String googleUrl = "https://accounts.google.com/o/oauth2/v2/auth";
