@@ -44,6 +44,7 @@ public class AuthController extends Controller {
 		final String userProviderId = node.findPath("id").asText();
 		final String name = node.findPath("name").asText();
 		final String newPictureUrl = node.findPath("picture").asText();
+		final String newEmail = node.findPath("email").asText();
 		final CompletableFuture<User> future = new CompletableFuture<>();
 
 		System.err.println("Inside getUserInfo, response is " + userProviderId + " and " + name);
@@ -53,6 +54,7 @@ public class AuthController extends Controller {
 				newUser.setName(name);
 				newUser.setIdFromProvider(userProviderId);
 				newUser.setPictureUrl(newPictureUrl);
+				newUser.setEmail(newEmail);
 
 				userService.add(newUser).thenAcceptAsync(future::complete);
 			} else {
