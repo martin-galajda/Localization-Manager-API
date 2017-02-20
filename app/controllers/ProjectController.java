@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.*;
 import play.libs.Json;
 import services.ProjectChangeService;
@@ -26,6 +27,9 @@ public class ProjectController extends Controller {
 
 	@Inject
 	private ProjectChangeService projectChangeService;
+
+	@Inject
+	private HttpExecutionContext ec;
 
     public Result index() {
         //return ok(index.render("Your new application is ready."));
@@ -65,7 +69,7 @@ public class ProjectController extends Controller {
 
 
 		return projectService
-			.updateProject(newProject)
+			.updateProject(newProject, ec)
 			.thenApplyAsync(project -> ok(Json.toJson(project)));
 	}
 

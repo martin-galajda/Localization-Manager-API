@@ -26,7 +26,7 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 		return this.fetchEntities();
 	}
 
-	public CompletionStage<ProjectChange> addProjectChange(Project oldProject)
+	public CompletionStage<ProjectChange> addProjectChange(Project oldProject, HttpExecutionContext ec)
 	{
 		Function<User, CompletionStage<ProjectChange>> createProjectChangeByUser = user -> {
 			System.err.println("User is in addProjectChange: " + user);
@@ -37,7 +37,7 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 		};
 
 		return authService
-				.getLoggedUser()
+				.getLoggedUser(ec)
 				.thenComposeAsync(createProjectChangeByUser, ec.current());
 	}
 

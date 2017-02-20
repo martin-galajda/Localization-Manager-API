@@ -33,14 +33,14 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		return this.addEntity(project);
 	}
 
-	public CompletionStage<Project> updateProject(Project project) {
+	public CompletionStage<Project> updateProject(Project project, HttpExecutionContext ec) {
 
 		CompletableFuture<Boolean> createdProjectChange = new CompletableFuture<>();
 		this.getProjectById(project.getId()).thenAcceptAsync(oldProject -> {
 			if (!createdProjectChange.isDone()) {
 				System.err.println("Adding change");
 				this.projectChangeService
-						.addProjectChange(oldProject)
+						.addProjectChange(oldProject, ec)
 						.thenApplyAsync(projectChange -> createdProjectChange.complete(true), ec.current());
 			}
 		}, ec.current());
