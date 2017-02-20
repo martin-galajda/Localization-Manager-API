@@ -1,6 +1,7 @@
 package services;
 
 import model.Project;
+import play.libs.concurrent.HttpExecutionContext;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,6 +18,8 @@ import java.util.concurrent.CompletionStage;
 public class ProjectService extends BaseDatabaseService<Project> {
 
 	@Inject ProjectChangeService projectChangeService;
+	@Inject
+	HttpExecutionContext ec;
 
 	public ProjectService() {
 		super("projects", Project.class);
@@ -38,7 +41,7 @@ public class ProjectService extends BaseDatabaseService<Project> {
 				System.err.println("Adding change");
 				this.projectChangeService
 						.addProjectChange(oldProject)
-						.thenApplyAsync(projectChange -> createdProjectChange.complete(true));
+						.thenApplyAsync(projectChange -> createdProjectChange.complete(true), ec.current());
 			}
 		});
 
