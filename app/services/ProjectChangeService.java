@@ -4,6 +4,7 @@ import model.Converter;
 import model.Project;
 import model.ProjectChange;
 import model.User;
+import play.libs.concurrent.HttpExecutionContext;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.function.Function;
 public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 
 	@Inject AuthService authService;
+	@Inject
+	HttpExecutionContext ec;
 
 	public ProjectChangeService() {
 		super("project_changes", ProjectChange.class);
@@ -35,7 +38,7 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 
 		return authService
 				.getLoggedUser()
-				.thenComposeAsync(createProjectChangeByUser);
+				.thenComposeAsync(createProjectChangeByUser, ec.current());
 	}
 
 	public CompletionStage<List<ProjectChange>> getProjectChangesForProject(String projectId)

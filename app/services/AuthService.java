@@ -1,6 +1,7 @@
 package services;
 
 import model.User;
+import play.libs.concurrent.HttpExecutionContext;
 
 import javax.inject.Inject;
 
@@ -17,6 +18,8 @@ public class AuthService {
 
 
 	@Inject UserService userService;
+	@Inject
+	HttpExecutionContext ec;
 
 	public CompletionStage<User> getLoggedUser() {
 		System.err.println("Inside get user");
