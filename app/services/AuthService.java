@@ -22,19 +22,23 @@ public class AuthService {
 	HttpExecutionContext ec;
 
 	public CompletionStage<User> getLoggedUser() {
-		System.err.println("Inside get user");
+		CompletableFuture<User> loggedUserFuture = new CompletableFuture<>();
+		ec.current().execute(() -> {
+			System.err.println("Inside get user");
 
-		String userId = play.mvc.Controller.session(SESSION_USER_ID_FIELD);
-		CompletableFuture<User> notLoggedInFuture = new CompletableFuture<>();
+			String userId = play.mvc.Controller.session(SESSION_USER_ID_FIELD);
 
-		System.err.println("Inside auth service userId in session is : " + userId);
+			System.err.println("Inside auth service userId in session is : " + userId);
 
-		if (userId == null) {
-			notLoggedInFuture.complete(null);
-			return notLoggedInFuture;
-		}
+			if (userId == null) {
+				loggedUserFuture.complete(null);
+			} else {
+				userService.getUserById(userId, ec).thenApplyAsync(user -> loggedUserFuture.complete(user));
+			}
 
-		return userService.getUserById(userId, ec);
+		});
+
+		return loggedUserFuture;
 	}
 
 }
