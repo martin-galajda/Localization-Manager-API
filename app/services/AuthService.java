@@ -29,6 +29,8 @@ public class AuthService {
 			String userId = play.mvc.Controller.session(SESSION_USER_ID_FIELD);
 
 			System.err.println("Inside auth service userId in session is : " + userId);
+			System.err.println(play.mvc.Controller.session());
+			System.err.println();
 
 			if (userId == null) {
 				loggedUserFuture.complete(null);
