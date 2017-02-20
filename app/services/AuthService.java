@@ -21,7 +21,7 @@ public class AuthService {
 	public CompletionStage<User> getLoggedUser() {
 		System.err.println("Inside get user");
 
-		String userId = session().get(SESSION_USER_ID_FIELD);
+		String userId = play.mvc.Controller.session(SESSION_USER_ID_FIELD);
 		CompletableFuture<User> notLoggedInFuture = new CompletableFuture<>();
 
 		System.err.println("Inside auth service userId in session is : " + userId);
