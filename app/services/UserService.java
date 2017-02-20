@@ -1,6 +1,7 @@
 package services;
 
 import model.User;
+import play.libs.concurrent.HttpExecutionContext;
 
 import javax.inject.Singleton;
 import java.util.Collection;
@@ -28,6 +29,10 @@ public class UserService extends BaseDatabaseService<User> {
 
 	public CompletionStage<User> getUserById(String id) {
 		return this.getOneEntityEqualingTo("id", id);
+	}
+
+	public CompletionStage<User> getUserById(String id, HttpExecutionContext executionContext) {
+		return this.getOneEntityEqualingTo("id", id, executionContext);
 	}
 
 	public CompletionStage<User> add(User user) {

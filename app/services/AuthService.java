@@ -34,7 +34,7 @@ public class AuthService {
 			return notLoggedInFuture;
 		}
 
-		return userService.getUserById(userId);
+		return userService.getUserById(userId, ec);
 	}
 
 }

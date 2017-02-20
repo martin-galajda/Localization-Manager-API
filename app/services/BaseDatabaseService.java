@@ -9,6 +9,7 @@ import listeners.FirebaseDatabaseListener;
 import model.BaseModelClass;
 import model.User;
 import play.libs.F;
+import play.libs.concurrent.HttpExecutionContext;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -48,6 +49,12 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		return this
 				.getEntitiesEqualingTo(key, value)
 				.thenApplyAsync(entities -> entities.size() > 0 ? entities.get(0) : null);
+	}
+
+	protected CompletableFuture<T> getOneEntityEqualingTo(String key, String value, HttpExecutionContext ec) {
+		return this
+				.getEntitiesEqualingTo(key, value)
+				.thenApplyAsync(entities -> entities.size() > 0 ? entities.get(0) : null, ec.current());
 	}
 
 	protected CompletableFuture<List<T>> fetchEntities() {
