@@ -36,8 +36,9 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		this.getProjectById(project.getId()).thenAcceptAsync(oldProject -> {
 			if (!createdProjectChange.isDone()) {
 				System.err.println("Adding change");
-				this.projectChangeService.addProjectChange(oldProject);
-				createdProjectChange.complete(true);
+				this.projectChangeService
+						.addProjectChange(oldProject)
+						.thenApplyAsync(projectChange -> createdProjectChange.complete(true));
 			}
 		});
 
