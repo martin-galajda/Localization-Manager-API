@@ -3,11 +3,16 @@ package services;
 import model.Converter;
 import model.Project;
 import model.ProjectChange;
+import model.User;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
+
+	@Inject AuthService authService;
 
 	public ProjectChangeService() {
 		super("project_changes", ProjectChange.class);
@@ -20,10 +25,17 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 
 	public CompletionStage<ProjectChange> addProjectChange(Project oldProject)
 	{
-		ProjectChange projectChange = ProjectChange.create(oldProject);
-		System.err.println("Adding change inside projectChangeService: addProjectChange");
+		Function<User, CompletionStage<ProjectChange>> createProjectChangeByUser = user -> {
+			System.err.println("User is in addProjectChange: " + user);
 
-		return this.addEntity(projectChange);
+			ProjectChange newProjectChange = ProjectChange.create(oldProject, user);
+
+			return this.addEntity(newProjectChange);
+		};
+
+		return authService
+				.getLoggedUser()
+				.thenComposeAsync(createProjectChangeByUser);
 	}
 
 	public CompletionStage<List<ProjectChange>> getProjectChangesForProject(String projectId)

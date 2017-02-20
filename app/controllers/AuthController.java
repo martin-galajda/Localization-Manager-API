@@ -11,15 +11,12 @@ import play.mvc.*;
 import javax.inject.Inject;
 
 import play.libs.ws.*;
+import services.AuthService;
 import services.UserService;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 public class AuthController extends Controller {
-
-	public static String SESSION_USER_ID_FIELD = "logged_user_id";
-	public static String SESSION_USER_PROVIDER_ID_FIELD = "logged_user_provider_id";
-	public static String SESSION_USER_NAME_FIELD = "logged_user_name";
 
 	@Inject WSClient ws;
 	@Inject HttpExecutionContext ec;
@@ -68,16 +65,16 @@ public class AuthController extends Controller {
 	private CompletionStage<User> saveUserInfoInSession(CompletionStage<User> future)
 	{
 		return future.thenApplyAsync(user -> {
-			session().put(SESSION_USER_ID_FIELD, user.getId());
-			session().put(SESSION_USER_PROVIDER_ID_FIELD, user.getIdFromProvider());
-			session().put(SESSION_USER_NAME_FIELD, user.getName());
+			session().put(AuthService.SESSION_USER_ID_FIELD, user.getId());
+			session().put(AuthService.SESSION_USER_PROVIDER_ID_FIELD, user.getIdFromProvider());
+			session().put(AuthService.SESSION_USER_NAME_FIELD, user.getName());
 			System.err.println(session());
 			return user;
 		}, ec.current());
 	}
 
 	public CompletionStage<Result> getLoggedUser() {
-		String id = session(SESSION_USER_ID_FIELD);
+		String id = session(AuthService.SESSION_USER_ID_FIELD);
 		final CompletableFuture<JsonNode> authorizedFuture = new CompletableFuture<>();
 		final CompletableFuture<Result> unauthorizedFuture = new CompletableFuture<>();
 

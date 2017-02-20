@@ -5,13 +5,14 @@ import java.util.Date;
 
 public class ProjectChange extends BaseModelClass {
 
-	public static ProjectChange create(Project oldProjectVersion){
+	public static ProjectChange create(Project oldProjectVersion, User createdBy){
 		Date date = new Date();
 		long timeStamp = date.getTime();
 
 		ProjectChange projectChange = new ProjectChange();
 		projectChange.setOldProjectVersion(oldProjectVersion);
 		projectChange.setCreatedAtTimestamp(timeStamp);
+		projectChange.setCreatedBy(createdBy.getName());
 
 		System.err.println("Adding change inside projectChange: create");
 		System.err.println("Adding change inside timestamp: " + timeStamp);
@@ -23,6 +24,16 @@ public class ProjectChange extends BaseModelClass {
 	private Project OldProjectVersion;
 
 	private long CreatedAtTimestamp;
+
+	private String createdBy;
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
 
 	public Project getOldProjectVersion() {
 		return OldProjectVersion;
