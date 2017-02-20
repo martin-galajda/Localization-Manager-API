@@ -43,9 +43,9 @@ public class ProjectService extends BaseDatabaseService<Project> {
 						.addProjectChange(oldProject)
 						.thenApplyAsync(projectChange -> createdProjectChange.complete(true), ec.current());
 			}
-		});
+		}, ec.current());
 
-		return createdProjectChange.thenComposeAsync((createdChange) -> this.updateEntity(project));
+		return createdProjectChange.thenComposeAsync((createdChange) -> this.updateEntity(project), ec.current());
 	}
 
 	public CompletionStage<Project> getProjectById(String projectId) {
