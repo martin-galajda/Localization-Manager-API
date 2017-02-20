@@ -7,7 +7,8 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import static play.mvc.Http.Context.Implicit.session;
+import static play.mvc.Controller.session;
+
 
 public class AuthService {
 	public static String SESSION_USER_ID_FIELD = "logged_user_id";
@@ -18,6 +19,8 @@ public class AuthService {
 	@Inject UserService userService;
 
 	public CompletionStage<User> getLoggedUser() {
+		System.err.println("Inside get user");
+
 		String userId = session().get(SESSION_USER_ID_FIELD);
 		CompletableFuture<User> notLoggedInFuture = new CompletableFuture<>();
 
