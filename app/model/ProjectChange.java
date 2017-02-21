@@ -25,14 +25,14 @@ public class ProjectChange extends BaseModelClass {
 
 	private long CreatedAtTimestamp;
 
-	private String createdBy;
+	private String CreatedBy;
 
 	public String getCreatedBy() {
-		return createdBy;
+		return CreatedBy;
 	}
 
 	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
+		this.CreatedBy = createdBy;
 	}
 
 	public Project getOldProjectVersion() {
