@@ -31,10 +31,6 @@ public class UserService extends BaseDatabaseService<User> {
 		return this.getOneEntityEqualingTo("id", id);
 	}
 
-	public CompletionStage<User> getUserById(String id, HttpExecutionContext executionContext) {
-		return this.getOneEntityEqualingTo("id", id, executionContext);
-	}
-
 	public CompletionStage<User> add(User user) {
 		return this.addEntity(user);
 	}

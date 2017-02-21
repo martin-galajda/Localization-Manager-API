@@ -1,21 +1,15 @@
 package services;
 
-import model.Converter;
 import model.Project;
 import model.ProjectChange;
-import model.User;
-import play.libs.concurrent.HttpExecutionContext;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 
 	@Inject AuthService authService;
-	@Inject
-	HttpExecutionContext ec;
 
 	public ProjectChangeService() {
 		super("project_changes", ProjectChange.class);
@@ -26,19 +20,13 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 		return this.fetchEntities();
 	}
 
-	public CompletionStage<ProjectChange> addProjectChange(Project oldProject, HttpExecutionContext ec)
+	public CompletionStage<ProjectChange> addProjectChange(Project oldProject, String usernameOfLoggedUser)
 	{
-		Function<User, CompletionStage<ProjectChange>> createProjectChangeByUser = user -> {
-			System.err.println("User is in addProjectChange: " + user);
+		System.err.println("User is in addProjectChange: " + usernameOfLoggedUser);
 
-			ProjectChange newProjectChange = ProjectChange.create(oldProject, user);
+		ProjectChange newProjectChange = ProjectChange.create(oldProject, usernameOfLoggedUser);
 
-			return this.addEntity(newProjectChange);
-		};
-
-		return authService
-				.getLoggedUser(ec)
-				.thenComposeAsync(createProjectChangeByUser, ec.current());
+		return this.addEntity(newProjectChange);
 	}
 
 	public CompletionStage<List<ProjectChange>> getProjectChangesForProject(String projectId)

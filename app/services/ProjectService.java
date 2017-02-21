@@ -11,15 +11,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-/**
- * Created by martin on 12/8/16.
- */
 @Singleton
 public class ProjectService extends BaseDatabaseService<Project> {
 
 	@Inject ProjectChangeService projectChangeService;
-	@Inject
-	HttpExecutionContext ec;
 
 	public ProjectService() {
 		super("projects", Project.class);
@@ -33,19 +28,19 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		return this.addEntity(project);
 	}
 
-	public CompletionStage<Project> updateProject(Project project, HttpExecutionContext ec) {
+	public CompletionStage<Project> updateProject(Project project, String usernameOfLoggedUser) {
 
 		CompletableFuture<Boolean> createdProjectChange = new CompletableFuture<>();
 		this.getProjectById(project.getId()).thenAcceptAsync(oldProject -> {
 			if (!createdProjectChange.isDone()) {
 				System.err.println("Adding change");
 				this.projectChangeService
-						.addProjectChange(oldProject, ec)
-						.thenApplyAsync(projectChange -> createdProjectChange.complete(true), ec.current());
+						.addProjectChange(oldProject, usernameOfLoggedUser)
+						.thenApplyAsync(projectChange -> createdProjectChange.complete(true));
 			}
-		}, ec.current());
+		});
 
-		return createdProjectChange.thenComposeAsync((createdChange) -> this.updateEntity(project), ec.current());
+		return createdProjectChange.thenComposeAsync((createdChange) -> this.updateEntity(project));
 	}
 
 	public CompletionStage<Project> getProjectById(String projectId) {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.*;
 import play.libs.Json;
+import services.AuthService;
 import services.ProjectChangeService;
 import services.ProjectService;
 
@@ -24,12 +25,6 @@ public class ProjectController extends Controller {
 
 	@Inject
 	private ProjectService projectService;
-
-	@Inject
-	private ProjectChangeService projectChangeService;
-
-	@Inject
-	private HttpExecutionContext ec;
 
     public Result index() {
         //return ok(index.render("Your new application is ready."));
@@ -67,9 +62,10 @@ public class ProjectController extends Controller {
 			return createNewProject(newProject);
 		}
 
+		String usernameOfLoggedUser = session(AuthService.SESSION_USER_NAME_FIELD);
 
 		return projectService
-			.updateProject(newProject, ec)
+			.updateProject(newProject, usernameOfLoggedUser)
 			.thenApplyAsync(project -> ok(Json.toJson(project)));
 	}
 
