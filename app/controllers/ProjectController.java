@@ -56,6 +56,7 @@ public class ProjectController extends Controller {
 
     @Security.Authenticated(SecuredController.class)
 	public CompletionStage<Result> postProject() {
+		System.err.println("Inside post project seesion");
 		JsonNode newProjectJson = request().body().asJson();
 		Project newProject = Project.create(newProjectJson);
 
