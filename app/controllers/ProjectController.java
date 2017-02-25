@@ -54,6 +54,7 @@ public class ProjectController extends Controller {
 				.thenApplyAsync(projects -> ok(Json.toJson(projects)));
     }
 
+    @Security.Authenticated(SecuredController.class)
 	public CompletionStage<Result> postProject() {
 		JsonNode newProjectJson = request().body().asJson();
 		Project newProject = Project.create(newProjectJson);
