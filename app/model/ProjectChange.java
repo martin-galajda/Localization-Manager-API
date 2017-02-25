@@ -16,6 +16,7 @@ public class ProjectChange extends BaseModelClass {
 
 		System.err.println("Adding change inside projectChange: create");
 		System.err.println("Adding change inside timestamp: " + timeStamp);
+		System.err.println("Adding createdBy: " + createdBy);
 
 
 		return projectChange;
@@ -36,6 +37,7 @@ public class ProjectChange extends BaseModelClass {
 	}
 
 	public Project getOldProjectVersion() {
+		System.err.println("Calling getOldProjectVersion");
 		return OldProjectVersion;
 	}
 
