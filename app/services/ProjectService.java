@@ -28,12 +28,13 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		return this.addEntity(project);
 	}
 
-	public CompletionStage<Project> updateProject(Project project, String usernameOfLoggedUser) {
+	public CompletionStage<Project> updateProject(Project project, final String usernameOfLoggedUser) {
 
 		CompletableFuture<Boolean> createdProjectChange = new CompletableFuture<>();
 		this.getProjectById(project.getId()).thenAcceptAsync(oldProject -> {
 			if (!createdProjectChange.isDone()) {
 				System.err.println("Adding change");
+				System.err.println("Adding change and usernameOfLoggedUser is " + usernameOfLoggedUser);
 				this.projectChangeService
 						.addProjectChange(oldProject, usernameOfLoggedUser)
 						.thenApplyAsync(projectChange -> createdProjectChange.complete(true));
