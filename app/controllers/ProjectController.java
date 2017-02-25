@@ -62,7 +62,7 @@ public class ProjectController extends Controller {
 			return createNewProject(newProject);
 		}
 
-		String usernameOfLoggedUser = session(AuthService.SESSION_USER_NAME_FIELD);
+		String usernameOfLoggedUser = session().get(AuthService.SESSION_USER_NAME_FIELD);
 
 		return projectService
 			.updateProject(newProject, usernameOfLoggedUser)
@@ -87,7 +87,7 @@ public class ProjectController extends Controller {
 	}
 
 	public Result sessionTest() {
-		return ok("Name=" + session("name") + "csrf=" + session("csrfToken"));
+		return ok("Name=" + session(AuthService.SESSION_USER_NAME_FIELD) + "csrf=" + session("csrfToken"));
 	}
 
 }
