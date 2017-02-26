@@ -31,8 +31,8 @@ public class UserController extends Controller {
 
 	public CompletionStage<Result> updateUser(String userId) {
 		JsonNode requestBody = request().body().asJson();
-		Boolean isAssignable = requestBody.get("isAssignable").asBoolean();
-		CompletableFuture failedFuture = new CompletableFuture();
+		JsonNode isAssignable = requestBody.get("isAssignable");
+		CompletableFuture<Result> failedFuture = new CompletableFuture();
 
 		if (isAssignable == null) {
 			failedFuture.complete(forbidden("`isAssignable` parameter is required."));
@@ -40,7 +40,7 @@ public class UserController extends Controller {
 		}
 
 		return userService
-				.updateUserAssignability(userId, isAssignable)
+				.updateUserAssignability(userId, isAssignable.asBoolean())
 				.thenApplyAsync(user -> user != null ? ok(Json.toJson(user)) : noContent());
 	}
 
