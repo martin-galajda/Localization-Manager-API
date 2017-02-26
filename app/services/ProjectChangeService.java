@@ -1,6 +1,5 @@
 package services;
 
-import com.sun.xml.internal.ws.util.CompletedFuture;
 import exceptions.CompareProjectException;
 import model.FieldChange;
 import model.Project;
