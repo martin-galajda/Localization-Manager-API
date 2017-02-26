@@ -47,10 +47,10 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 
 	protected CompletableFuture<List<T>> getPaginatedEntitiesEqualingTo(String key, String value, String startAt, Integer limit) {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
-		DatabaseReference reference = database.getReference(pathToEntity);
+		DatabaseReference reference = database.getReference(pathToEntity + "/" + value);
 		CompletableFuture<List<T>> promise = new CompletableFuture<>();
 
-		Query result = reference.orderByKey().equalTo(value, key).limitToLast(limit);
+		Query result = reference.orderByKey().limitToLast(limit);
 
 		if (startAt != null) {
 			result.startAt("lastId", startAt);
