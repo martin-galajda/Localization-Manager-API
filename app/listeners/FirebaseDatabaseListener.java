@@ -10,9 +10,7 @@ import model.BaseModelClass;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Created by martin on 12/8/16.
- */
+
 public class FirebaseDatabaseListener<T extends BaseModelClass>
 		implements ValueEventListener,
 		OnCompleteListener<Void>,
