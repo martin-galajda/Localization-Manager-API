@@ -15,9 +15,12 @@ public class ProjectChangeController extends Controller{
 	ProjectChangeService projectChangeService;
 
 	public CompletionStage<Result> getProjectChangesForProject(String projectId) {
+		String startAtId = request().getQueryString("startAt");
+		String limit = request().getQueryString("limit");
+
 		return this
 				.projectChangeService
-				.getProjectChangesForProject(projectId)
+				.getProjectChangesForProject(projectId, startAtId, Integer.parseInt(limit))
 				.thenApplyAsync(projectChanges -> ok(Json.toJson(projectChanges)));
 	}
 }

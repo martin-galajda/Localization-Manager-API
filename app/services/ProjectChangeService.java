@@ -5,6 +5,7 @@ import model.FieldChange;
 import model.Project;
 import model.ProjectChange;
 import play.Logger;
+import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -31,8 +32,8 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 		return this.addEntity(newProjectChange);
 	}
 
-	public CompletionStage<List<ProjectChange>> getProjectChangesForProject(String projectId)
+	public CompletionStage<List<ProjectChange>> getProjectChangesForProject(String projectId, String startAtId, Integer limit)
 	{
-		return this.getEntitiesEqualingTo("projectId", projectId);
+		return this.getPaginatedEntitiesEqualingTo("projectId", projectId, startAtId, limit);
 	}
 }
