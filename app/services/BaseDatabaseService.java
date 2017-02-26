@@ -97,6 +97,20 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		return promise;
 	}
 
+	protected CompletableFuture<T> addEntityWithKey(String key, T entity) {
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference reference = database.getReference(pathToEntity + "/" + key);
+		CompletableFuture<T> promise = new CompletableFuture<>();
+
+		DatabaseReference entityReference = reference.push();
+		entity.setId(entityReference.getKey());
+		entityReference
+				.setValue(entity)
+				.addOnCompleteListener(new FirebaseDatabaseListener<T>(promise, genericEntity, entity));
+
+		return promise;
+	}
+
 	protected CompletableFuture<T> updateEntity(T entity) {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference reference = database.getReference(pathToEntity);

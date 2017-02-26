@@ -29,7 +29,7 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 		List<FieldChange> fieldChangeList = newProject.getChangedFields(oldProject);
 		ProjectChange newProjectChange = ProjectChange.create(newProject.getId(), fieldChangeList, usernameOfLoggedUser);
 		Logger.debug("Adding project change: ", newProjectChange);
-		return this.addEntity(newProjectChange);
+		return this.addEntityWithKey(newProject.getId(), newProjectChange);
 	}
 
 	public CompletionStage<List<ProjectChange>> getProjectChangesForProject(String projectId, String startAtId, Integer limit)
