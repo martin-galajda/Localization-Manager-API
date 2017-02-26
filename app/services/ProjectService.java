@@ -58,8 +58,11 @@ public class ProjectService extends BaseDatabaseService<Project> {
 
 		this.getProjectById(newProject.getId()).thenAcceptAsync(oldProject -> {
 			try {
-				this.projectChangeService.addProjectChange(newProject, oldProject, usernameOfLoggedUser);
-				future.complete(true);
+				this.projectChangeService
+						.addProjectChange(newProject, oldProject, usernameOfLoggedUser)
+						.thenAcceptAsync(projectChange -> {
+							future.complete(true);
+						});
 			} catch (CompareProjectException e) {
 				Logger.error(e.getMessage());
 				future.complete(false);
