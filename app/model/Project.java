@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exceptions.CompareProjectException;
+import play.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -158,6 +159,9 @@ public class Project extends BaseModelClass {
 					valueOfCurrentProjectField = newField != null ? newField.toString() : "";
 					valueOfOldProjectField = oldField != null ? oldField.toString() : "";
 				}
+
+				Logger.debug("Old value field: ", valueOfOldProjectField);
+				Logger.debug("New value field: ", valueOfCurrentProjectField);
 
 				if (!valueOfCurrentProjectField.equals(valueOfOldProjectField)) {
 					FieldChange newFieldChange = new FieldChange(
