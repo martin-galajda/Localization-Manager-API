@@ -159,7 +159,7 @@ public class Project extends BaseModelClass {
 					valueOfCurrentProjectField = newField != null ? newField.toString() : "";
 					valueOfOldProjectField = oldField != null ? oldField.toString() : "";
 				}
-
+				Logger.debug("Field name: ", field.getName());
 				Logger.debug("Old value field: ", valueOfOldProjectField);
 				Logger.debug("New value field: ", valueOfCurrentProjectField);
 
