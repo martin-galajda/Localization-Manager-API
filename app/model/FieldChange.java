@@ -1,6 +1,11 @@
 package model;
 
 public class FieldChange {
+	public FieldChange()
+	{
+
+	}
+
 	public FieldChange(String fieldName, String oldValue, String newValue) {
 		this.fieldName = fieldName;
 		this.oldValue = oldValue;
