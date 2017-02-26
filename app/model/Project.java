@@ -187,6 +187,7 @@ public class Project extends BaseModelClass {
 		if (printableListObject instanceof List) {
 			List<Object> printableList = (List) printableListObject;
 			for (Object property : printableList) {
+				stringBuilder.append(",");
 				stringBuilder.append(property.toString());
 			}
 		}

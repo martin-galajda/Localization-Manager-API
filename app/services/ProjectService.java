@@ -2,6 +2,7 @@ package services;
 
 import exceptions.CompareProjectException;
 import model.Project;
+import model.ProjectChange;
 import play.Logger;
 import play.libs.concurrent.HttpExecutionContext;
 
@@ -31,8 +32,9 @@ public class ProjectService extends BaseDatabaseService<Project> {
 	}
 
 	public CompletionStage<Project> updateProject(Project newProject, final String usernameOfLoggedUser) {
-		saveProjectChange(newProject, usernameOfLoggedUser);
-		return this.updateEntity(newProject);
+		return this
+				.saveProjectChange(newProject, usernameOfLoggedUser)
+				.thenComposeAsync((updated) -> this.updateEntity(newProject));
 	}
 
 	public CompletionStage<Project> getProjectById(String projectId) {
@@ -51,13 +53,19 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		return this.deleteEntity(projectId);
 	}
 
-	private void saveProjectChange(Project newProject, String usernameOfLoggedUser) {
+	private CompletionStage<Boolean> saveProjectChange(Project newProject, String usernameOfLoggedUser) {
+		CompletableFuture<Boolean> future = new CompletableFuture<>();
+
 		this.getProjectById(newProject.getId()).thenAcceptAsync(oldProject -> {
 			try {
 				this.projectChangeService.addProjectChange(newProject, oldProject, usernameOfLoggedUser);
+				future.complete(true);
 			} catch (CompareProjectException e) {
 				Logger.error(e.getMessage());
+				future.complete(false);
 			}
 		});
+
+		return future;
 	}
 }
