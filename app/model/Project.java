@@ -147,7 +147,7 @@ public class Project extends BaseModelClass {
 		try {
 			for (Field field: fields) {
 				Object oldField = field.get(oldProject);
-				Object newField = field.get(this).;
+				Object newField = field.get(this);
 				String valueOfCurrentProjectField;
 				String valueOfOldProjectField;
 
