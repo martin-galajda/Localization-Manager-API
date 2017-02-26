@@ -22,7 +22,6 @@ public class FirebaseInitializer {
 		try {
 			String databaseUrl = this.configuration.getString("firebase.databaseUrl");
 			String pathToServiceAccount = this.configuration.getString("firebase.pathToServiceAccount");
-			System.out.println("Database url is: " + databaseUrl);
 			System.err.println("Database url is: " + databaseUrl);
 
 			if (databaseUrl == null) {

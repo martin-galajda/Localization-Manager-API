@@ -58,7 +58,6 @@ public class ProjectController extends Controller {
 
     @Security.Authenticated(SecuredController.class)
 	public CompletionStage<Result> postProject() {
-		System.err.println("Inside post project seesion");
 		JsonNode newProjectJson = request().body().asJson();
 		Project newProject = Project.create(newProjectJson);
 
@@ -67,8 +66,6 @@ public class ProjectController extends Controller {
 		}
 
 		String usernameOfLoggedUser = session().get(AuthService.SESSION_USER_NAME_FIELD);
-		System.err.println("Inside post project seesion is: " + session());
-		System.err.println("Inside post project user name from session: " + usernameOfLoggedUser);
 
 		return projectService
 			.updateProject(newProject, usernameOfLoggedUser)

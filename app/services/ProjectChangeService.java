@@ -1,7 +1,11 @@
 package services;
 
+import com.sun.xml.internal.ws.util.CompletedFuture;
+import exceptions.CompareProjectException;
+import model.FieldChange;
 import model.Project;
 import model.ProjectChange;
+import play.Logger;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -20,18 +24,16 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 		return this.fetchEntities();
 	}
 
-	public CompletionStage<ProjectChange> addProjectChange(Project oldProject, String usernameOfLoggedUser)
+	public CompletionStage<ProjectChange> addProjectChange(Project newProject, Project oldProject, String usernameOfLoggedUser) throws CompareProjectException
 	{
-		System.err.println("User is in addProjectChange: " + usernameOfLoggedUser);
-
-		ProjectChange newProjectChange = ProjectChange.create(oldProject, usernameOfLoggedUser);
-
+		List<FieldChange> fieldChangeList = newProject.getChangedFields(oldProject);
+		ProjectChange newProjectChange = ProjectChange.create(newProject.getId(), fieldChangeList, usernameOfLoggedUser);
+		Logger.debug("Adding project change: ", newProjectChange);
 		return this.addEntity(newProjectChange);
 	}
 
 	public CompletionStage<List<ProjectChange>> getProjectChangesForProject(String projectId)
 	{
-		return this
-				.getEntitiesEqualingTo("oldProjectVersion/id", projectId);
+		return this.getEntitiesEqualingTo("projectId", projectId);
 	}
 }

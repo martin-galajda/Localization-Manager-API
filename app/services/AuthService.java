@@ -19,10 +19,6 @@ public class AuthService {
 	public CompletionStage<User> getLoggedUser(String userId) {
 		CompletableFuture<User> loggedUserFuture = new CompletableFuture<>();
 
-		System.err.println("Inside get user");
-		System.err.println("Inside auth service userId in session is : " + userId);
-		System.err.println();
-
 		if (userId == null) {
 			loggedUserFuture.complete(null);
 		} else {

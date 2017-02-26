@@ -37,14 +37,12 @@ public class AuthController extends Controller {
 
 	private CompletionStage<User> getUserInfo(JsonNode node)
 	{
-		System.err.println(node);
 		final String userProviderId = node.findPath("id").asText();
 		final String name = node.findPath("name").asText();
 		final String newPictureUrl = node.findPath("picture").asText();
 		final String newEmail = node.findPath("email").asText();
 		final CompletableFuture<User> future = new CompletableFuture<>();
 
-		System.err.println("Inside getUserInfo, response is " + userProviderId + " and " + name);
 		userService.getUserByIdFromProvider(userProviderId).thenAcceptAsync(user -> {
 			if (user == null) {
 				User newUser = new User();
@@ -68,7 +66,6 @@ public class AuthController extends Controller {
 			session().put(AuthService.SESSION_USER_ID_FIELD, user.getId());
 			session().put(AuthService.SESSION_USER_PROVIDER_ID_FIELD, user.getIdFromProvider());
 			session().put(AuthService.SESSION_USER_NAME_FIELD, user.getName());
-			System.err.println(session());
 			return user;
 		}, ec.current());
 	}

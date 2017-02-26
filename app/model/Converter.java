@@ -55,4 +55,9 @@ public class Converter extends BaseModelClass {
 		}
 		return newConverter;
 	}
+
+
+	public String toString() {
+		return this.getName();
+	}
 }

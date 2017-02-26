@@ -95,4 +95,8 @@ public class User extends BaseModelClass {
 		}
 		return newUser;
 	}
+
+	public String toString() {
+		return this.getName();
+	}
 }

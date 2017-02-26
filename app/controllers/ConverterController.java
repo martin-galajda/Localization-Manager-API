@@ -40,7 +40,6 @@ public class ConverterController extends Controller {
 
 	public CompletionStage<Result> postConverter() {
 		JsonNode newConverterJson = request().body().asJson();
-		System.err.println("New converter json: " + newConverterJson);
 		Converter newConverter = Converter.create(newConverterJson);
 
 		return this.converterService
@@ -50,7 +49,6 @@ public class ConverterController extends Controller {
 
 	public CompletionStage<Result> postConverterUpdate(String entityId) {
 		JsonNode newConverterJson = request().body().asJson();
-		System.err.println("New converter json: " + newConverterJson);
 		Converter newConverter = Converter.create(newConverterJson);
 
 		return this.converterService

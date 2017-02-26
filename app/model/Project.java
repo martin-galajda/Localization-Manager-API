@@ -4,7 +4,11 @@ package model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import exceptions.CompareProjectException;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 public class Project extends BaseModelClass {
@@ -104,11 +108,11 @@ public class Project extends BaseModelClass {
 		return Assignee;
 	}
 
-	public void setConverter(model.Converter converter) {
+	public void setConverter(Converter converter) {
 		Converter = converter;
 	}
 
-	public model.Converter getConverter() {
+	public Converter getConverter() {
 		return Converter;
 	}
 
@@ -120,7 +124,6 @@ public class Project extends BaseModelClass {
 	public String getName() {
 		return Name;
 	}
-
 
 	public Project()
 	{
@@ -137,5 +140,53 @@ public class Project extends BaseModelClass {
 			System.err.println("Error parsing project json into Project model: " + e.getMessage());
 		}
 		return newProject;
+	}
+
+	public List<FieldChange> getChangedFields(Project oldProject) throws CompareProjectException {
+		Field[] fields = Project.class.getDeclaredFields();
+		List<FieldChange> fieldChangeList = new ArrayList<>();
+
+		try {
+			for (Field field: fields) {
+				Object oldField = field.get(oldProject);
+				Object newField = field.get(this);
+				String valueOfCurrentProjectField;
+				String valueOfOldProjectField;
+
+				if (isListType(field)) {
+					valueOfCurrentProjectField = convertListPropertyToString((List<Object>) newField);
+					valueOfOldProjectField = convertListPropertyToString((List<Object>) oldField);
+				} else {
+					valueOfCurrentProjectField = newField != null ? newField.toString() : "";
+					valueOfOldProjectField = oldField != null ? oldField.toString() : "";
+				}
+
+				if (!valueOfCurrentProjectField.equals(valueOfOldProjectField)) {
+					FieldChange newFieldChange = new FieldChange(
+							field.getName(),
+							valueOfOldProjectField,
+							valueOfCurrentProjectField
+					);
+
+					fieldChangeList.add(newFieldChange);
+				}
+			}
+		} catch (IllegalArgumentException|IllegalAccessException e) {
+			throw new CompareProjectException("Error occured while comparing projects: ", e);
+		}
+
+		return fieldChangeList;
+	}
+
+	private static String convertListPropertyToString(List<Object> printableList) {
+		StringBuilder stringBuilder = new StringBuilder("");
+		for (Object property : printableList) {
+			stringBuilder.append(property.toString());
+		}
+		return stringBuilder.toString();
+	}
+
+	private static boolean isListType(Field field) {
+		return List.class.isAssignableFrom(field.getType());
 	}
 }

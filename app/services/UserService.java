@@ -46,7 +46,6 @@ public class UserService extends BaseDatabaseService<User> {
 			}
 
 			user.setIsAssignable(isAssignable);
-			System.err.println(user);
 
 			this.updateEntity(user);
 			return user;

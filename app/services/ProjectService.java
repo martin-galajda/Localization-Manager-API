@@ -1,6 +1,8 @@
 package services;
 
+import exceptions.CompareProjectException;
 import model.Project;
+import play.Logger;
 import play.libs.concurrent.HttpExecutionContext;
 
 import javax.inject.Inject;
@@ -28,20 +30,9 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		return this.addEntity(project);
 	}
 
-	public CompletionStage<Project> updateProject(Project project, final String usernameOfLoggedUser) {
-
-		CompletableFuture<Boolean> createdProjectChange = new CompletableFuture<>();
-		this.getProjectById(project.getId()).thenAcceptAsync(oldProject -> {
-			if (!createdProjectChange.isDone()) {
-				System.err.println("Adding change");
-				System.err.println("Adding change and usernameOfLoggedUser is " + usernameOfLoggedUser);
-				this.projectChangeService
-						.addProjectChange(oldProject, usernameOfLoggedUser)
-						.thenApplyAsync(projectChange -> createdProjectChange.complete(true));
-			}
-		});
-
-		return createdProjectChange.thenComposeAsync((createdChange) -> this.updateEntity(project));
+	public CompletionStage<Project> updateProject(Project newProject, final String usernameOfLoggedUser) {
+		saveProjectChange(newProject, usernameOfLoggedUser);
+		return this.updateEntity(newProject);
 	}
 
 	public CompletionStage<Project> getProjectById(String projectId) {
@@ -58,5 +49,15 @@ public class ProjectService extends BaseDatabaseService<Project> {
 
 	public CompletionStage<Boolean> deleteProject(String projectId) {
 		return this.deleteEntity(projectId);
+	}
+
+	private void saveProjectChange(Project newProject, String usernameOfLoggedUser) {
+		this.getProjectById(newProject.getId()).thenAcceptAsync(oldProject -> {
+			try {
+				this.projectChangeService.addProjectChange(newProject, oldProject, usernameOfLoggedUser);
+			} catch (CompareProjectException e) {
+				Logger.error(e.getMessage());
+			}
+		});
 	}
 }
