@@ -45,15 +45,15 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 		return promise.thenApplyAsync(values -> values);
 	}
 
-	protected CompletableFuture<List<T>> getPaginatedEntitiesEqualingTo(String key, String value, String startAt, Integer limit) {
+	protected CompletableFuture<List<T>> getPaginatedEntitiesEqualingTo(String key, String value, String endAtId, Integer limit) {
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference reference = database.getReference(pathToEntity + "/" + value);
 		CompletableFuture<List<T>> promise = new CompletableFuture<>();
 
 		Query result = reference.orderByKey().limitToLast(limit);
 
-		if (startAt != null) {
-			result.startAt("lastId", startAt);
+		if (endAtId != null) {
+			result.endAt(endAtId);
 		}
 
 		result.addListenerForSingleValueEvent(new FirebaseDatabaseListener<T>(promise, genericEntity));

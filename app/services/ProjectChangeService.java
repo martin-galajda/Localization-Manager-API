@@ -32,8 +32,8 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 		return this.addEntityWithKey(newProject.getId(), newProjectChange);
 	}
 
-	public CompletionStage<List<ProjectChange>> getProjectChangesForProject(String projectId, String startAtId, Integer limit)
+	public CompletionStage<List<ProjectChange>> getProjectChangesForProject(String projectId, String endAtId, Integer limit)
 	{
-		return this.getPaginatedEntitiesEqualingTo("projectId", projectId, startAtId, limit);
+		return this.getPaginatedEntitiesEqualingTo("projectId", projectId, endAtId, limit);
 	}
 }
