@@ -56,7 +56,7 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 
 		play.Logger.debug("endAtId is: " + endAtId);
 		if (endAtId != null) {
-			result.endAt(endAtId);
+			result = result.endAt(endAtId);
 		}
 
 		result.addListenerForSingleValueEvent(new FirebaseDatabaseListener<T>(promise, genericEntity));
