@@ -8,6 +8,7 @@ import listeners.FirebaseDatabaseChildListener;
 import listeners.FirebaseDatabaseListener;
 import model.BaseModelClass;
 import model.User;
+import play.*;
 import play.libs.F;
 import play.libs.concurrent.HttpExecutionContext;
 
@@ -52,6 +53,8 @@ public abstract class BaseDatabaseService<T extends BaseModelClass> {
 
 		Query result = reference.orderByKey().limitToLast(limit);
 
+
+		play.Logger.debug("endAtId is: " + endAtId);
 		if (endAtId != null) {
 			result.endAt(endAtId);
 		}
