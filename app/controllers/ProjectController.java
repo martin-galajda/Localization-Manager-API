@@ -75,9 +75,18 @@ public class ProjectController extends Controller {
 	public Result postProjectStatus(String id) {
 		JsonNode newProjectJson = request().body().asJson();
 		Integer wordCount = newProjectJson.get("word_count").asInt();
-		String status = newProjectJson.get("status").asText();
+		String status = newProjectJson.get("value").asText();
+		TranslationStatus translationStatus;
 
-		projectService.updateProjectStatus(id, wordCount, status);
+		if (status.equals("COMPLETED")) {
+			translationStatus = TranslationStatus.COMPLETED;
+		} else if (status.equals("IN_PROGRESS")) {
+			translationStatus = TranslationStatus.IN_PROGRESS;
+		} else {
+			translationStatus = TranslationStatus.NONE;
+		}
+
+		projectService.updateProjectStatus(id, wordCount, translationStatus);
 		return ok();
 	}
 

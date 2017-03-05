@@ -3,6 +3,7 @@ package services;
 import exceptions.CompareProjectException;
 import model.Project;
 import model.ProjectChange;
+import model.TranslationStatus;
 import play.Logger;
 import play.libs.concurrent.HttpExecutionContext;
 
@@ -41,10 +42,10 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		return this.getOneEntityEqualingTo("id", projectId);
 	}
 
-	public void updateProjectStatus(String entityId, Integer wordCount, String status) {
+	public void updateProjectStatus(String entityId, Integer wordCount, TranslationStatus translationStatus) {
 		HashMap<String, Object> updates = new HashMap<>();
 		updates.put("wordCount", wordCount);
-		updates.put("status", status);
+		updates.put("status", translationStatus.value);
 
 		this.updateEntityFields(entityId, updates);
 	}

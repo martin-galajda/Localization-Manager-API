@@ -28,9 +28,9 @@ public class Project extends BaseModelClass {
 
 	private List<String> Branches;
 
-	private Integer WordCount;
+	private Integer WordCount = 0;
 
-	private String Status;
+	private TranslationStatus Status = TranslationStatus.NONE;
 
 	private String HashMapIdentifier;
 
@@ -50,12 +50,12 @@ public class Project extends BaseModelClass {
 		WordCount = wordCount;
 	}
 
-	public String getStatus() {
-		return Status;
+	public Integer getStatus() {
+		return Status.value;
 	}
 
-	public void setStatus(String status) {
-		Status = status;
+	public void setStatus(Integer status) {
+		Status = TranslationStatus.fromInt(status);
 	}
 
 	public boolean getSyncVersions() {
