@@ -15,9 +15,6 @@ import play.libs.ws.*;
 import javax.inject.Inject;
 
 public class GoogleProvider {
-
-	static final String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
-	static final String clientSecret = "3djQduYEEVXCJ9kdg4JGC0L2";
 	static final String grantType = "authorization_code";
 
 	static final String GOOGLE_REQUEST_TOKEN_ENDPOINT = "https://accounts.google.com/o/oauth2/token";
@@ -37,7 +34,8 @@ public class GoogleProvider {
 	}
 
 	public String getRedirectUrl() {
-		String clientId = "1091217744160-poc33mmkke85docb2miaqjtuk8e0ocvp.apps.googleusercontent.com";
+		String clientId = configuration.getString("google.oauth2.clientId");
+		String clientSecret = configuration.getString("google.oauth2.clientSecret");
 		String redirectUri = this.redirectUri;
 		String prompt = "consent";
 		String responseType = "code";
@@ -59,16 +57,18 @@ public class GoogleProvider {
 		return googleUrl;
 	}
 
-	public CompletionStage<JsonNode> handleGoogleAuthentication(String code, Executor executor)
+	public CompletionStage<JsonNode> handleGoogleAuthentication(String code, String serverUri, Executor executor)
 	{
 		return this
-				.exchangeCodeForToken(code, executor)
+				.exchangeCodeForToken(code, serverUri, executor)
 				.thenComposeAsync(token -> this.exchangeTokenForUserInfo(token, executor), executor);
 	}
 
-	public CompletionStage<WSResponse> exchangeCodeForToken(String code, Executor executor) {
+	public CompletionStage<WSResponse> exchangeCodeForToken(String code, String serverUri, Executor executor) {
 		WSRequest req = wsClient.url(GOOGLE_REQUEST_TOKEN_ENDPOINT);
-
+		String clientId = configuration.getString("google.oauth2.clientId");
+		String clientSecret = configuration.getString("google.oauth2.clientSecret");
+		String redirectUri = serverUri + "/auth/google/handler";
 		String reqForm = "code=" + code +
 				"&client_id=" + clientId +
 				"&client_secret=" + clientSecret +

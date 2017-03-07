@@ -29,7 +29,11 @@ public class AuthController extends Controller {
 
 	public CompletionStage<Result> handleGoogle() {
 		String code = request().getQueryString("code");
-		return googleProvider.handleGoogleAuthentication(code, ec.current())
+		String host = request().host();
+		String protocol = request().secure() ? "https" : "http";
+		String serverUri = protocol + "://www." + host;
+
+		return googleProvider.handleGoogleAuthentication(code, serverUri, ec.current())
 				.thenApplyAsync(this::getUserInfo, ec.current())
 				.thenComposeAsync(this::saveUserInfoInSession, ec.current())
 				.thenApplyAsync(user -> redirect("https://morning-taiga-56897.herokuapp.com"));
