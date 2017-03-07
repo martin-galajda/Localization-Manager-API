@@ -99,7 +99,10 @@ public class ProjectController extends Controller {
 	}
 
 	public Result sessionTest() {
-		return ok("Name=" + session(AuthService.SESSION_USER_NAME_FIELD) + "csrf=" + session("csrfToken"));
+
+		String host = request().host();
+
+		return ok("Name=" + session(AuthService.SESSION_USER_NAME_FIELD) + "csrf=" + session("csrfToken") + "host= " + host);
 	}
 
 }
