@@ -19,6 +19,8 @@ public class GoogleProvider {
 
 	static final String GOOGLE_REQUEST_TOKEN_ENDPOINT = "https://accounts.google.com/o/oauth2/token";
 
+	static final String ROUTE_TO_HANDLE_GOOGLE_REQUEST = "/api/auth/google/handler";
+
 	private String redirectUri;
 
 	private WSClient wsClient;
@@ -68,7 +70,7 @@ public class GoogleProvider {
 		WSRequest req = wsClient.url(GOOGLE_REQUEST_TOKEN_ENDPOINT);
 		String clientId = configuration.getString("google.oauth2.clientId");
 		String clientSecret = configuration.getString("google.oauth2.clientSecret");
-		String redirectUri = serverUri + "/auth/google/handler";
+		String redirectUri = serverUri + ROUTE_TO_HANDLE_GOOGLE_REQUEST;
 		String reqForm = "code=" + code +
 				"&client_id=" + clientId +
 				"&client_secret=" + clientSecret +
