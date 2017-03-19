@@ -4,6 +4,7 @@ import authentication.providers.GoogleProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.firebase.database.*;
 import model.User;
+import play.*;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.*;
@@ -47,6 +48,8 @@ public class AuthController extends Controller {
 		final String newEmail = node.findPath("email").asText();
 		final CompletableFuture<User> future = new CompletableFuture<>();
 
+		play.Logger.debug("User info: " + node);
+
 		userService.getUserByIdFromProvider(userProviderId).thenAcceptAsync(user -> {
 			if (user == null) {
 				User newUser = new User();
@@ -54,6 +57,7 @@ public class AuthController extends Controller {
 				newUser.setIdFromProvider(userProviderId);
 				newUser.setPictureUrl(newPictureUrl);
 				newUser.setEmail(newEmail);
+				play.Logger.debug("New user: " + newUser);
 
 				userService.add(newUser).thenAcceptAsync(future::complete);
 			} else {
