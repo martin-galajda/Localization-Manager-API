@@ -31,7 +31,7 @@ public class AuthController extends Controller {
 	public CompletionStage<Result> handleGoogle() {
 		String code = request().getQueryString("code");
 		String host = request().host();
-		String protocol = request().secure() ? "https" : "http";
+		String protocol = "https";
 		String serverUri = protocol + "://www." + host;
 
 		return googleProvider.handleGoogleAuthentication(code, serverUri, ec.current())
