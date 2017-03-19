@@ -1,3 +1,5 @@
+package tmp;
+
 import play.http.HttpErrorHandler;
 import play.mvc.*;
 import play.mvc.Http.*;

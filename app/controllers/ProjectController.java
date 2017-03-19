@@ -74,6 +74,7 @@ public class ProjectController extends Controller {
 
 	public Result postProjectStatus(String id) {
 		JsonNode newProjectJson = request().body().asJson();
+		System.err.println("Received json: " + newProjectJson);
 		Integer wordCount = newProjectJson.get("word_count").asInt();
 		String status = newProjectJson.get("value").asText();
 		TranslationStatus translationStatus;
