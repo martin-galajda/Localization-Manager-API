@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.firebase.database.*;
 import model.User;
 
-import play.Configuration;
+import play.*;
 import play.libs.concurrent.HttpExecutionContext;
 import play.libs.ws.*;
 
@@ -77,6 +77,8 @@ public class GoogleProvider {
 				"&grant_type=" + grantType +
 				"&redirect_uri=" + redirectUri;
 
+		play.Logger.debug("Sending exchange code for token request: " + reqForm);
+
 		return req.setContentType("application/x-www-form-urlencoded")
 				.post(reqForm)
 				.thenApplyAsync(res -> res, executor);
@@ -86,6 +88,9 @@ public class GoogleProvider {
 		JsonNode jsonBody = response.asJson();
 		String accessToken = jsonBody.findPath("access_token").asText();
 		String refreshToken = jsonBody.findPath("refresh_token").asText();
+
+		play.Logger.debug("Received token info: " + jsonBody);
+
 
 		WSRequest accessRequest = wsClient.url("https://www.googleapis.com/oauth2/v2/userinfo");
 		WSRequest authReq = accessRequest.setHeader("Authorization", "Bearer " + accessToken);
