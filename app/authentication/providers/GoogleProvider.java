@@ -75,7 +75,7 @@ public class GoogleProvider {
 				"&client_id=" + clientId +
 				"&client_secret=" + clientSecret +
 				"&grant_type=" + grantType +
-				"&redirect_uri=" + redirectUri;
+				"&redirect_uri=" + this.redirectUri;
 
 		play.Logger.debug("Sending exchange code for token request: " + reqForm);
 
