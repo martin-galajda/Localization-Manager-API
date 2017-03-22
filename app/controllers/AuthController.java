@@ -24,7 +24,12 @@ public class AuthController extends Controller {
 	@Inject HttpExecutionContext ec;
 	@Inject GoogleProvider googleProvider;
 	@Inject UserService userService;
-	@Inject Configuration configuration;
+	private Configuration configuration;
+
+	@Inject
+	public AuthController(Configuration configuration) {
+		this.configuration = configuration;
+	}
 
 	public Result google() {
 		return redirect(googleProvider.getRedirectUrl());
@@ -80,7 +85,7 @@ public class AuthController extends Controller {
 
 	private String[] getAdministratorEmailsFromConfig()
 	{
-		return configuration.getString("administrators").split(",");
+		return this.configuration.getString("administrators").split(",");
 	}
 
 	private Boolean isAdministrator(String email)
