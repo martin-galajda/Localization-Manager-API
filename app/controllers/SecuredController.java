@@ -6,9 +6,6 @@ import play.mvc.Result;
 import play.mvc.Security;
 import services.AuthService;
 
-/**
- * Created by martin on 2/25/17.
- */
 public class SecuredController extends Security.Authenticator {
 
 	@Override

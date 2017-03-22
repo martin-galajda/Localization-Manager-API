@@ -52,4 +52,17 @@ public class UserService extends BaseDatabaseService<User> {
 		});
 	}
 
+	public CompletionStage<User> updateUserRole(String userId, String role) {
+		return this.getUserById(userId).thenApplyAsync(user -> {
+			if (user == null) {
+				return null;
+			}
+
+			user.setRole(role);
+
+			this.updateEntity(user);
+			return user;
+		});
+	}
+
 }

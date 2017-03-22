@@ -4,6 +4,7 @@ package model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import constants.UserRole;
 
 public class User extends BaseModelClass {
 
@@ -15,7 +16,7 @@ public class User extends BaseModelClass {
 
 	protected String IdFromProvider;
 
-	private String Role;
+	private String Role = UserRole.GUEST;
 
 	private String pictureUrl;
 

@@ -3,6 +3,7 @@ package controllers;
 import authentication.providers.GoogleProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.firebase.database.*;
+import constants.UserRole;
 import model.User;
 import play.*;
 import play.libs.Json;
@@ -23,6 +24,7 @@ public class AuthController extends Controller {
 	@Inject HttpExecutionContext ec;
 	@Inject GoogleProvider googleProvider;
 	@Inject UserService userService;
+	@Inject Configuration configuration;
 
 	public Result google() {
 		return redirect(googleProvider.getRedirectUrl());
@@ -34,7 +36,8 @@ public class AuthController extends Controller {
 		String protocol = "https";
 		String serverUri = protocol + "://www." + host;
 
-		return googleProvider.handleGoogleAuthentication(code, serverUri, ec.current())
+		return googleProvider
+				.handleGoogleAuthentication(code, serverUri, ec.current())
 				.thenApplyAsync(this::getUserInfo, ec.current())
 				.thenComposeAsync(this::saveUserInfoInSession, ec.current())
 				.thenApplyAsync(user -> redirect("https://morning-taiga-56897.herokuapp.com"));
@@ -57,6 +60,12 @@ public class AuthController extends Controller {
 				newUser.setIdFromProvider(userProviderId);
 				newUser.setPictureUrl(newPictureUrl);
 				newUser.setEmail(newEmail);
+
+				if (this.isAdministrator(newEmail)) {
+					newUser.setRole(UserRole.ADMIN);
+				} else {
+					newUser.setRole(UserRole.GUEST);
+				}
 				play.Logger.debug("New user: " + newUser);
 
 				userService.add(newUser).thenAcceptAsync(future::complete);
@@ -68,12 +77,30 @@ public class AuthController extends Controller {
 		return future;
 	}
 
+	private String[] getAdministratorEmailsFromConfig()
+	{
+		return configuration.getString("administrators").split(",");
+	}
+
+	private Boolean isAdministrator(String email)
+	{
+		String[] adminEmails = getAdministratorEmailsFromConfig();
+		for (String adminEmail : adminEmails) {
+			if (adminEmail.equals(email)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	private CompletionStage<User> saveUserInfoInSession(CompletionStage<User> future)
 	{
 		return future.thenApplyAsync(user -> {
 			session().put(AuthService.SESSION_USER_ID_FIELD, user.getId());
 			session().put(AuthService.SESSION_USER_PROVIDER_ID_FIELD, user.getIdFromProvider());
 			session().put(AuthService.SESSION_USER_NAME_FIELD, user.getName());
+			session().put(AuthService.SESSION_USER_ROLE_FIELD, user.getRole());
 			return user;
 		}, ec.current());
 	}

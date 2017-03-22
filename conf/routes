@@ -20,6 +20,7 @@ GET     /api/auth/logout                controllers.AuthController.logout
 
 GET     /api/user                       controllers.UserController.getUsers
 POST    /api/user/:id                   controllers.UserController.updateUser(id)
+PUT     /api/user/:id/role              controllers.UserController.updateUserRole(id)
 
 GET     /api/converter                  controllers.ConverterController.getConverters
 POST    /api/converter                  controllers.ConverterController.postConverter
