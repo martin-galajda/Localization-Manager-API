@@ -54,6 +54,7 @@ public class AuthController extends Controller {
 		play.Logger.debug("User info: " + node);
 
 		userService.getUserByIdFromProvider(userProviderId).thenAcceptAsync(user -> {
+			play.Logger.debug("User: " + user);
 			if (user == null) {
 				User newUser = new User();
 				newUser.setName(name);
