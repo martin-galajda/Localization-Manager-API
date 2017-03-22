@@ -85,7 +85,11 @@ public class AuthController extends Controller {
 
 	private Boolean isAdministrator(String email)
 	{
+		play.Logger.debug("getting administrators emails: ");
+
 		String[] adminEmails = getAdministratorEmailsFromConfig();
+		play.Logger.debug("got emails: ");
+
 		for (String adminEmail : adminEmails) {
 			if (adminEmail.equals(email)) {
 				return true;
