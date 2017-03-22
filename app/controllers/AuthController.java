@@ -17,6 +17,8 @@ import services.AuthService;
 import services.UserService;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import play.Configuration;
+
 
 public class AuthController extends Controller {
 
@@ -24,11 +26,13 @@ public class AuthController extends Controller {
 	@Inject HttpExecutionContext ec;
 	@Inject GoogleProvider googleProvider;
 	@Inject UserService userService;
+
 	private Configuration configuration;
 
 	@Inject
 	public AuthController(Configuration configuration) {
 		this.configuration = configuration;
+		play.Logger.debug("User info: " + this.configuration);
 	}
 
 	public Result google() {
