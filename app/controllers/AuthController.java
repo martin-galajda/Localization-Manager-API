@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import play.libs.ws.*;
 import services.AuthService;
+import services.ConfigService;
 import services.UserService;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -26,14 +27,7 @@ public class AuthController extends Controller {
 	@Inject HttpExecutionContext ec;
 	@Inject GoogleProvider googleProvider;
 	@Inject UserService userService;
-
-	private Configuration configuration;
-
-	@Inject
-	public AuthController(Configuration configuration) {
-		this.configuration = configuration;
-		play.Logger.debug("User info: " + this.configuration);
-	}
+	@Inject ConfigService configService;
 
 	public Result google() {
 		return redirect(googleProvider.getRedirectUrl());
@@ -87,16 +81,11 @@ public class AuthController extends Controller {
 		return future;
 	}
 
-	private String[] getAdministratorEmailsFromConfig()
-	{
-		return this.configuration.getString("administrators").split(",");
-	}
-
 	private Boolean isAdministrator(String email)
 	{
 		play.Logger.debug("getting administrators emails: ");
 
-		String[] adminEmails = getAdministratorEmailsFromConfig();
+		String[] adminEmails = configService.getAdministratorEmailsFromConfig();
 		play.Logger.debug("got emails: ");
 
 		for (String adminEmail : adminEmails) {

@@ -1,5 +1,6 @@
 import authentication.providers.GoogleProvider;
 import com.google.inject.AbstractModule;
+import services.ConfigService;
 import services.ProjectService;
 import services.UserService;
 
@@ -26,6 +27,7 @@ public class Module extends AbstractModule {
         bind(UserService.class).asEagerSingleton();
         bind(GoogleProvider.class).asEagerSingleton();
         bind(FirebaseInitializer.class).asEagerSingleton();
+		bind(ConfigService.class).asEagerSingleton();
     }
 
 }
