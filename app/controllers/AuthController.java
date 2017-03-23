@@ -1,5 +1,6 @@
 package controllers;
 
+import actions.UserAction;
 import authentication.providers.GoogleProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.firebase.database.*;
@@ -108,6 +109,7 @@ public class AuthController extends Controller {
 		}, ec.current());
 	}
 
+	@With(UserAction.class)
 	public CompletionStage<Result> getLoggedUser() {
 		String id = session(AuthService.SESSION_USER_ID_FIELD);
 		final CompletableFuture<JsonNode> authorizedFuture = new CompletableFuture<>();
