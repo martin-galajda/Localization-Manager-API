@@ -14,9 +14,7 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-/**
- * Created by martin on 12/8/16.
- */
+
 public class UserController extends Controller {
 	private final UserService userService;
 
