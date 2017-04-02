@@ -5,6 +5,7 @@ import play.Logger;
 import play.mvc.Http;
 import play.mvc.Result;
 import services.AuthService;
+import services.ConfigService;
 import services.UserService;
 
 import javax.inject.Inject;
@@ -15,12 +16,15 @@ public class UserAction extends play.mvc.Action.Simple {
 	@Inject
 	UserService userService;
 
+	@Inject
+	ConfigService configService;
+
 	@Override
 	public CompletionStage<Result> call(Http.Context ctx) {
-		if (ctx.request().hasHeader("Authorization")) {
-			String authorizationHeader = ctx.request().getHeader("Authorization");
+		if (ctx.request().hasHeader("Secret-authorization-token")) {
+			String authorizationHeader = ctx.request().getHeader("Secret-authorization-token");
 			Logger.debug("Authorization header: ", authorizationHeader);
-			if (authorizationHeader.equals("123456")) {
+			if (authorizationHeader.equals(configService.getSecretAuthorizationToken())) {
 				return delegate.call(ctx);
 			}
 		}

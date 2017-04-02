@@ -13,4 +13,9 @@ public class ConfigService {
 	{
 		return this.configuration.getString("administrators").split(",");
 	}
+
+	public String getSecretAuthorizationToken()
+	{
+		return this.configuration.getString("secret.token");
+	}
 }
