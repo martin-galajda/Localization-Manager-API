@@ -1,5 +1,6 @@
 package controllers;
 
+import actions.UserAction;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
@@ -33,12 +34,12 @@ public class ProjectController extends Controller {
 		return ok();
     }
 
-	@Security.Authenticated(SecuredController.class)
+	@With(UserAction.class)
     public CompletionStage<Result> getProjects() {
 		return this.projectService.getProjects().thenApplyAsync(projects -> ok(Json.toJson(projects)));
     }
 
-	@Security.Authenticated(SecuredController.class)
+	@With(UserAction.class)
 	public CompletionStage<Result> getProjectsAsHashMap() {
 		return this
 				.projectService
@@ -57,7 +58,7 @@ public class ProjectController extends Controller {
 				.thenApplyAsync(projects -> ok(Json.toJson(projects)));
     }
 
-    @Security.Authenticated(SecuredController.class)
+	@With(UserAction.class)
 	public CompletionStage<Result> postProject() {
 		JsonNode newProjectJson = request().body().asJson();
 		Project newProject = Project.create(newProjectJson);
@@ -73,7 +74,7 @@ public class ProjectController extends Controller {
 			.thenApplyAsync(project -> ok(Json.toJson(project)));
 	}
 
-	@Security.Authenticated(SecuredController.class)
+	@With(UserAction.class)
 	public Result postProjectStatus(String id) {
 		JsonNode newProjectJson = request().body().asJson();
 		Integer wordCount = newProjectJson.get("word_count").asInt();
@@ -92,12 +93,12 @@ public class ProjectController extends Controller {
 		return ok();
 	}
 
-	@Security.Authenticated(SecuredController.class)
+	@With(UserAction.class)
 	public CompletionStage<Result> deleteProject(String projectId) {
 		return projectService.deleteProject(projectId).thenApplyAsync(deleted -> ok());
 	}
 
-	@Security.Authenticated(SecuredController.class)
+	@With(UserAction.class)
 	private CompletionStage<Result> createNewProject(Project newProject) {
 		return this.projectService.addProject(newProject).thenApplyAsync(entity -> ok(Json.toJson(entity)));
 	}
