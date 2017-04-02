@@ -33,12 +33,13 @@ public class ProjectController extends Controller {
 		return ok();
     }
 
-
+	@Security.Authenticated(SecuredController.class)
     public CompletionStage<Result> getProjects() {
 		return this.projectService.getProjects().thenApplyAsync(projects -> ok(Json.toJson(projects)));
     }
 
-    public CompletionStage<Result> getProjectsAsHashMap() {
+	@Security.Authenticated(SecuredController.class)
+	public CompletionStage<Result> getProjectsAsHashMap() {
 		return this
 				.projectService
 				.getProjects()
@@ -72,6 +73,7 @@ public class ProjectController extends Controller {
 			.thenApplyAsync(project -> ok(Json.toJson(project)));
 	}
 
+	@Security.Authenticated(SecuredController.class)
 	public Result postProjectStatus(String id) {
 		JsonNode newProjectJson = request().body().asJson();
 		Integer wordCount = newProjectJson.get("word_count").asInt();
@@ -90,10 +92,12 @@ public class ProjectController extends Controller {
 		return ok();
 	}
 
+	@Security.Authenticated(SecuredController.class)
 	public CompletionStage<Result> deleteProject(String projectId) {
 		return projectService.deleteProject(projectId).thenApplyAsync(deleted -> ok());
 	}
 
+	@Security.Authenticated(SecuredController.class)
 	private CompletionStage<Result> createNewProject(Project newProject) {
 		return this.projectService.addProject(newProject).thenApplyAsync(entity -> ok(Json.toJson(entity)));
 	}
