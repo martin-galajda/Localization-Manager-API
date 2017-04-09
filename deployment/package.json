@@ -1,0 +1,29 @@
+{
+  "name": "Configure-localization-manager",
+  "version": "1.0.0",
+  "description": "Configure localization manager",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "~1.6.2"
+  },
+  "dependencies": {
+    "babel-register": "^6.24.1",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1",
+    "materialize-css": "^0.98.1",
+    "pickadate": "^3.5.6"
+  }
+}

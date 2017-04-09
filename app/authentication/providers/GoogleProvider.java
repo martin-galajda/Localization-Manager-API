@@ -1,16 +1,13 @@
 package authentication.providers;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.firebase.database.*;
-import model.User;
 
 import play.*;
-import play.libs.concurrent.HttpExecutionContext;
 import play.libs.ws.*;
+import services.ConfigService;
 
 import javax.inject.Inject;
 
@@ -18,8 +15,6 @@ public class GoogleProvider {
 	static final String grantType = "authorization_code";
 
 	static final String GOOGLE_REQUEST_TOKEN_ENDPOINT = "https://accounts.google.com/o/oauth2/token";
-
-	static final String ROUTE_TO_HANDLE_GOOGLE_REQUEST = "/api/auth/google/handler";
 
 	private String redirectUri;
 
@@ -37,7 +32,6 @@ public class GoogleProvider {
 
 	public String getRedirectUrl() {
 		String clientId = configuration.getString("google.oauth2.clientId");
-		String clientSecret = configuration.getString("google.oauth2.clientSecret");
 		String redirectUri = this.redirectUri;
 		String prompt = "consent";
 		String responseType = "code";
@@ -59,25 +53,22 @@ public class GoogleProvider {
 		return googleUrl;
 	}
 
-	public CompletionStage<JsonNode> handleGoogleAuthentication(String code, String serverUri, Executor executor)
+	public CompletionStage<JsonNode> handleGoogleAuthentication(String code, Executor executor)
 	{
 		return this
-				.exchangeCodeForToken(code, serverUri, executor)
+				.exchangeCodeForToken(code, executor)
 				.thenComposeAsync(token -> this.exchangeTokenForUserInfo(token, executor), executor);
 	}
 
-	public CompletionStage<WSResponse> exchangeCodeForToken(String code, String serverUri, Executor executor) {
+	public CompletionStage<WSResponse> exchangeCodeForToken(String code, Executor executor) {
 		WSRequest req = wsClient.url(GOOGLE_REQUEST_TOKEN_ENDPOINT);
 		String clientId = configuration.getString("google.oauth2.clientId");
 		String clientSecret = configuration.getString("google.oauth2.clientSecret");
-		String redirectUri = serverUri + ROUTE_TO_HANDLE_GOOGLE_REQUEST;
 		String reqForm = "code=" + code +
 				"&client_id=" + clientId +
 				"&client_secret=" + clientSecret +
 				"&grant_type=" + grantType +
 				"&redirect_uri=" + this.redirectUri;
-
-		play.Logger.debug("Sending exchange code for token request: " + reqForm);
 
 		return req.setContentType("application/x-www-form-urlencoded")
 				.post(reqForm)
@@ -87,9 +78,6 @@ public class GoogleProvider {
 	public CompletionStage<JsonNode> exchangeTokenForUserInfo(WSResponse response, Executor executor) {
 		JsonNode jsonBody = response.asJson();
 		String accessToken = jsonBody.findPath("access_token").asText();
-		String refreshToken = jsonBody.findPath("refresh_token").asText();
-
-		play.Logger.debug("Received token info: " + jsonBody);
 
 
 		WSRequest accessRequest = wsClient.url("https://www.googleapis.com/oauth2/v2/userinfo");

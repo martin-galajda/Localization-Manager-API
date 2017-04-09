@@ -36,12 +36,9 @@ public class AuthController extends Controller {
 
 	public CompletionStage<Result> handleGoogle() {
 		String code = request().getQueryString("code");
-		String host = request().host();
-		String protocol = "https";
-		String serverUri = protocol + "://www." + host;
 
 		return googleProvider
-				.handleGoogleAuthentication(code, serverUri, ec.current())
+				.handleGoogleAuthentication(code, ec.current())
 				.thenApplyAsync(this::getUserInfo, ec.current())
 				.thenComposeAsync(this::saveUserInfoInSession, ec.current())
 				.thenApplyAsync(user -> redirect("https://morning-taiga-56897.herokuapp.com"));
@@ -55,7 +52,6 @@ public class AuthController extends Controller {
 		final String newEmail = node.findPath("email").asText();
 		final CompletableFuture<User> future = new CompletableFuture<>();
 
-		play.Logger.debug("User info: " + node);
 
 		userService.getUserByIdFromProvider(userProviderId).thenAcceptAsync(user -> {
 			play.Logger.debug("User: " + user);

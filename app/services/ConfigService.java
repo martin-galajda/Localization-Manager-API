@@ -18,4 +18,9 @@ public class ConfigService {
 	{
 		return this.configuration.getString("secret.token");
 	}
+
+	public String getBackendServerUrl()
+	{
+		return this.configuration.getString("backendUrl");
+	}
 }

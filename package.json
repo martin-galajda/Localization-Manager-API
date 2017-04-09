@@ -1,0 +1,22 @@
+{
+  "name": "prototyp_api",
+  "version": "1.0.0",
+  "description": "PROTOTYPE API OF LOCALIZATION MANAGER",
+  "main": "install.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Martinator112/prototype_localization_manager_api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Martinator112/prototype_localization_manager_api/issues"
+  },
+  "homepage": "https://github.com/Martinator112/prototype_localization_manager_api#readme",
+  "dependencies": {
+    "babel-register": "^6.24.0"
+  }
+}
