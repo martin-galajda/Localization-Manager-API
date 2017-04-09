@@ -84,9 +84,8 @@ $(saveBtn).on('click', function() {
 const parseConfigurationFile = (successCallback) => {
     const configurationObject = {};
     fs.readFile(path.join('../', 'conf', 'locale_manager.conf'),  (err, data) => {
-        data = data.toString();
-        process.stdout.write(data);
         if (err) throw err;
+        data = data.toString();
 
         const lines = data.split(os.EOL);
         lines.forEach(line => {
@@ -118,10 +117,4 @@ parseConfigurationFile((config) => {
     setInputValue('administrators', administrators);
     setInputValue('secretToken', secretToken);
     setInputValue('pathToFirebaseCredentials', pathToServiceAccount);
-
-    Materialize.updateTextFields();
-});
-
-$(document).ready(function() {
-    Materialize.updateTextFields();
 });
