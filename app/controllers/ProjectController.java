@@ -2,6 +2,7 @@ package controllers;
 
 import actions.UserAction;
 import com.fasterxml.jackson.databind.JsonNode;
+import play.Logger;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecutionContext;
@@ -77,6 +78,10 @@ public class ProjectController extends Controller {
 	@With(UserAction.class)
 	public Result postProjectStatus(String id) {
 		JsonNode newProjectJson = request().body().asJson();
+
+		Logger.debug("!!!POST_PROJECT_STATUS!!!: requestBody");
+		System.err.println(request().body().asJson());
+
 		Integer wordCount = newProjectJson.get("word_count").asInt();
 		String status = newProjectJson.get("value").asText();
 		TranslationStatus translationStatus;
