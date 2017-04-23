@@ -28,7 +28,7 @@ const project = {
         "name": "grep and sed",
         "id": "-KcMhoC7IlfKGMWDoTQ9"
     },
-    "status": 0,
+    "status": "Test-None",
     "syncVersions": false,
     "wordCount": 0
 }

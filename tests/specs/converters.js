@@ -1,17 +1,16 @@
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
-var expect = chai.expect;
-var should = chai.should();
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const expect = chai.expect;
+const should = chai.should();
 chai.use(chaiAsPromised);
 
-var testConverterObject = require('./../test-objects/converter');
-var makeRequest = require('./../helpers/request');
+const testConverterObject = require('./../test-objects/converter');
+const makeRequest = require('../../common_scripts/authorizedRequest');
 
 const SERVER_URL = "https://glacial-hollows-97055.herokuapp.com";
-const PATH_TO_GET_PROJECTS_AS_HASH_MAP = "/api/project/hash_map";
 const CONVERTER_API_REST_ENDPOINT_PATH = "/api/converter";
 
-var newConverterId = null;
+let newConverterId = null;
 
 describe("Converter tests", function() {
 

@@ -1,22 +1,19 @@
-var request = require("request");
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
-var expect = chai.expect;
-var should = chai.should();
+require("babel-register");
+const request = require("request");
+const deepCopy = require('deep-copy');
+
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const expect = chai.expect;
+const should = chai.should();
 chai.use(chaiAsPromised);
 
-var testProjectObject = require('./../test-objects/project');
-var makeRequest = require('./../helpers/request');
+const testProjectObject = deepCopy(require('./../test-objects/project'));
+const makeRequest = require('../../common_scripts/authorizedRequest');
 
 const SERVER_URL = "https://glacial-hollows-97055.herokuapp.com";
 const PATH_TO_GET_PROJECTS_AS_HASH_MAP = "/api/project/hash_map";
 const PROJECT_API_REST_ENDPOINT_PATH = "/api/project";
-
-const basicRequestOptions = {
-    headers: {
-        "Secret-authorization-token": "123456"
-    }
-};
 
 var newProjectId = null;
 
@@ -70,6 +67,4 @@ describe("Project tests", function() {
             expect(response.statusCode).to.equal(200);
         }).should.notify(done);
     });
-
-
 });

@@ -1,12 +1,14 @@
 var request = require("request");
+var deepCopy = require('deep-copy');
+
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 var expect = chai.expect;
 var should = chai.should();
 chai.use(chaiAsPromised);
 
-var testProjectObject = require('./../test-objects/project');
-var makeRequest = require('./../helpers/request');
+var testProjectObject = deepCopy(require('./../test-objects/project'));
+var makeRequest = require('../../common_scripts/authorizedRequest');
 
 const SERVER_URL = "https://glacial-hollows-97055.herokuapp.com";
 const PROJECT_API_REST_ENDPOINT_PATH = "/api/project";
@@ -38,13 +40,14 @@ describe("Project status update tests", function() {
             method: 'POST',
             json: true,
             body: {
-                wordCount: 10,
+                word_count: 10,
                 value: "COMPLETED"
             },
             url: SERVER_URL + PROJECT_API_REST_ENDPOINT_PATH + "/" + newProjectId + "/status"
         });
 
         postProjectPromise.should.be.fulfilled.then(({ response, body }) => {
+            console.log(body);
             expect(response.statusCode).to.equal(200);
         }).should.notify(done);
     });
