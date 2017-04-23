@@ -30,7 +30,7 @@ public class Project extends BaseModelClass {
 
 	private Integer WordCount = 0;
 
-	private TranslationStatus Status = TranslationStatus.NONE;
+	private String Status = "NONE";
 
 	private String HashMapIdentifier;
 
@@ -50,12 +50,12 @@ public class Project extends BaseModelClass {
 		WordCount = wordCount;
 	}
 
-	public Integer getStatus() {
-		return Status.value;
+	public String getStatus() {
+		return Status;
 	}
 
-	public void setStatus(Integer status) {
-		Status = TranslationStatus.fromInt(status);
+	public void setStatus(String status) {
+		Status = status;
 	}
 
 	public boolean getSyncVersions() {

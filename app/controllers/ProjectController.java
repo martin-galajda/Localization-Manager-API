@@ -77,24 +77,12 @@ public class ProjectController extends Controller {
 
 	@With(UserAction.class)
 	public Result postProjectStatus(String id) {
-		JsonNode newProjectJson = request().body().asJson();
+		JsonNode requestBody = request().body().asJson();
 
-		Logger.debug("!!!POST_PROJECT_STATUS!!!: requestBody");
-		System.err.println(request().body().asJson());
+		Integer wordCount = requestBody.get("word_count").asInt(-1);
+		String status = requestBody.get("value").asText();
 
-		Integer wordCount = newProjectJson.get("word_count").asInt();
-		String status = newProjectJson.get("value").asText();
-		TranslationStatus translationStatus;
-
-		if (status.equals("COMPLETED")) {
-			translationStatus = TranslationStatus.COMPLETED;
-		} else if (status.equals("IN_PROGRESS")) {
-			translationStatus = TranslationStatus.IN_PROGRESS;
-		} else {
-			translationStatus = TranslationStatus.NONE;
-		}
-
-		projectService.updateProjectStatus(id, wordCount, translationStatus);
+		projectService.updateProjectStatus(id, wordCount, status);
 		return ok();
 	}
 

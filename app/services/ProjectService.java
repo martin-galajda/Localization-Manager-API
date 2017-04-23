@@ -42,10 +42,13 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		return this.getOneEntityEqualingTo("id", projectId);
 	}
 
-	public void updateProjectStatus(String entityId, Integer wordCount, TranslationStatus translationStatus) {
+	public void updateProjectStatus(String entityId, Integer wordCount, String translationStatus) {
 		HashMap<String, Object> updates = new HashMap<>();
-		updates.put("wordCount", wordCount);
-		updates.put("status", translationStatus.value);
+
+		if (wordCount == null || !wordCount.equals(-1)) {
+			updates.put("wordCount", wordCount);
+		}
+		updates.put("status", translationStatus);
 
 		this.updateEntityFields(entityId, updates);
 	}
