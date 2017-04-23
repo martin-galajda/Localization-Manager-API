@@ -17,16 +17,13 @@ public class AdminAction extends play.mvc.Action.Simple {
 
 	@Override
 	public CompletionStage<Result> call(Http.Context ctx) {
-		Logger.debug("User session is " + ctx.session());
 		String userIdFromOAuthProvider = ctx.session().get(AuthService.SESSION_USER_PROVIDER_ID_FIELD);
-		Logger.debug("User id from oauth provider is " + userIdFromOAuthProvider);
 		if (userIdFromOAuthProvider == null) {
 			Result unauthorizedResult = unauthorized();
 			return CompletableFuture.completedFuture(unauthorizedResult);
 		}
 
 		String userRole = ctx.session().get(AuthService.SESSION_USER_ROLE_FIELD);
-		Logger.debug("User role inside session is " + userRole);
 
 		CompletableFuture<Boolean> verifyAdminRole = new CompletableFuture<>();
 

@@ -55,7 +55,6 @@ public class AuthController extends Controller {
 
 
 		userService.getUserByIdFromProvider(userProviderId).thenAcceptAsync(user -> {
-			play.Logger.debug("User: " + user);
 			if (user == null) {
 				User newUser = new User();
 				newUser.setName(name);
@@ -68,7 +67,6 @@ public class AuthController extends Controller {
 				} else {
 					newUser.setRole(UserRole.GUEST);
 				}
-				play.Logger.debug("New user: " + newUser);
 
 				userService.add(newUser).thenAcceptAsync(future::complete);
 			} else {
@@ -81,10 +79,7 @@ public class AuthController extends Controller {
 
 	private Boolean isAdministrator(String email)
 	{
-		play.Logger.debug("getting administrators emails: ");
-
 		String[] adminEmails = configService.getAdministratorEmailsFromConfig();
-		play.Logger.debug("got emails: ");
 
 		for (String adminEmail : adminEmails) {
 			if (adminEmail.equals(email)) {

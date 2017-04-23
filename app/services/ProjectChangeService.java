@@ -28,7 +28,6 @@ public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 	{
 		List<FieldChange> fieldChangeList = newProject.getChangedFields(oldProject);
 		ProjectChange newProjectChange = ProjectChange.create(newProject.getId(), fieldChangeList, usernameOfLoggedUser);
-		Logger.debug("Adding project change: ", newProjectChange);
 		return this.addEntityWithKey(newProject.getId(), newProjectChange);
 	}
 

@@ -23,7 +23,6 @@ public class UserAction extends play.mvc.Action.Simple {
 	public CompletionStage<Result> call(Http.Context ctx) {
 		if (ctx.request().hasHeader("Secret-authorization-token")) {
 			String authorizationHeader = ctx.request().getHeader("Secret-authorization-token");
-			Logger.debug("Authorization header: ", authorizationHeader);
 			if (authorizationHeader.equals(configService.getSecretAuthorizationToken())) {
 				return delegate.call(ctx);
 			}
