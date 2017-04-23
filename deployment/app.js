@@ -4,7 +4,7 @@ require("./assets/materialize.js");
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-
+const runTests = require(path.resolve(path.join(__dirname, '../', 'tests', 'runTests.js')));
 
 var saveBtn = document.getElementById('save-btn');
 const writeToConfFile = ( filename, field, data ) => {
@@ -125,4 +125,22 @@ parseConfigurationFile((config) => {
     setInputValue('pathToFirebaseCredentials', pathToServiceAccount);
     setInputValue('jiraHostUrl', jiraHostUrl);
     setInputValue('jiraTranslationIssueType', jiraTranslationIssueType);
+});
+
+$('#test-btn').on('click', () => {
+    runTests().then(({ passed, failed, errors }) => {
+
+        if (failed === 0) {
+            const $notification = $('<div class="notification notification-success fade-in">All tests passed</div>').appendTo('.notification-container');
+            animateFadingNotification($notification);
+        }
+        $('#test-results').removeClass('hidden');
+        setInputValue('passedTests', String(passed));
+        setInputValue('failedTests', String(failed));
+        setInputValue('errorTests', errors.map(({ err, test }) => {
+            return `Failed to ${test.title}, Reason: ${err}`
+        }).join(os.EOL));
+
+        $('#test-btn').addClass('hidden');
+    })
 });

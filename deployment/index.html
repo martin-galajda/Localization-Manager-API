@@ -57,8 +57,11 @@
                         <input name="secretToken" id="secretToken" class="validate" />
                         <label for="secretToken" >Secret token used for authorization</label>
                     </div>
-                    <div class="input-field col s6" >
-                        <input name="administrators" id="administrators" class="validate" />
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12" >
+                        <input name="administrators" id="administrators" class="validate"></input>
                         <label for="administrators" >E-mails of administrators - delimited by comma</label>
                     </div>
                 </div>
@@ -81,14 +84,40 @@
 
         </div>
 
+        <div class="row hidden" id="test-results">
+            <h2>Test results</h2>
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input name="passedTests" id="passedTests" class="validate" />
+                        <label for="passedTests" >Passed</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input name="failedTests" id="failedTests" class="validate" />
+                        <label for="failedTests" >Failed</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <textarea name="errorTests" id="errorTests" class="materialize-textarea"></textarea>
+                        <label for="errorTests" >Errors</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+
         <button id="save-btn" class="waves-effect waves-light btn" >
             Save
+        </button>
+
+        <button id="test-btn" class="waves-effect waves-light btn" >
+            Run tests
         </button>
     </div>
 
     <div class="notification-container">
 
     </div>
+
 
 
 
