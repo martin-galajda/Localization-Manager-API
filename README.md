@@ -1,13 +1,13 @@
-PROTOTYPE API OF LOCALIZATION MANAGER
+#PROTOTYPE API OF LOCALIZATION MANAGER
 
-Prerequisities:
+## Prerequisities:
 - Node v 5.0.0 or higher
 
-Run JIRA integrations:
+## Run JIRA integrations:
 - npm run jira -> from the root folder
 
-Run TESTS:
+## Run TESTS:
 - npm test
 
-Run configuration GUI application for deployment:
+## Run GUI application for configuring deployment:
 - cd deployment && npm start
