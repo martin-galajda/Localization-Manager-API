@@ -4,6 +4,7 @@
   "description": "PROTOTYPE API OF LOCALIZATION MANAGER",
   "main": "install.js",
   "scripts": {
+    "test": "node tests/runTestsFromConsole.js",
     "jira": "npm run compile_jira_integration && node ./integrations/dist/jira_integration.js",
     "compile_jira_integration": "./node_modules/.bin/babel ./integrations/src --out-dir ./integrations/dist --presets=node6,es2016"
   },
@@ -31,6 +32,9 @@
     "deep-copy": "^1.2.0",
     "es6-promise": "^4.1.0",
     "es6-shim": "^0.35.3",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "babel-preset-env": "^1.4.0",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0"
   }
 }
