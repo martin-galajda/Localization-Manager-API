@@ -65,6 +65,8 @@ $(saveBtn).on('click', function() {
     const administrators = getInputValue('administrators');
     const secretToken = getInputValue('secretToken');
     const firebaseCredentialsPath = getInputValue('pathToFirebaseCredentials');
+    const jiraHostUrl = getInputValue('jiraHostUrl');
+    const jiraTranslationIssueType = getInputValue('jiraTranslationIssueType');
 
     writeToConfFile('locale_manager.conf', 'authentication.redirectUrl', authenticationRedirectUrl);
     writeToConfFile('locale_manager.conf', 'backendUrl', serverUrl);
@@ -76,6 +78,8 @@ $(saveBtn).on('click', function() {
     writeToConfFile('locale_manager.conf', 'administrators', administrators);
     writeToConfFile('locale_manager.conf', 'secret.token', secretToken);
     writeToConfFile('locale_manager.conf', 'firebase.pathToServiceAccount', firebaseCredentialsPath);
+    writeToConfFile('locale_manager.conf', 'jiraHostUrl', jiraHostUrl);
+    writeToConfFile('locale_manager.conf', 'jiraTranslationIssueType', jiraTranslationIssueType);
 
     const $notification = $('<div class="notification notification-success fade-in">Successfully saved</div>').appendTo('.notification-container');
     animateFadingNotification($notification);
@@ -108,6 +112,8 @@ parseConfigurationFile((config) => {
     const administrators = config['administrators'];
     const secretToken = config['secret.token'];
     const pathToServiceAccount = config['firebase.pathToServiceAccount'];
+    const jiraHostUrl = config['jiraHostUrl'];
+    const jiraTranslationIssueType = config['jiraTranslationIssueType'];
 
     setInputValue('backendUrl', backendUrl);
     setInputValue('frontendUrl', frontendUrl);
@@ -117,4 +123,6 @@ parseConfigurationFile((config) => {
     setInputValue('administrators', administrators);
     setInputValue('secretToken', secretToken);
     setInputValue('pathToFirebaseCredentials', pathToServiceAccount);
+    setInputValue('jiraHostUrl', jiraHostUrl);
+    setInputValue('jiraTranslationIssueType', jiraTranslationIssueType);
 });

@@ -4,7 +4,8 @@
   "description": "PROTOTYPE API OF LOCALIZATION MANAGER",
   "main": "install.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "jira": "npm run compile_jira_integration && node ./integrations/dist/jira_integration.js",
+    "compile_jira_integration": "./node_modules/.bin/babel ./integrations/src --out-dir ./integrations/dist --presets=node6,es2016"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,19 @@
   },
   "homepage": "https://github.com/Martinator112/prototype_localization_manager_api#readme",
   "dependencies": {
-    "babel-register": "^6.24.0"
+    "babel": "^6.23.0",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-node6": "^11.0.0",
+    "base64-js": "^1.2.0",
+    "base64url": "^2.0.0",
+    "command-line-arguments": "^1.1.1",
+    "deep-copy": "^1.2.0",
+    "es6-promise": "^4.1.0",
+    "es6-shim": "^0.35.3",
+    "mocha": "^3.2.0"
   }
 }

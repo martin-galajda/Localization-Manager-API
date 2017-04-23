@@ -1,0 +1,4 @@
+node_modules
+conf_test
+.npm-global
+npm-debug*
