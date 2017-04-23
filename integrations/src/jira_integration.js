@@ -3,16 +3,11 @@ require("es6-shim");
 const base64url = require('base64url');
 const fs = require('fs');
 const os = require('os');
-var request = require("request");
 
-
-var getJiraIssue = require('./helpers/getJiraIssue');
 var getAllProjects = require('./helpers/getAllProjects');
 var getLatestTranslationIssueForProject = require('./helpers/getLatestTranslationIssueForProject');
 var updateProjectStatus = require('./helpers/updateProjectStatus');
 var getUsernameAndPassword = require('./helpers/getUsernameAndPassword');
-
-
 
 getUsernameAndPassword.then(({ username, password }) => {
 	const basicAuthBase64Encoded = base64url(`${username}:${password}`);
@@ -52,7 +47,6 @@ const handleUpdateProject = ({ projectKey, id, basicAuthBase64Encoded}) => {
 			console.log(`Reason:.` + reason.error ? reason.error.toString() : '');
 			console.log(`HTTP status:.` + reason.response.statusCode.toString());
 		});
-
 	}).catch((reason) => {
 		console.error(`Error getting latest translation issue for project: ${projectKey}`);
 		console.error(`Status code: ${reason.response.statusCode}`);

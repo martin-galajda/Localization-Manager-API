@@ -1,13 +1,13 @@
 const method = 'GET';
-const makeRequest = require('./request');
+const makeRequest = require('./makeRequest');
 var Promise = require('es6-promise').Promise;
 const parseConfigurationFile = require('../../../common_scripts/parseConfigurationFile');
 
 const configuration = parseConfigurationFile();
 const JIRA_HOST = configuration.jiraHostUrl;
 const jiraTranslationIssueType = configuration.jiraTranslationIssueType;
-console.log(JIRA_HOST);
-console.log(jiraTranslationIssueType);
+console.log(`JIRA host URL is: ${JIRA_HOST}`);
+console.log(`JIRA issuetype for translations is: ${jiraTranslationIssueType}`);
 
 const getLatestTranslationIssuesForProject = ({ project, basicAuthBase64Encoded, limit = 1 }) => {
 	const query = `project= ${project} AND issuetype = ${jiraTranslationIssueType} ORDER BY created DESC`;
