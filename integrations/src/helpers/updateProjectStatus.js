@@ -12,7 +12,7 @@ const updateProjectStatus = ({
 	status
 }) => {
 	return authorizedRequest({
-		method: 'POST',
+		method: 'PUT',
 		json: true,
 		body: {
 			word_count: wordCount,

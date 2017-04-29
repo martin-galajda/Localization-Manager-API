@@ -87,6 +87,17 @@ public class ProjectController extends Controller {
 	}
 
 	@With(UserAction.class)
+	public Result postProjectPrice(String id) {
+		JsonNode requestBody = request().body().asJson();
+
+		Double price = requestBody.get("price").asDouble(-1);
+		String currency = requestBody.get("currency").asText("");
+
+		projectService.updateProjectPrice(id, price, currency);
+		return ok();
+	}
+
+	@With(UserAction.class)
 	public CompletionStage<Result> deleteProject(String projectId) {
 		return projectService.deleteProject(projectId).thenApplyAsync(deleted -> ok());
 	}
