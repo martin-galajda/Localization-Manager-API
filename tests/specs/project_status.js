@@ -47,7 +47,22 @@ describe("Project status update tests", function() {
         });
 
         postProjectPromise.should.be.fulfilled.then(({ response, body }) => {
-            console.log(body);
+            expect(response.statusCode).to.equal(200);
+        }).should.notify(done);
+    });
+
+    it("should PUT Project price", function(done) {
+        const postProjectPromise = makeRequest({
+            method: 'PUT',
+            json: true,
+            body: {
+                price: 10,
+                currency: "CZK"
+            },
+            url: SERVER_URL + PROJECT_API_REST_ENDPOINT_PATH + "/" + newProjectId + "/price"
+        });
+
+        postProjectPromise.should.be.fulfilled.then(({ response, body }) => {
             expect(response.statusCode).to.equal(200);
         }).should.notify(done);
     });
@@ -58,7 +73,6 @@ describe("Project status update tests", function() {
             method: 'DELETE',
             url: `${SERVER_URL}${PROJECT_API_REST_ENDPOINT_PATH}/${newProjectId}`
         });
-
 
         deleteProjectPromise.should.be.fulfilled.then(({ response}) => {
             expect(response.statusCode).to.equal(200);

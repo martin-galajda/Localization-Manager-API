@@ -30,6 +30,9 @@ const project = {
     },
     "status": "Test-None",
     "syncVersions": false,
-    "wordCount": 0
-}
+    "wordCount": 0,
+    "currency": "CZK",
+    "price": null,
+};
+
 module.exports = project;
