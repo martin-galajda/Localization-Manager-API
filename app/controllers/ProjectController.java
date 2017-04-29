@@ -76,7 +76,7 @@ public class ProjectController extends Controller {
 	}
 
 	@With(UserAction.class)
-	public Result postProjectStatus(String id) {
+	public Result putProjectStatus(String id) {
 		JsonNode requestBody = request().body().asJson();
 
 		Integer wordCount = requestBody.get("word_count").asInt(-1);
@@ -87,7 +87,7 @@ public class ProjectController extends Controller {
 	}
 
 	@With(UserAction.class)
-	public Result postProjectPrice(String id) {
+	public Result putProjectPrice(String id) {
 		JsonNode requestBody = request().body().asJson();
 
 		Double price = requestBody.get("price").asDouble(-1);
