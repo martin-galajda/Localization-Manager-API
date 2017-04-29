@@ -53,6 +53,19 @@ public class ProjectService extends BaseDatabaseService<Project> {
 		this.updateEntityFields(entityId, updates);
 	}
 
+	public void updateProjectPrice(String entityId, Double price, String currency) {
+		HashMap<String, Object> updates = new HashMap<>();
+
+		if (price != null && !price.equals(-1)) {
+			updates.put("price", price);
+		}
+		if (currency != null && !currency.equals("")) {
+			updates.put("currency", currency);
+		}
+
+		this.updateEntityFields(entityId, updates);
+	}
+
 	public CompletionStage<Boolean> deleteProject(String projectId) {
 		return this.deleteEntity(projectId);
 	}

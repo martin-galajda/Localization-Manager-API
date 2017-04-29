@@ -34,6 +34,26 @@ public class Project extends BaseModelClass {
 
 	private String HashMapIdentifier;
 
+	private Double price = "NONE";
+
+	private String currency;
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String newCurrency) {
+		this.currency = newCurrency;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(String newPrice) {
+		price = newPrice;
+	}
+
 	public String getHashMapIdentifier() {
 		return HashMapIdentifier;
 	}
