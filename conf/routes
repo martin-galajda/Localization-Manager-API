@@ -12,7 +12,8 @@ OPTIONS  /*url                      controllers.AppController.options(url)
 POST     /api/project                   controllers.ProjectController.postProject
 DELETE   /api/project/:id               controllers.ProjectController.deleteProject(id)
 
-POST    /api/project/:id/status         controllers.ProjectController.postProjectStatus(id)
+PUT    /api/project/:id/status         controllers.ProjectController.putProjectStatus(id)
+PUT    /api/project/:id/price         controllers.ProjectController.putProjectPrice(id)
 
 GET     /api/auth/google                controllers.AuthController.google
 GET     /api/auth/google/handler        controllers.AuthController.handleGoogle

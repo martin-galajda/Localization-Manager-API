@@ -37,7 +37,7 @@ describe("Project status update tests", function() {
 
     it("should PUT Project status", function(done) {
         const postProjectPromise = makeRequest({
-            method: 'POST',
+            method: 'PUT',
             json: true,
             body: {
                 word_count: 10,
