@@ -34,9 +34,9 @@ public class Project extends BaseModelClass {
 
 	private String HashMapIdentifier;
 
-	private Double price = "NONE";
+	private Double price;
 
-	private String currency;
+	private String currency = "CZK";
 
 	public String getCurrency() {
 		return currency;
@@ -50,7 +50,7 @@ public class Project extends BaseModelClass {
 		return price;
 	}
 
-	public void setPrice(String newPrice) {
+	public void setPrice(Double newPrice) {
 		price = newPrice;
 	}
 
