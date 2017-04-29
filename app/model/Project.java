@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exceptions.CompareProjectException;
-import play.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -12,27 +11,27 @@ import java.util.List;
 
 public class Project extends BaseModelClass {
 
-	private String Name;
+	private String name;
 
-	private String ProjectKey;
+	private String projectKey;
 
-	private boolean SyncVersions;
+	private boolean syncVersions;
 
-	private String Git;
+	private String git;
 
-	private String ResourcePath;
+	private String resourcePath;
 
-	private User Assignee;
+	private User assignee;
 
-	private Converter Converter;
+	private Converter converter;
 
-	private List<String> Branches;
+	private List<String> branches;
 
-	private Integer WordCount = 0;
+	private Integer wordCount = 0;
 
-	private String Status = "NONE";
+	private String status = "NONE";
 
-	private String HashMapIdentifier;
+	private String hashMapIdentifier;
 
 	private Double price;
 
@@ -55,93 +54,93 @@ public class Project extends BaseModelClass {
 	}
 
 	public String getHashMapIdentifier() {
-		return HashMapIdentifier;
+		return hashMapIdentifier;
 	}
 
 	public void setHashMapIdentifier(String hashMapIdentifier) {
-		HashMapIdentifier = hashMapIdentifier;
+		this.hashMapIdentifier = hashMapIdentifier;
 	}
 
 	public Integer getWordCount() {
-		return WordCount;
+		return wordCount;
 	}
 
 	public void setWordCount(Integer wordCount) {
-		WordCount = wordCount;
+		this.wordCount = wordCount;
 	}
 
 	public String getStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(String status) {
-		Status = status;
+		this.status = status;
 	}
 
 	public boolean getSyncVersions() {
-		return SyncVersions;
+		return syncVersions;
 	}
 
 	public List<String> getBranches() {
-		return Branches;
+		return branches;
 	}
 
 	public void setBranches(List<String> branches) {
-		Branches = branches;
+		this.branches = branches;
 	}
 
 	public String getProjectKey() {
-		return ProjectKey;
+		return projectKey;
 	}
 
 	public void setProjectKey(String projectKey) {
-		ProjectKey = projectKey;
+		this.projectKey = projectKey;
 	}
 
 	public void setSyncVersions(boolean syncVersions) {
-		this.SyncVersions = syncVersions;
+		this.syncVersions = syncVersions;
 	}
 
 	public String getGit() {
-		return Git;
+		return git;
 	}
 
 	public void setGit(String git) {
-		Git = git;
+		this.git = git;
 	}
 
 	public String getResourcePath() {
-		return ResourcePath;
+		return resourcePath;
 	}
 
 	public void setResourcePath(String resourcePath) {
-		ResourcePath = resourcePath;
+		this.resourcePath = resourcePath;
 	}
 
 	public void setAssignee(User assignee) {
-		Assignee = assignee;
+		this.assignee = assignee;
 	}
 
 	public User getAssignee() {
 
-		return Assignee;
+		return assignee;
 	}
 
 	public void setConverter(model.Converter converter) {
-		Converter = converter;
+		this.converter = converter;
 	}
 
 	public model.Converter getConverter() {
-		return Converter;
+		return converter;
 	}
 
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public Project()
@@ -208,7 +207,6 @@ public class Project extends BaseModelClass {
 				stringBuilder.append(property.toString());
 			}
 		}
-
 
 		return stringBuilder.toString();
 	}
