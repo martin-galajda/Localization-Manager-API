@@ -14,7 +14,7 @@
 - cd deployment && npm start - from the root folder
 
 ## Deployment to HEROKU
-- Create account on heroku
+- Create account on heroku - https://signup.heroku.com/
 - Install heroku locally - tutorial is here https://devcenter.heroku.com/articles/heroku-cli
 - Enter `heroku login` from the command line and enter credentials
 - In the root folder enter `heroku create` (and save the url of deployed application, it will be printed out to standard output -e.g. terminal)
