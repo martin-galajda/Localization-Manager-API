@@ -2,6 +2,7 @@ In order to launch integration for price estimation it is necessary to launch sc
 
 node price_estimation_integration.js projectKey1 -price --10.25 -currency --CZK projectKey2 -price --250 -currency --USD
 
+The order of projectKey, price and currency is important!
 The provided example will be parsed as:
 {
     projectKey1: {
@@ -14,4 +15,6 @@ The provided example will be parsed as:
     }
 }
 
-The order of projectKey, price and currency is important!
+"projectKey1, projectKey2" are values for the fields that are defined in the application as "Project key" field.
+They are probably supposed to be identifiers of projects in JIRA.
+
