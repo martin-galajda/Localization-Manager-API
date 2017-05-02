@@ -33,7 +33,7 @@ public class Project extends BaseModelClass {
 
 	private String hashMapIdentifier;
 
-	private Double price;
+	private Double price = 0.0;
 
 	private String currency = "CZK";
 

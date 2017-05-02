@@ -1,18 +1,10 @@
 package services;
 
 import model.User;
-import play.libs.concurrent.HttpExecutionContext;
-
 import javax.inject.Singleton;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-/**
- * Created by martin on 12/8/16.
- */
 @Singleton
 public class UserService extends BaseDatabaseService<User> {
 	public UserService() {
@@ -64,5 +56,4 @@ public class UserService extends BaseDatabaseService<User> {
 			return user;
 		});
 	}
-
 }

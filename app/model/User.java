@@ -8,15 +8,15 @@ import constants.UserRole;
 
 public class User extends BaseModelClass {
 
-	private String Name;
+	private String name;
 
-	private String TeamName;
+	private String teamName;
 
-	private boolean IsAssignable;
+	private boolean isAssignable;
 
-	protected String IdFromProvider;
+	protected String idFromProvider;
 
-	private String Role = UserRole.GUEST;
+	private String role = UserRole.GUEST;
 
 	private String pictureUrl;
 
@@ -41,43 +41,43 @@ public class User extends BaseModelClass {
 	}
 
 	public String getRole() {
-		return Role;
+		return role;
 	}
 
 	public void setRole(String role) {
-		Role = role;
+		this.role = role;
 	}
 
 	public void setIdFromProvider(String idFromProvider) {
-		IdFromProvider = idFromProvider;
+		this.idFromProvider = idFromProvider;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public void setTeamName(String teamName) {
-		TeamName = teamName;
+		this.teamName = teamName;
 	}
 
 	public void setIsAssignable(boolean assignable) {
-		IsAssignable = assignable;
+		isAssignable = assignable;
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public String getTeamName() {
-		return TeamName;
+		return teamName;
 	}
 
 	public String getIdFromProvider() {
-		return IdFromProvider;
+		return idFromProvider;
 	}
 
 	public boolean getIsAssignable() {
-		return IsAssignable;
+		return isAssignable;
 	}
 
 	public User()

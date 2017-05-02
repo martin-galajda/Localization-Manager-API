@@ -11,9 +11,12 @@ chai.use(chaiAsPromised);
 const testProjectObject = deepCopy(require('./../test-objects/project'));
 const makeRequest = require('../../common_scripts/authorizedRequest');
 
-const SERVER_URL = "https://glacial-hollows-97055.herokuapp.com";
 const PATH_TO_GET_PROJECTS_AS_HASH_MAP = "/api/project/hash_map";
 const PROJECT_API_REST_ENDPOINT_PATH = "/api/project";
+const parseConfigurationFile = require('../../common_scripts/parseConfigurationFile');
+const configuration = parseConfigurationFile();
+const SERVER_URL = configuration.backendUrl;
+
 
 var newProjectId = null;
 

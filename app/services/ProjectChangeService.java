@@ -4,8 +4,6 @@ import exceptions.CompareProjectException;
 import model.FieldChange;
 import model.Project;
 import model.ProjectChange;
-import play.Logger;
-import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.List;

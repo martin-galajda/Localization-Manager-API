@@ -1,20 +1,12 @@
 package services;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.database.*;
-import listeners.FirebaseDatabaseChildListener;
 import listeners.FirebaseDatabaseListener;
 import model.BaseModelClass;
-import model.User;
-import play.*;
-import play.libs.F;
 import play.libs.concurrent.HttpExecutionContext;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 
 public abstract class BaseDatabaseService<T extends BaseModelClass> {

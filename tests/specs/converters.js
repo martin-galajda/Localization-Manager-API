@@ -7,8 +7,10 @@ chai.use(chaiAsPromised);
 const testConverterObject = require('./../test-objects/converter');
 const makeRequest = require('../../common_scripts/authorizedRequest');
 
-const SERVER_URL = "https://glacial-hollows-97055.herokuapp.com";
 const CONVERTER_API_REST_ENDPOINT_PATH = "/api/converter";
+const parseConfigurationFile = require('../../common_scripts/parseConfigurationFile');
+const configuration = parseConfigurationFile();
+const SERVER_URL = configuration.backendUrl;
 
 let newConverterId = null;
 

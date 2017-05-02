@@ -2,14 +2,10 @@ package services;
 
 import exceptions.CompareProjectException;
 import model.Project;
-import model.ProjectChange;
-import model.TranslationStatus;
 import play.Logger;
-import play.libs.concurrent.HttpExecutionContext;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

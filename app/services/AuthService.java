@@ -14,7 +14,6 @@ public class AuthService {
 	public static String SESSION_USER_NAME_FIELD = "logged_user_name";
 	public static String SESSION_USER_ROLE_FIELD = "role";
 
-
 	@Inject UserService userService;
 
 	public CompletionStage<User> getLoggedUser(String userId) {

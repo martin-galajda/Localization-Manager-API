@@ -1,0 +1,17 @@
+In order to launch integration for price estimation it is necessary to launch script as:
+
+node price_estimation_integration.js projectKey1 -price --10.25 -currency --CZK projectKey2 -price --250 -currency --USD
+
+The provided example will be parsed as:
+{
+    projectKey1: {
+        price: 10.25,
+        currency: CZK
+    },
+    projectKey2: {
+        price: 250,
+        currency: USD
+    }
+}
+
+The order of projectKey, price and currency is important!

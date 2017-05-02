@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Converter extends BaseModelClass {
 
-	private String Name;
+	private String name;
 
 	private List<String> convertFromXliff;
 
@@ -21,11 +21,11 @@ public class Converter extends BaseModelClass {
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public List<String> getConvertFromXliff() {
@@ -55,7 +55,6 @@ public class Converter extends BaseModelClass {
 		}
 		return newConverter;
 	}
-
 
 	public String toString() {
 		return this.getName();

@@ -6,25 +6,11 @@ import java.util.Date;
 
 
 public class ProjectChange extends BaseModelClass {
-
-	public static ProjectChange create(String projectId, List<FieldChange> fieldChangeList, String createdBy){
-		Date date = new Date();
-		long timeStamp = date.getTime();
-
-		ProjectChange projectChange = new ProjectChange();
-		projectChange.setCreatedAtTimestamp(timeStamp);
-		projectChange.setCreatedBy(createdBy);
-		projectChange.setFieldChangeList(fieldChangeList);
-		projectChange.setProjectId(projectId);
-
-		return projectChange;
-	}
-
 	private List<FieldChange> fieldChangeList;
 
-	private long CreatedAtTimestamp;
+	private long createdAtTimestamp;
 
-	private String CreatedBy;
+	private String createdBy;
 
 	private String projectId;
 
@@ -37,19 +23,19 @@ public class ProjectChange extends BaseModelClass {
 	}
 
 	public String getCreatedBy() {
-		return CreatedBy;
+		return createdBy;
 	}
 
 	public void setCreatedBy(String createdBy) {
-		this.CreatedBy = createdBy;
+		this.createdBy = createdBy;
 	}
 
 	public Long getCreatedAtTimestamp() {
-		return this.CreatedAtTimestamp;
+		return this.createdAtTimestamp;
 	}
 
 	public void setCreatedAtTimestamp(Long timestamp) {
-		CreatedAtTimestamp = timestamp;
+		createdAtTimestamp = timestamp;
 	}
 
 	public List<FieldChange> getFieldChangeList() {
@@ -58,5 +44,18 @@ public class ProjectChange extends BaseModelClass {
 
 	public void setFieldChangeList(List<FieldChange> fieldChangeList) {
 		this.fieldChangeList = fieldChangeList;
+	}
+
+	public static ProjectChange create(String projectId, List<FieldChange> fieldChangeList, String createdBy){
+		Date date = new Date();
+		long timeStamp = date.getTime();
+
+		ProjectChange projectChange = new ProjectChange();
+		projectChange.setCreatedAtTimestamp(timeStamp);
+		projectChange.setCreatedBy(createdBy);
+		projectChange.setFieldChangeList(fieldChangeList);
+		projectChange.setProjectId(projectId);
+
+		return projectChange;
 	}
 }

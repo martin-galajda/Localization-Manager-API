@@ -32,7 +32,7 @@ const project = {
     "syncVersions": false,
     "wordCount": 0,
     "currency": "CZK",
-    "price": null,
+    "price": 0,
 };
 
 module.exports = project;
