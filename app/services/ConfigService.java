@@ -23,4 +23,9 @@ public class ConfigService {
 	{
 		return this.configuration.getString("backendUrl");
 	}
+
+	public String getFrontendServerUrl()
+    {
+        return this.configuration.getString("http.client.address");
+    }
 }

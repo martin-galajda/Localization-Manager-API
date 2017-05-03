@@ -42,7 +42,7 @@ public class AuthController extends Controller {
 				.handleGoogleAuthentication(code, ec.current())
 				.thenApplyAsync(this::getUserInfo, ec.current())
 				.thenComposeAsync(this::saveUserInfoInSession, ec.current())
-				.thenApplyAsync(user -> redirect("https://morning-taiga-56897.herokuapp.com"));
+				.thenApplyAsync(user -> redirect(configService.getFrontendServerUrl()));
 	}
 
 	private CompletionStage<User> getUserInfo(JsonNode node)
