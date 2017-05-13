@@ -21,6 +21,6 @@ public class Filters extends DefaultHttpFilters {
      */
     @Inject
     public Filters(CORSFilter corsFilter, CSRFFilter csrfFilter) {
-        super(corsFilter);
+        super(corsFilter, csrfFilter);
     }
 }
