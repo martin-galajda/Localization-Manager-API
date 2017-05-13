@@ -28,4 +28,5 @@ public class ConfigService {
     {
         return this.configuration.getString("http.client.address");
     }
+
 }
