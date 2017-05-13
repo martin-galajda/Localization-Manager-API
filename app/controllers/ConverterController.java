@@ -2,12 +2,15 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import model.Converter;
+import play.data.Form;
+import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.ConverterService;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static play.mvc.Results.ok;
@@ -19,6 +22,9 @@ public class ConverterController extends Controller {
 
 	@Inject
 	ConverterService converterService;
+
+	@Inject
+	FormFactory formFactory;
 
 	public CompletionStage<Result> getConverters() {
 		return this.converterService.getConverters().thenApplyAsync(converters -> ok(Json.toJson(converters)));
@@ -39,8 +45,15 @@ public class ConverterController extends Controller {
 	}
 
 	public CompletionStage<Result> postConverter() {
-		JsonNode newConverterJson = request().body().asJson();
-		Converter newConverter = Converter.create(newConverterJson);
+		Form<Converter> form = formFactory.form(Converter.class);
+
+		if (form.hasErrors()) {
+			CompletableFuture<Result> badRequestPromise = new CompletableFuture<>();
+			badRequestPromise.complete(badRequest(form.errorsAsJson()));
+			return badRequestPromise;
+		}
+
+		Converter newConverter = form.get();
 
 		return this.converterService
 				.addConverter(newConverter)
