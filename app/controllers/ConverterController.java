@@ -45,7 +45,7 @@ public class ConverterController extends Controller {
 	}
 
 	public CompletionStage<Result> postConverter() {
-		Form<Converter> form = formFactory.form(Converter.class);
+		Form<Converter> form = formFactory.form(Converter.class).bindFromRequest();
 
 		if (form.hasErrors()) {
 			CompletableFuture<Result> badRequestPromise = new CompletableFuture<>();
