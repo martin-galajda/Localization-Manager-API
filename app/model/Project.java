@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exceptions.CompareProjectException;
+import play.data.validation.Constraints;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -11,8 +12,10 @@ import java.util.List;
 
 public class Project extends BaseModelClass {
 
+	@Constraints.Required
 	private String name;
 
+	@Constraints.Required
 	private String projectKey;
 
 	private boolean syncVersions;
@@ -31,6 +34,7 @@ public class Project extends BaseModelClass {
 
 	private String status = "NONE";
 
+	@Constraints.Required
 	private String hashMapIdentifier;
 
 	private Double price = 0.0;

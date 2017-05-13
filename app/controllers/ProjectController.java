@@ -3,6 +3,8 @@ package controllers;
 import actions.UserAction;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.Logger;
+import play.data.Form;
+import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecutionContext;
@@ -14,6 +16,7 @@ import services.ProjectService;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 
@@ -22,13 +25,15 @@ import model.*;
 import javax.inject.Inject;
 
 /**
- * This controller contains an action to handle HTTP requests
- * to the application's home page.
+ *
  */
 public class ProjectController extends Controller {
 
 	@Inject
 	private ProjectService projectService;
+
+	@Inject
+	private FormFactory formFactory;
 
     public Result index() {
         //return ok(index.render("Your new application is ready."));
@@ -61,8 +66,15 @@ public class ProjectController extends Controller {
 
 	@With(UserAction.class)
 	public CompletionStage<Result> postProject() {
-		JsonNode newProjectJson = request().body().asJson();
-		Project newProject = Project.create(newProjectJson);
+		Form<Project> form = formFactory.form(Project.class).bindFromRequest();
+
+		if (form.hasErrors()) {
+			CompletableFuture<Result> badRequestPromise = new CompletableFuture<>();
+			badRequestPromise.complete(badRequest(form.errorsAsJson()));
+			return badRequestPromise;
+		}
+
+		Project newProject = form.get();
 
 		if (newProject.getId() == null) {
 			return createNewProject(newProject);

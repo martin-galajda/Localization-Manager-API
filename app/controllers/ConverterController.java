@@ -68,8 +68,15 @@ public class ConverterController extends Controller {
 
 	@With(UserAction.class)
 	public CompletionStage<Result> postConverterUpdate(String entityId) {
-		JsonNode newConverterJson = request().body().asJson();
-		Converter newConverter = Converter.create(newConverterJson);
+		Form<Converter> form = formFactory.form(Converter.class).bindFromRequest();
+
+		if (form.hasErrors()) {
+			CompletableFuture<Result> badRequestPromise = new CompletableFuture<>();
+			badRequestPromise.complete(badRequest(form.errorsAsJson()));
+			return badRequestPromise;
+		}
+
+		Converter newConverter = form.get();
 
 		return this.converterService
 				.updateConverter(newConverter)
