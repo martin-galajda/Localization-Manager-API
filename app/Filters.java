@@ -20,7 +20,7 @@ public class Filters extends DefaultHttpFilters {
     /**
      */
     @Inject
-    public Filters(CORSFilter corsFilter, CSRFFilter csrfFilter) {
-        super(csrfFilter, corsFilter);
+    public Filters(CORSFilter corsFilter) {
+        super(corsFilter);
     }
 }
