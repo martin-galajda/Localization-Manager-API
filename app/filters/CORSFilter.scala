@@ -23,7 +23,7 @@ class CORSFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext
         //"Access-Control-Allow-Origin" -> "https://morning-taiga-56897.herokuapp.com",
         "Access-Control-Allow-Origin" -> accessControlAllowOrigin,
         "Access-Control-Allow-Methods" -> "GET, POST, OPTIONS, DELETE, PUT",
-        "Access-Control-Allow-Headers" -> "Accept, Origin, Content-type, X-Json, X-Prototype-Version, X-Requested-With, X-XSRF-TOKEN",
+        "Access-Control-Allow-Headers" -> "Accept, Origin, Content-type, X-Json, X-Prototype-Version, X-Requested-With, X-XSRF-TOKEN, Cookie",
         "Access-Control-Allow-Credentials" -> "true"
       )
     }
