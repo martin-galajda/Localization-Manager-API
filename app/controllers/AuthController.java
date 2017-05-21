@@ -22,7 +22,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import play.Configuration;
 
-
+/**
+ * Controller which encapsulated API endpoint for authenticating users.
+ */
 public class AuthController extends Controller {
 
 	@Inject WSClient ws;

@@ -9,6 +9,10 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 
+/**
+ * The class provides shared logic for communication with persistence layer.
+ * @param <T>
+ */
 public abstract class BaseDatabaseService<T extends BaseModelClass> {
 	private final String pathToEntity;
 	private final Class<T> genericEntity;

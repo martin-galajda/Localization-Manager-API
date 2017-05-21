@@ -9,6 +9,9 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
+/**
+ * Provides logic tied to the project history.
+ */
 public class ProjectChangeService extends BaseDatabaseService<ProjectChange> {
 
 	@Inject AuthService authService;

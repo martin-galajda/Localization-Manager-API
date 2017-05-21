@@ -8,7 +8,9 @@ import services.ProjectChangeService;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-
+/**
+ * Controller which encapsulates API endpoint for project history.
+ */
 public class ProjectChangeController extends Controller{
 
 	@Inject

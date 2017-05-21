@@ -6,6 +6,9 @@ import services.AuthService;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+/**
+ * The class implements actions that are not restricted.
+ */
 public class GuestUserAction extends play.mvc.Action.Simple {
 	@Override
 	public CompletionStage<Result> call(Http.Context ctx) {

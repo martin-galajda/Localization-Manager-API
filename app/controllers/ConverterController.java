@@ -18,7 +18,7 @@ import java.util.concurrent.CompletionStage;
 import static play.mvc.Results.ok;
 
 /**
- * Created by martin on 12/12/16.
+ * Controller which encapsulates API endpoint for converters.
  */
 public class ConverterController extends Controller {
 

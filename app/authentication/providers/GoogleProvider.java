@@ -30,6 +30,11 @@ public class GoogleProvider {
 		this.redirectUri = configuration.getString("authentication.redirectUrl");
 	}
 
+	/**
+	 * Build URL that is used by Google for sending authorization code (grant)
+	 * after user grants permission to access his information to the application.
+	 * @return URL to which will Google redirect request with authorization code.
+	 */
 	public String getRedirectUrl() {
 		String clientId = configuration.getString("google.oauth2.clientId");
 		String redirectUri = this.redirectUri;
@@ -53,6 +58,14 @@ public class GoogleProvider {
 		return googleUrl;
 	}
 
+	/**
+	 * Handles user authentication via Google.
+	 * It receives authorization code (grant) which is consequently exchanged for the access token
+	 * which is then exchanged for the user information.
+	 * @param code
+	 * @param executor
+	 * @return Response containing user information.
+	 */
 	public CompletionStage<JsonNode> handleGoogleAuthentication(String code, Executor executor)
 	{
 		return this
@@ -60,6 +73,12 @@ public class GoogleProvider {
 				.thenComposeAsync(token -> this.exchangeTokenForUserInfo(token, executor), executor);
 	}
 
+	/**
+	 * Exchanges authorization code for the access token
+	 * @param code
+	 * @param executor
+	 * @return Response containing access token.
+	 */
 	public CompletionStage<WSResponse> exchangeCodeForToken(String code, Executor executor) {
 		WSRequest req = wsClient.url(GOOGLE_REQUEST_TOKEN_ENDPOINT);
 		String clientId = configuration.getString("google.oauth2.clientId");
@@ -75,6 +94,12 @@ public class GoogleProvider {
 				.thenApplyAsync(res -> res, executor);
 	}
 
+	/**
+	 * Exchanges access token for the user information.
+	 * @param response
+	 * @param executor
+	 * @return Response containing user information.
+	 */
 	public CompletionStage<JsonNode> exchangeTokenForUserInfo(WSResponse response, Executor executor) {
 		JsonNode jsonBody = response.asJson();
 		String accessToken = jsonBody.findPath("access_token").asText();

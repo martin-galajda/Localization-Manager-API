@@ -4,7 +4,9 @@ import play.Configuration;
 
 import javax.inject.Inject;
 
-
+/**
+ * Provides logic tied to configuring the application.
+ */
 public class ConfigService {
 	@Inject
 	Configuration configuration;

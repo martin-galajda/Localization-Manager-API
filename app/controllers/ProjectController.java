@@ -25,7 +25,7 @@ import model.*;
 import javax.inject.Inject;
 
 /**
- *
+ * Controller which encapsulates API endpoint for projects.
  */
 public class ProjectController extends Controller {
 
@@ -36,7 +36,6 @@ public class ProjectController extends Controller {
 	private FormFactory formFactory;
 
     public Result index() {
-        //return ok(index.render("Your new application is ready."));
 		return ok();
     }
 

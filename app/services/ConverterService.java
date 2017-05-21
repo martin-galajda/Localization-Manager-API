@@ -5,6 +5,9 @@ import model.Converter;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
+/**
+ * Provides logic tied to the converters.
+ */
 public class ConverterService extends BaseDatabaseService<Converter> {
 	public ConverterService()
 	{

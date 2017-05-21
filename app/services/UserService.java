@@ -5,6 +5,9 @@ import javax.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
+/**
+ * Provides logic tied to the users.
+ */
 @Singleton
 public class UserService extends BaseDatabaseService<User> {
 	public UserService() {

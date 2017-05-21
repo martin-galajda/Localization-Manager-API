@@ -8,6 +8,9 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+/**
+ * Provides logic tied to authentication of users.
+ */
 public class AuthService {
 	public static String SESSION_USER_ID_FIELD = "logged_user_id";
 	public static String SESSION_USER_PROVIDER_ID_FIELD = "logged_user_provider_id";

@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+/**
+ * Provides logic tied to the projects.
+ */
 @Singleton
 public class ProjectService extends BaseDatabaseService<Project> {
 

@@ -11,6 +11,9 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+/**
+ * The class implements action that are restricted to the admin role.
+ */
 public class AdminAction extends play.mvc.Action.Simple {
 	@Inject
 	UserService userService;

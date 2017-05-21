@@ -10,7 +10,10 @@ import model.BaseModelClass;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-
+/**
+ * The class responsible for communication with the Firebase Realtime Database.
+ * @param <T>
+ */
 public class FirebaseDatabaseListener<T extends BaseModelClass>
 		implements ValueEventListener,
 		OnCompleteListener<Void>,

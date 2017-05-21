@@ -14,7 +14,9 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-
+/**
+ * Controller which encapsulates API endpoint for users.
+ */
 public class UserController extends Controller {
 	private final UserService userService;
 
