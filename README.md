@@ -12,6 +12,7 @@
 ## Configure application:
 - `npm install` - from the root folder
 - cd deployment && npm start - from the root folder
+- Change application secret for the applicaton - see details at https://www.playframework.com/documentation/2.5.x/ApplicationSecret
 
 ## Deployment to HEROKU
 - Create account on heroku - https://signup.heroku.com/

@@ -152,18 +152,6 @@ public class Project extends BaseModelClass {
 
 	}
 
-	public static Project create(JsonNode newProjectJson) {
-		ObjectMapper objMapper = new ObjectMapper();
-		Project newProject = null;
-		try {
-			newProject = objMapper.treeToValue(newProjectJson, Project.class);
-		}
-		catch (JsonProcessingException e) {
-			System.err.println("Error parsing project json into Project model: " + e.getMessage());
-		}
-		return newProject;
-	}
-
 	public List<FieldChange> getChangedFields(Project oldProject) throws CompareProjectException {
 		Field[] fields = Project.class.getDeclaredFields();
 		List<FieldChange> fieldChangeList = new ArrayList<>();

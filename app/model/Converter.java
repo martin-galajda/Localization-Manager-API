@@ -48,19 +48,6 @@ public class Converter extends BaseModelClass {
 		this.convertToXliff = convertToXliff;
 	}
 
-	public static Converter create(JsonNode newConverterJson) {
-		ObjectMapper objMapper = new ObjectMapper();
-		Converter newConverter = null;
-		try {
-			newConverter = objMapper.treeToValue(newConverterJson, Converter.class);
-		}
-		catch (JsonProcessingException e) {
-			System.err.println("Error parsing converter json into Converter model: " + e.getMessage());
-		}
-		return newConverter;
-	}
-
-
 	public String toString() {
 		return this.getName();
 	}
